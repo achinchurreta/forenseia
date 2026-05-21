@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import Container from "../components/ui/Container.astro";
+import ServiceCard from "../components/ui/ServiceCard.astro";
+import { posts } from "../data/posts";
+---
+
+<BaseLayout title="Blog / Gaceta | ForenseIA">
+  <PageHeader
+    eyebrow="Blog y gaceta"
+    title="Ideas, análisis y conocimiento aplicado."
+    description="Publicaciones sobre inteligencia artificial, auditoría forense, OSINT, ciberseguridad, derecho, fiscalización e inteligencia patrimonial."
+  />
+
+  <section class="py-24">
+    <Container>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {posts.map((post) => (
+          <ServiceCard
+            title={post.title}
+            description={post.description}
+            href={post.href}
+            label="Leer artículo"
+          />
+        ))}
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

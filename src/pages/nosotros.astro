@@ -1,0 +1,103 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import Container from "../components/ui/Container.astro";
+
+const values = [
+  "Precisión",
+  "Confidencialidad",
+  "Evidencia",
+  "Análisis",
+  "Ética",
+  "Estrategia",
+];
+---
+
+<BaseLayout title="Nosotros | ForenseIA">
+  <PageHeader
+    eyebrow="Quiénes somos"
+    title="Inteligencia forense, IA y análisis estratégico."
+    description="ForenseIA integra auditoría, OSINT, inteligencia patrimonial, ciberseguridad e inteligencia artificial aplicada para convertir información compleja en decisiones útiles."
+  />
+
+  <section class="py-24">
+    <Container>
+      <div class="grid lg:grid-cols-2 gap-16 items-start">
+        <div>
+          <span class="text-[#C8A96B] uppercase tracking-[0.35em] text-xs">
+            Nuestra visión
+          </span>
+
+          <h2 class="text-3xl md:text-5xl font-semibold leading-tight mt-4">
+            No analizamos datos por analizarlos. Buscamos claridad, contexto y verdad operativa.
+          </h2>
+        </div>
+
+        <div class="space-y-6 text-white/60 leading-relaxed text-lg">
+          <p>
+            ForenseIA nace como una plataforma de conocimiento, consultoría y formación especializada en auditoría forense, inteligencia artificial, OSINT, inteligencia patrimonial y análisis estratégico.
+          </p>
+
+          <p>
+            Su propósito es ayudar a personas, instituciones y organizaciones a entender información compleja, detectar riesgos, ordenar evidencia y tomar mejores decisiones.
+          </p>
+
+          <p>
+            La página funciona como centro de contenido, academia, gaceta especializada y punto de contacto para servicios profesionales.
+          </p>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-y border-white/10 bg-white/[0.02] py-24">
+    <Container>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="border border-white/10 p-8">
+          <h3 class="text-2xl font-semibold">Misión</h3>
+          <p class="text-white/55 leading-relaxed mt-4">
+            Convertir información dispersa en inteligencia útil para investigación, auditoría, formación y toma de decisiones.
+          </p>
+        </div>
+
+        <div class="border border-white/10 p-8">
+          <h3 class="text-2xl font-semibold">Visión</h3>
+          <p class="text-white/55 leading-relaxed mt-4">
+            Ser una referencia en inteligencia forense, IA aplicada, OSINT y capacitación especializada en habla hispana.
+          </p>
+        </div>
+
+        <div class="border border-white/10 p-8">
+          <h3 class="text-2xl font-semibold">Diferencial</h3>
+          <p class="text-white/55 leading-relaxed mt-4">
+            Unimos auditoría, derecho, tecnología, evidencia digital, análisis patrimonial e inteligencia artificial.
+          </p>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="py-24">
+    <Container>
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-12">
+        <div>
+          <span class="text-[#C8A96B] uppercase tracking-[0.35em] text-xs">
+            Principios
+          </span>
+
+          <h2 class="text-3xl md:text-5xl font-semibold mt-4">
+            Valores de trabajo
+          </h2>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {values.map((value) => (
+          <div class="border border-white/10 bg-white/[0.02] p-8">
+            <h3 class="text-2xl font-semibold">{value}</h3>
+          </div>
+        ))}
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

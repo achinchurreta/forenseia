@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import Container from "../components/ui/Container.astro";
+import ServiceCard from "../components/ui/ServiceCard.astro";
+import { courses } from "../data/courses";
+---
+
+<BaseLayout title="Cursos | ForenseIA">
+  <PageHeader
+    eyebrow="Academia ForenseIA"
+    title="Cursos, clases y capacitaciones especializadas."
+    description="Formación ejecutiva en auditoría forense, OSINT, inteligencia patrimonial, IA aplicada, ciberseguridad y cumplimiento."
+  />
+
+  <section class="py-24">
+    <Container>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {courses.map((course) => (
+          <ServiceCard
+            title={course.title}
+            description={course.description}
+            href={course.href}
+            label="Ver curso"
+          />
+        ))}
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

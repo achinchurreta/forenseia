@@ -1,0 +1,80 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import Container from "../components/ui/Container.astro";
+
+const whatsapp = "529933094154";
+const message = encodeURIComponent("Hola, quiero solicitar un diagnóstico con ForenseIA.");
+---
+
+<BaseLayout title="Contacto | ForenseIA">
+  <PageHeader
+    eyebrow="Contacto"
+    title="Solicita un diagnóstico inicial."
+    description="Cuéntanos qué tipo de riesgo, investigación, capacitación o necesidad institucional deseas analizar."
+  />
+
+  <section class="py-24">
+    <Container>
+      <div class="grid lg:grid-cols-[1fr_420px] gap-12">
+
+        <form class="border border-white/10 bg-white/[0.02] p-8 space-y-5">
+          <input class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]" placeholder="Nombre completo" />
+
+          <input class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]" placeholder="Correo electrónico" />
+
+          <input class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]" placeholder="Teléfono / WhatsApp" />
+
+          <select class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]">
+            <option>Tipo de solicitud</option>
+            <option>Auditoría forense</option>
+            <option>OSINT e inteligencia digital</option>
+            <option>Inteligencia patrimonial</option>
+            <option>Curso o capacitación</option>
+            <option>IA aplicada / automatización</option>
+            <option>Ciberseguridad defensiva</option>
+          </select>
+
+          <textarea class="w-full bg-black border border-white/10 px-4 py-4 text-white min-h-40 outline-none focus:border-[#C8A96B]" placeholder="Describe tu caso o necesidad"></textarea>
+
+          <button class="bg-[#C8A96B] text-black px-8 py-4 font-medium hover:opacity-90 transition">
+            Enviar solicitud
+          </button>
+        </form>
+
+        <aside class="border border-white/10 bg-white/[0.02] p-8 h-fit">
+          <h2 class="text-2xl font-semibold">
+            Contacto directo
+          </h2>
+
+          <p class="text-white/55 leading-relaxed mt-4">
+            Para solicitudes urgentes, cursos institucionales o consultorías especializadas, puedes iniciar contacto directo por WhatsApp.
+          </p>
+
+          <a
+            href={`https://wa.me/${whatsapp}?text=${message}`}
+            target="_blank"
+            class="block text-center mt-8 bg-[#C8A96B] text-black px-6 py-4 font-medium hover:opacity-90 transition"
+          >
+            Escribir por WhatsApp
+          </a>
+
+          <div class="border-t border-white/10 mt-8 pt-8 space-y-4">
+            <div>
+              <p class="text-[#C8A96B] text-sm">Correo</p>
+              <p class="text-white/60 mt-1">contacto@forenseia.com</p>
+            </div>
+
+            <div>
+              <p class="text-[#C8A96B] text-sm">Áreas</p>
+              <p class="text-white/60 mt-1">
+                Auditoría · OSINT · IA · Cursos · Ciberseguridad
+              </p>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

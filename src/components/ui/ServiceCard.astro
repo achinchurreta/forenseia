@@ -1,0 +1,31 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  label?: string;
+}
+
+const { title, description, href, label = "Explorar" } = Astro.props;
+---
+
+<a
+  href={href}
+  class="group block border border-white/10 bg-white/[0.025] p-7 hover:border-[#C8A96B]/70 transition duration-300"
+>
+  <div class="h-10 w-10 border border-[#C8A96B]/50 flex items-center justify-center text-[#C8A96B] mb-8">
+    +
+  </div>
+
+  <h3 class="text-xl font-semibold group-hover:text-[#C8A96B] transition">
+    {title}
+  </h3>
+
+  <p class="text-white/55 leading-relaxed mt-4">
+    {description}
+  </p>
+
+  <p class="text-[#C8A96B] text-sm mt-8">
+    {label} →
+  </p>
+</a>

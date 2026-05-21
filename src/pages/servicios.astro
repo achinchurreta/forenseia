@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import Container from "../components/ui/Container.astro";
+import ServiceCard from "../components/ui/ServiceCard.astro";
+import { services } from "../data/services";
+---
+
+<BaseLayout title="Servicios | ForenseIA">
+  <PageHeader
+    eyebrow="Servicios especializados"
+    title="Soluciones de inteligencia, auditoría e investigación."
+    description="Servicios profesionales para analizar riesgos, documentos, evidencia digital, información patrimonial y procesos institucionales."
+  />
+
+  <section class="py-24">
+    <Container>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {services.map((service) => (
+          <ServiceCard
+            title={service.title}
+            description={service.description}
+            href={service.href}
+            label="Ver servicio"
+          />
+        ))}
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

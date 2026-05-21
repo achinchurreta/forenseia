@@ -1,0 +1,46 @@
+---
+import { navigation } from "../../data/navigation";
+---
+
+<header class="fixed top-0 left-0 w-full z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-center justify-between h-20">
+
+      <a href="/" class="flex items-center gap-3">
+        <img
+          src="/logo.png"
+          alt="ForenseIA"
+          class="w-10 h-10 object-contain"
+        />
+
+        <div class="hidden md:block">
+          <p class="text-white text-base font-semibold tracking-wide leading-none">
+            FORENSEIA
+          </p>
+          <p class="text-[#C8A96B] text-[9px] uppercase tracking-[0.3em] mt-1">
+            Inteligencia Estratégica
+          </p>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-8">
+        {navigation.map((item) => (
+          <a
+            href={item.href}
+            class="text-sm text-white/60 hover:text-[#C8A96B] transition"
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+
+      <a
+        href="/contacto"
+        class="hidden md:inline-flex border border-[#C8A96B]/70 px-5 py-3 text-sm text-[#C8A96B] hover:bg-[#C8A96B] hover:text-black transition"
+      >
+        Solicitar diagnóstico
+      </a>
+
+    </div>
+  </div>
+</header>
