@@ -1,0 +1,43 @@
+---
+const stats = [
+  { value: "+15", label: "Años de experiencia" },
+  { value: "+250", label: "Análisis y proyectos" },
+  { value: "+30", label: "Sectores atendidos" },
+];
+
+const sectors = [
+  "Gobierno",
+  "Auditoría",
+  "Despachos jurídicos",
+  "Empresas privadas",
+  "Cumplimiento",
+  "Investigación",
+];
+---
+
+<section class="border-t border-white/10 bg-white/[0.02] py-20">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-3 gap-6 mb-16">
+      {stats.map((item) => (
+        <div class="border border-white/10 p-8">
+          <p class="text-4xl font-semibold text-[#C8A96B]">{item.value}</p>
+          <p class="text-white/55 mt-2">{item.label}</p>
+        </div>
+      ))}
+    </div>
+
+    <div>
+      <p class="text-[#C8A96B] uppercase tracking-[0.35em] text-xs mb-8">
+        Sectores atendidos
+      </p>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-6 gap-4">
+        {sectors.map((sector) => (
+          <div class="border border-white/10 px-5 py-4 text-center text-white/70">
+            {sector}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
