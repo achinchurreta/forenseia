@@ -1,35 +1,27 @@
 ---
 import { navigation } from "../../data/navigation";
-import { CONTACT } from "../../constants/contact";
 ---
 
-<header class="fixed top-0 left-0 w-full z-50 border-b border-white/10 bg-black/60 backdrop-blur-2xl">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="flex items-center justify-between h-24">
+<header class="fixed top-0 left-0 z-50 w-full border-b border-white/10 bg-black/60 backdrop-blur-2xl">
+  <div class="mx-auto max-w-7xl px-6">
+    <div class="flex h-24 items-center justify-between">
 
-      <a href="/" class="flex items-center gap-3">
-        <img
-          src="/logo.png"
-          alt="ForenseIA"
-          class="w-10 h-10 object-contain"
-        />
+      <a href="/" class="flex items-center gap-4">
+        <img src="/logo.png" alt="ForenseIA" class="h-11 w-11 object-contain" />
 
-        <div class="hidden md:block">
-          <p class="text-white text-base font-semibold tracking-wide leading-none">
+        <div>
+          <p class="text-base font-semibold tracking-wide text-white">
             FORENSEIA
           </p>
-          <p class="text-[#C8A96B] text-[9px] uppercase tracking-[0.3em] mt-1">
+          <p class="mt-1 text-[10px] uppercase tracking-[0.32em] text-[#C8A96B]">
             Inteligencia Estratégica
           </p>
         </div>
       </a>
 
-      <nav class="hidden lg:flex items-center gap-8">
+      <nav class="hidden items-center gap-8 lg:flex">
         {navigation.map((item) => (
-          <a
-            href={item.href}
-            class="text-sm text-white/60 hover:text-[#C8A96B] transition"
-          >
+          <a href={item.href} class="text-sm text-white/55 transition duration-300 hover:text-[#C8A96B]">
             {item.label}
           </a>
         ))}
@@ -37,11 +29,47 @@ import { CONTACT } from "../../constants/contact";
 
       <a
         href="/contacto"
-        class="hidden md:inline-flex border border-[#C8A96B]/70 px-5 py-3 text-sm text-[#C8A96B] hover:bg-[#C8A96B] hover:text-black transition"
+        class="hidden border border-[#C8A96B]/60 px-6 py-3 text-sm text-[#C8A96B] transition duration-300 hover:bg-[#C8A96B] hover:text-black md:inline-flex"
       >
         Solicitar diagnóstico
       </a>
 
+      <button
+        id="menu-button"
+        class="inline-flex h-11 w-11 items-center justify-center border border-white/10 text-white lg:hidden"
+        aria-label="Abrir menú"
+      >
+        ☰
+      </button>
     </div>
   </div>
+
+  <div
+    id="mobile-menu"
+    class="hidden border-t border-white/10 bg-black/95 px-6 py-8 lg:hidden"
+  >
+    <nav class="flex flex-col gap-5">
+      {navigation.map((item) => (
+        <a href={item.href} class="text-white/70 hover:text-[#C8A96B]">
+          {item.label}
+        </a>
+      ))}
+
+      <a
+        href="/contacto"
+        class="mt-4 border border-[#C8A96B]/60 px-6 py-4 text-center text-[#C8A96B]"
+      >
+        Solicitar diagnóstico
+      </a>
+    </nav>
+  </div>
 </header>
+
+<script>
+  const button = document.getElementById("menu-button");
+  const menu = document.getElementById("mobile-menu");
+
+  button?.addEventListener("click", () => {
+    menu?.classList.toggle("hidden");
+  });
+</script>

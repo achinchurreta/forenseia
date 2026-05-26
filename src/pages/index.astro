@@ -5,7 +5,9 @@ import Container from "../components/ui/Container.astro";
 import SectionTitle from "../components/ui/SectionTitle.astro";
 import ServiceCard from "../components/ui/ServiceCard.astro";
 import Button from "../components/ui/Button.astro";
+import Reveal from "../components/ui/Reveal.astro";
 
+import IntroSection from "../components/home/IntroSection.astro";
 import MethodPreview from "../components/home/MethodPreview.astro";
 import AuthoritySection from "../components/home/AuthoritySection.astro";
 import FinalCTA from "../components/home/FinalCTA.astro";
@@ -16,198 +18,166 @@ import { posts } from "../data/posts";
 ---
 
 <BaseLayout title="ForenseIA | Inteligencia Estratégica">
-
-  <!-- HERO -->
   <section class="relative min-h-screen flex items-center overflow-hidden pt-24">
-
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(200,169,107,0.18),transparent_35%)]"></div>
-
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_80%,rgba(255,255,255,0.03),transparent_30%)]"></div>
-
-    <div class="absolute inset-0 opacity-[0.04] bg-[url('/grid.svg')]"></div>
+    <div class="absolute inset-0 bg-black"></div>
+    <div class="absolute top-0 right-0 w-[700px] h-[700px] bg-[#C8A96B]/10 blur-[160px] rounded-full"></div>
+    <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-white/[0.03] blur-[140px] rounded-full"></div>
+    <div class="absolute inset-0 opacity-[0.03] bg-[linear-gradient(rgba(255,255,255,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.07)_1px,transparent_1px)] bg-[size:90px_90px]"></div>
 
     <Container class="relative z-10">
+      <div class="grid lg:grid-cols-2 gap-20 items-center">
+        <Reveal>
+          <div class="max-w-2xl">
+            <span class="text-[#C8A96B] uppercase tracking-[0.35em] text-sm">
+              Inteligencia Estratégica
+            </span>
 
-      <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <h1 class="text-5xl md:text-7xl font-semibold leading-[0.96] tracking-[-0.05em] mt-8">
+              Convertimos información compleja en inteligencia accionable.
+            </h1>
 
-        <!-- LEFT -->
-        <div class="max-w-2xl">
+            <p class="text-white/60 text-lg leading-relaxed mt-10 max-w-xl">
+              ForenseIA integra auditoría forense, OSINT, inteligencia patrimonial,
+              ciberseguridad e inteligencia artificial aplicada para investigar,
+              enseñar y acompañar decisiones estratégicas.
+            </p>
 
-          <span class="text-[#C8A96B] uppercase tracking-[0.35em] text-sm">
-            Inteligencia estratégica
-          </span>
+            <div class="flex flex-wrap gap-5 mt-12">
+              <Button href="/contacto">
+                Solicitar diagnóstico
+              </Button>
 
-          <h1 class="text-5xl md:text-7xl font-semibold leading-[0.98] tracking-[-0.04em] mt-6">
-            Convertimos información compleja en inteligencia accionable.
-          </h1>
-
-          <p class="text-white/60 text-lg leading-relaxed mt-8">
-            ForenseIA integra auditoría forense, OSINT, inteligencia patrimonial,
-            ciberseguridad e inteligencia artificial aplicada para investigar,
-            enseñar y acompañar decisiones estratégicas.
-          </p>
-
-          <div class="flex flex-wrap gap-4 mt-10">
-
-            <Button href="/contacto">
-              Solicitar diagnóstico
-            </Button>
-
-            <Button href="/cursos" variant="secondary">
-              Ver cursos
-            </Button>
-
+              <Button href="/cursos" variant="secondary">
+                Ver cursos
+              </Button>
+            </div>
           </div>
+        </Reveal>
 
-        </div>
+        <Reveal delay={180}>
+          <div class="relative flex justify-center lg:justify-end">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-[420px] h-[420px] bg-[#C8A96B]/10 blur-[120px] rounded-full"></div>
+            </div>
 
-        <!-- RIGHT -->
-        <div class="flex justify-center lg:justify-end">
-
-          <img
-            src="/logo.png"
-            alt="ForenseIA"
-            class="w-[240px] md:w-[340px] object-contain drop-shadow-2xl"
-          />
-
-        </div>
-
+            <img
+              src="/logo.png"
+              alt="ForenseIA"
+              class="relative z-10 w-[260px] md:w-[420px] object-contain drop-shadow-[0_0_60px_rgba(200,169,107,0.25)]"
+            />
+          </div>
+        </Reveal>
       </div>
-
     </Container>
-
   </section>
 
-  <!-- AUTHORITY -->
+  <IntroSection />
+
   <AuthoritySection />
 
-  <!-- SERVICES -->
-  <section class="border-y border-white/10 bg-white/[0.02] py-24">
-
+  <section class="border-y border-white/10 bg-white/[0.02] py-28">
     <Container>
-
-      <div class="flex items-end justify-between gap-6 mb-12">
-
-        <SectionTitle
-          eyebrow="Servicios"
-          title="Áreas de especialización"
-          description="Servicios diseñados para análisis, investigación, cumplimiento, formación y toma de decisiones."
-        />
+      <div class="flex items-end justify-between gap-6 mb-14">
+        <Reveal>
+          <SectionTitle
+            eyebrow="Servicios"
+            title="Áreas de especialización"
+            description="Servicios diseñados para análisis, investigación, cumplimiento, formación y toma de decisiones."
+          />
+        </Reveal>
 
         <a
           href="/servicios"
-          class="hidden md:block text-[#C8A96B]"
+          class="hidden md:block text-[#C8A96B] hover:opacity-80 transition"
         >
           Ver todos →
         </a>
-
       </div>
 
       <div class="grid md:grid-cols-3 gap-6">
-
-        {services.slice(0, 3).map((service) => (
-
-          <ServiceCard
-            title={service.title}
-            description={service.description}
-            href={service.href}
-            label="Ver servicio"
-          />
-
+        {services.slice(0, 3).map((service, index) => (
+          <Reveal delay={index * 120}>
+            <ServiceCard
+              title={service.title}
+              description={service.description}
+              href={service.href}
+              label="Ver servicio"
+            />
+          </Reveal>
         ))}
-
       </div>
-
     </Container>
-
   </section>
 
-  <!-- COURSES -->
-  <section class="py-24">
-
+  <section class="py-28">
     <Container>
-
-      <div class="flex items-end justify-between gap-6 mb-12">
-
-        <SectionTitle
-          eyebrow="Academia"
-          title="Cursos destacados"
-          description="Formación especializada para profesionales, instituciones, auditores, investigadores y equipos de cumplimiento."
-        />
+      <div class="flex items-end justify-between gap-6 mb-14">
+        <Reveal>
+          <SectionTitle
+            eyebrow="Academia"
+            title="Cursos destacados"
+            description="Formación especializada para profesionales, instituciones, investigadores y equipos de cumplimiento."
+          />
+        </Reveal>
 
         <a
           href="/cursos"
-          class="hidden md:block text-[#C8A96B]"
+          class="hidden md:block text-[#C8A96B] hover:opacity-80 transition"
         >
           Ver cursos →
         </a>
-
       </div>
 
       <div class="grid md:grid-cols-3 gap-6">
-
-        {courses.map((course) => (
-
-          <ServiceCard
-            title={course.title}
-            description={course.description}
-            href={course.href}
-            label="Ver curso"
-          />
-
+        {courses.map((course, index) => (
+          <Reveal delay={index * 120}>
+            <ServiceCard
+              title={course.title}
+              description={course.description}
+              href={course.href}
+              label="Ver curso"
+            />
+          </Reveal>
         ))}
-
       </div>
-
     </Container>
-
   </section>
 
-  <!-- BLOG -->
-  <section class="border-t border-white/10 bg-white/[0.02] py-24">
-
+  <section class="border-t border-white/10 bg-white/[0.02] py-28">
     <Container>
-
-      <div class="flex items-end justify-between gap-6 mb-12">
-
-        <SectionTitle
-          eyebrow="Gaceta"
-          title="Últimos análisis"
-          description="Publicaciones para enseñar, posicionar autoridad y conectar conocimiento técnico con soluciones reales."
-        />
+      <div class="flex items-end justify-between gap-6 mb-14">
+        <Reveal>
+          <SectionTitle
+            eyebrow="Gaceta"
+            title="Últimos análisis"
+            description="Publicaciones para enseñar, posicionar autoridad y conectar conocimiento técnico con soluciones reales."
+          />
+        </Reveal>
 
         <a
           href="/blog"
-          class="hidden md:block text-[#C8A96B]"
+          class="hidden md:block text-[#C8A96B] hover:opacity-80 transition"
         >
           Ver blog →
         </a>
-
       </div>
 
       <div class="grid md:grid-cols-3 gap-6">
-
-        {posts.map((post) => (
-
-          <ServiceCard
-            title={post.title}
-            description={post.description}
-            href={post.href}
-            label="Leer artículo"
-          />
-
+        {posts.map((post, index) => (
+          <Reveal delay={index * 120}>
+            <ServiceCard
+              title={post.title}
+              description={post.description}
+              href={post.href}
+              label="Leer artículo"
+            />
+          </Reveal>
         ))}
-
       </div>
-
     </Container>
-
   </section>
 
-  <!-- METHOD -->
   <MethodPreview />
 
-  <!-- CTA -->
   <FinalCTA />
-
 </BaseLayout>

@@ -6,31 +6,30 @@ interface Props {
   label?: string;
 }
 
-const {
-  title,
-  description,
-  href,
-  label = "Explorar",
-} = Astro.props;
+const { title, description, href, label = "Explorar" } = Astro.props;
 ---
 
 <a
   href={href}
-  class="group block border border-white/10 bg-gradient-to-b from-white/[0.03] to-white/[0.01] p-7 hover:border-[#C8A96B]/70 transition duration-500 hover:-translate-y-1"
+  class="group relative block overflow-hidden border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-8 transition duration-500 hover:-translate-y-1 hover:border-[#C8A96B]/70"
 >
-  <div class="h-10 w-10 border border-[#C8A96B]/50 flex items-center justify-center text-[#C8A96B] mb-8">
-    +
+  <div class="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-[#C8A96B]/0 blur-3xl transition duration-500 group-hover:bg-[#C8A96B]/10"></div>
+
+  <div class="relative z-10">
+    <div class="mb-10 flex h-11 w-11 items-center justify-center border border-[#C8A96B]/40 text-[#C8A96B] transition duration-300 group-hover:bg-[#C8A96B] group-hover:text-black">
+      +
+    </div>
+
+    <h3 class="text-xl font-semibold leading-tight transition group-hover:text-[#D6B97C]">
+      {title}
+    </h3>
+
+    <p class="mt-5 text-white/55 leading-relaxed">
+      {description}
+    </p>
+
+    <p class="mt-10 text-sm text-[#C8A96B]">
+      {label} →
+    </p>
   </div>
-
-  <h3 class="text-xl font-semibold group-hover:text-[#D6B97C] transition">
-    {title}
-  </h3>
-
-  <p class="text-white/55 leading-relaxed mt-4">
-    {description}
-  </p>
-
-  <p class="text-[#C8A96B] text-sm mt-8">
-    {label} →
-  </p>
 </a>

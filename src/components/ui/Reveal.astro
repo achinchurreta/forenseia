@@ -1,0 +1,44 @@
+---
+interface Props {
+  delay?: number;
+}
+
+const { delay = 0 } = Astro.props;
+---
+
+<div
+  class="reveal opacity-0 translate-y-6"
+  style={`transition-delay:${delay}ms`}
+>
+  <slot />
+</div>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  document.querySelectorAll(".reveal").forEach((el) => {
+    observer.observe(el);
+  });
+</script>
+
+<style>
+  .reveal {
+    transition:
+      opacity 900ms ease,
+      transform 900ms ease;
+  }
+
+  .reveal.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
