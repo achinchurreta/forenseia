@@ -1,64 +1,152 @@
-<footer class="border-t border-white/10 bg-black">
-  <div class="max-w-7xl mx-auto px-6 py-16">
-    <div class="grid md:grid-cols-4 gap-12">
+---
+import { CONTACT } from "../../constants/contact";
+---
 
-      <div class="md:col-span-1">
-        <div class="flex items-center gap-3">
-          <img src="/logo.png" alt="ForenseIA" class="w-12 h-12 object-contain" />
+<footer class="border-t border-white/10 bg-black py-24 mt-20">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <div class="grid md:grid-cols-3 gap-16">
+
+      <!-- BRAND -->
+      <div>
+
+        <div class="flex items-center gap-4">
+
+          <img
+            src="/logo.png"
+            alt="ForenseIA"
+            class="w-12 h-12 object-contain"
+          />
 
           <div>
             <h3 class="text-white text-lg font-semibold tracking-wide">
               FORENSEIA
             </h3>
-            <p class="text-[#C8A96B] text-[10px] uppercase tracking-[0.25em]">
+
+            <p class="text-[#C6A15B] text-[10px] uppercase tracking-[0.3em]">
               Inteligencia Estratégica
             </p>
           </div>
+
         </div>
 
-        <p class="text-white/50 text-sm leading-relaxed mt-6">
-          Auditoría forense, OSINT, inteligencia patrimonial, ciberseguridad e IA aplicada para investigación, formación y toma de decisiones.
+        <p class="text-white/50 leading-relaxed mt-6 max-w-sm">
+          Auditoría forense, inteligencia patrimonial,
+          OSINT, ciberseguridad e inteligencia artificial aplicada.
         </p>
+
       </div>
 
+      <!-- LINKS -->
       <div>
-        <h4 class="text-white font-semibold mb-5">Plataforma</h4>
-        <ul class="space-y-3 text-white/50 text-sm">
-          <li><a href="/servicios" class="hover:text-[#C8A96B]">Servicios</a></li>
-          <li><a href="/cursos" class="hover:text-[#C8A96B]">Cursos</a></li>
-          <li><a href="/blog" class="hover:text-[#C8A96B]">Blog / Gaceta</a></li>
-          <li><a href="/metodologia" class="hover:text-[#C8A96B]">Metodología</a></li>
-        </ul>
+
+        <h4 class="text-white font-semibold mb-6">
+          Plataforma
+        </h4>
+
+        <div class="space-y-4">
+
+          <a
+            href="/servicios"
+            class="block text-white/50 hover:text-[#C6A15B] transition"
+          >
+            Servicios
+          </a>
+
+          <a
+            href="/cursos"
+            class="block text-white/50 hover:text-[#C6A15B] transition"
+          >
+            Cursos
+          </a>
+
+          <a
+            href="/blog"
+            class="block text-white/50 hover:text-[#C6A15B] transition"
+          >
+            Blog / Gaceta
+          </a>
+
+          <a
+            href="/contacto"
+            class="block text-white/50 hover:text-[#C6A15B] transition"
+          >
+            Contacto
+          </a>
+
+        </div>
+
       </div>
 
+      <!-- CONTACT -->
       <div>
-        <h4 class="text-white font-semibold mb-5">Especialización</h4>
-        <ul class="space-y-3 text-white/50 text-sm">
-          <li>Auditoría Forense</li>
-          <li>OSINT</li>
-          <li>Inteligencia Patrimonial</li>
-          <li>IA Aplicada</li>
-        </ul>
-      </div>
 
-      <div>
-        <h4 class="text-white font-semibold mb-5">Contacto</h4>
-        <ul class="space-y-3 text-white/50 text-sm">
-          <li>contacto@forenseia.com</li>
-          <li>México</li>
-          <li>
-            <a href="/contacto" class="text-[#C8A96B] hover:underline">
-              Solicitar diagnóstico →
-            </a>
-          </li>
-        </ul>
+        <h4 class="text-white font-semibold mb-6">
+          Contacto
+        </h4>
+
+        <div class="space-y-4">
+
+          <a
+            href={CONTACT.whatsapp}
+            target="_blank"
+            class="block text-white/50 hover:text-[#C6A15B] transition"
+          >
+            WhatsApp
+          </a>
+
+          <a
+            href={CONTACT.facebook}
+            target="_blank"
+            class="block text-white/50 hover:text-[#C6A15B] transition"
+          >
+            Facebook
+          </a>
+
+          <a
+            href={CONTACT.instagram}
+            target="_blank"
+            class="block text-white/50 hover:text-[#C6A15B] transition"
+          >
+            Instagram
+          </a>
+
+          <a
+            href={CONTACT.tiktok}
+            target="_blank"
+            class="block text-white/50 hover:text-[#C6A15B] transition"
+          >
+            TikTok
+          </a>
+
+          <a
+            href={`mailto:${CONTACT.email}`}
+            class="block text-white/50 hover:text-[#C6A15B] transition"
+          >
+            {CONTACT.email}
+          </a>
+
+          <p class="text-white/40">
+            +52 993 133 6447
+          </p>
+
+        </div>
+
       </div>
 
     </div>
 
-    <div class="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row justify-between gap-4 text-white/40 text-xs">
-      <p>© 2026 ForenseIA. Todos los derechos reservados.</p>
-      <p>Inteligencia, evidencia y estrategia.</p>
+    <div class="border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between gap-4 text-white/30 text-sm">
+
+      <p>
+        © 2026 ForenseIA. Todos los derechos reservados.
+      </p>
+
+      <p>
+        Inteligencia · Evidencia · Estrategia
+      </p>
+
     </div>
+
   </div>
 </footer>
