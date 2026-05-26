@@ -3,7 +3,17 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/ui/PageHeader.astro";
 import Container from "../components/ui/Container.astro";
 import ServiceCard from "../components/ui/ServiceCard.astro";
-import { posts } from "../data/posts";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+type BlogPost = CollectionEntry<"blog">;
+
+const posts: BlogPost[] = await getCollection("blog");
+
+const sortedPosts = posts.sort(
+  (a: BlogPost, b: BlogPost) =>
+    new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
 ---
 
 <BaseLayout title="Blog / Gaceta | ForenseIA">
@@ -16,11 +26,11 @@ import { posts } from "../data/posts";
   <section class="py-24">
     <Container>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {posts.map((post) => (
+        {sortedPosts.map((post: BlogPost) => (
           <ServiceCard
-            title={post.title}
-            description={post.description}
-            href={post.href}
+            title={post.data.title}
+            description={post.data.description}
+            href={`/blog/${post.slug}`}
             label="Leer artículo"
           />
         ))}

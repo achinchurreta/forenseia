@@ -1,0 +1,125 @@
+<section class="border border-white/10 bg-white/[0.02] p-8 rounded-[32px]">
+  <div class="mb-10">
+    <p class="text-[#C6A15B] uppercase tracking-[0.3em] text-xs mb-4">
+      Solicitar diagnóstico
+    </p>
+
+    <h2 class="text-4xl font-semibold leading-tight">
+      Cuéntanos sobre tu caso o necesidad.
+    </h2>
+
+    <p class="text-white/55 mt-4 leading-relaxed">
+      Analizamos casos relacionados con auditoría forense, OSINT,
+      inteligencia patrimonial, evidencia digital e inteligencia estratégica.
+    </p>
+  </div>
+
+  <form
+    name="diagnostico"
+    method="POST"
+    data-netlify="true"
+    netlify-honeypot="bot-field"
+    class="space-y-6"
+  >
+    <input type="hidden" name="form-name" value="diagnostico" />
+
+    <p class="hidden">
+      <label>
+        No llenar:
+        <input name="bot-field" />
+      </label>
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm mb-2 text-white/60">
+          Nombre completo
+        </label>
+
+        <input
+          type="text"
+          name="nombre"
+          required
+          class="w-full bg-black border border-white/10 px-4 py-4 rounded-xl text-white focus:outline-none focus:border-[#C6A15B]"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm mb-2 text-white/60">
+          Correo electrónico
+        </label>
+
+        <input
+          type="email"
+          name="correo"
+          required
+          class="w-full bg-black border border-white/10 px-4 py-4 rounded-xl text-white focus:outline-none focus:border-[#C6A15B]"
+        />
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm mb-2 text-white/60">
+          Teléfono
+        </label>
+
+        <input
+          type="text"
+          name="telefono"
+          class="w-full bg-black border border-white/10 px-4 py-4 rounded-xl text-white focus:outline-none focus:border-[#C6A15B]"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm mb-2 text-white/60">
+          Organización / Empresa
+        </label>
+
+        <input
+          type="text"
+          name="empresa"
+          class="w-full bg-black border border-white/10 px-4 py-4 rounded-xl text-white focus:outline-none focus:border-[#C6A15B]"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm mb-2 text-white/60">
+        Tipo de análisis
+      </label>
+
+      <select
+        name="tipo"
+        class="w-full bg-black border border-white/10 px-4 py-4 rounded-xl text-white focus:outline-none focus:border-[#C6A15B]"
+      >
+        <option>Auditoría Forense</option>
+        <option>OSINT</option>
+        <option>Inteligencia Patrimonial</option>
+        <option>Ciberseguridad</option>
+        <option>Capacitación</option>
+        <option>Otro</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-sm mb-2 text-white/60">
+        Descripción
+      </label>
+
+      <textarea
+        name="descripcion"
+        rows="6"
+        required
+        class="w-full bg-black border border-white/10 px-4 py-4 rounded-xl text-white focus:outline-none focus:border-[#C6A15B]"
+      ></textarea>
+    </div>
+
+    <button
+      type="submit"
+      class="bg-[#C6A15B] text-black px-8 py-4 rounded-xl font-medium hover:opacity-90 transition"
+    >
+      Solicitar diagnóstico
+    </button>
+  </form>
+</section>
