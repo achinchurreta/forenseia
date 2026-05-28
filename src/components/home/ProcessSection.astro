@@ -1,0 +1,54 @@
+---
+import Container from "../ui/Container.astro";
+import SectionTitle from "../ui/SectionTitle.astro";
+import Reveal from "../ui/Reveal.astro";
+
+const steps = [
+  {
+    title: "Diagnóstico",
+    description: "Identificamos la necesidad, el riesgo o el objetivo del análisis.",
+  },
+  {
+    title: "Análisis",
+    description: "Revisamos información, documentos, fuentes abiertas, evidencia digital y contexto.",
+  },
+  {
+    title: "Estrategia",
+    description: "Convertimos hallazgos en criterios, recomendaciones, formación o acciones concretas.",
+  },
+];
+---
+
+<section class="border-t border-white/10 bg-white/[0.02] py-28">
+  <Container>
+    <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-14 items-start">
+      <Reveal>
+        <SectionTitle
+          eyebrow="Proceso"
+          title="De información dispersa a decisiones claras."
+          description="Un flujo simple para ordenar datos, interpretar evidencia y convertir conocimiento en acción."
+        />
+      </Reveal>
+
+      <div class="space-y-6">
+        {steps.map((step, index) => (
+          <Reveal delay={index * 120}>
+            <div class="border border-white/10 bg-black/40 p-8 hover:border-[#C8A96B]/60 transition">
+              <p class="text-[#C8A96B] text-sm">
+                0{index + 1}
+              </p>
+
+              <h3 class="mt-5 text-2xl font-semibold">
+                {step.title}
+              </h3>
+
+              <p class="mt-4 text-white/55 leading-relaxed">
+                {step.description}
+              </p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </Container>
+</section>

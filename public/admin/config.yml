@@ -1,0 +1,54 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+locale: "es"
+
+collections:
+  - name: "blog"
+    label: "Blog / Gaceta"
+    folder: "src/content/blog"
+    create: true
+    extension: "mdx"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    fields:
+      - label: "Título"
+        name: "title"
+        widget: "string"
+
+      - label: "Descripción SEO"
+        name: "description"
+        widget: "text"
+
+      - label: "Categoría"
+        name: "category"
+        widget: "select"
+        options:
+          - "Inteligencia Artificial"
+          - "Auditoría Forense"
+          - "OSINT"
+          - "Ciberseguridad"
+          - "Derecho y Fiscalización"
+          - "Lavado de Dinero"
+          - "Gobierno Digital"
+          - "Inteligencia Patrimonial"
+          - "Herramientas Tecnológicas"
+          - "Gaceta Mundial IA"
+
+      - label: "Fecha"
+        name: "date"
+        widget: "datetime"
+        format: "YYYY-MM-DD"
+
+      - label: "Imagen destacada"
+        name: "cover"
+        widget: "image"
+        required: false
+
+      - label: "Contenido"
+        name: "body"
+        widget: "markdown"

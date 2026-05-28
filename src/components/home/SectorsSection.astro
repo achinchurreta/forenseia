@@ -1,0 +1,42 @@
+---
+import Container from "../ui/Container.astro";
+import SectionTitle from "../ui/SectionTitle.astro";
+import Reveal from "../ui/Reveal.astro";
+
+const sectors = [
+  "Gobiernos municipales",
+  "Gobiernos estatales",
+  "Órganos internos de control",
+  "Despachos jurídicos",
+  "Empresas privadas",
+  "Universidades",
+  "Áreas de cumplimiento",
+  "Auditoría y fiscalización",
+  "Seguridad institucional",
+  "Investigación patrimonial",
+];
+---
+
+<section class="border-t border-white/10 bg-white/[0.02] py-28">
+  <Container>
+    <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-14 items-start">
+      <Reveal>
+        <SectionTitle
+          eyebrow="Sectores"
+          title="Diseñado para instituciones, equipos técnicos y tomadores de decisión."
+          description="ForenseIA comunica, enseña y ofrece servicios para sectores donde la evidencia, la trazabilidad y el análisis estratégico son fundamentales."
+        />
+      </Reveal>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        {sectors.map((sector, index) => (
+          <Reveal delay={index * 70}>
+            <div class="border border-white/10 bg-black/40 px-5 py-5 text-white/65 hover:border-[#C8A96B]/60 hover:text-white transition">
+              {sector}
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </Container>
+</section>
