@@ -1,30 +1,75 @@
-<script>
-  const form = document.getElementById("post-form") as HTMLFormElement | null;
-  const message = document.getElementById("message") as HTMLParagraphElement | null;
+---
+import DashboardLayout from "../../../components/dashboard/DashboardLayout.astro";
+---
 
-  form?.addEventListener("submit", async (event) => {
-    event.preventDefault();
+<DashboardLayout title="Nuevo post | ForenseIA">
+  <div class="mb-10">
+    <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+      Blog / Gaceta
+    </p>
 
-    if (!form || !message) return;
+    <h1 class="text-4xl font-semibold mt-4">
+      Nuevo post
+    </h1>
 
-    const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries());
+    <p class="text-white/50 mt-4">
+      Crea un artículo para publicarlo en el blog de ForenseIA.
+    </p>
+  </div>
 
-    message.textContent = "Publicando...";
+  <form id="post-form" class="max-w-4xl space-y-6">
+    <input name="title" required placeholder="Título" class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]" />
 
-    const response = await fetch("/.netlify/functions/create-post", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
+    <input name="slug" required placeholder="slug-del-articulo" class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]" />
 
-    const data = await response.json();
+    <textarea name="description" required placeholder="Descripción SEO" class="w-full bg-black border border-white/10 px-4 py-4 text-white min-h-28 outline-none focus:border-[#C8A96B]"></textarea>
 
-    if (!response.ok) {
-      message.textContent = `Error: ${data.error}`;
-      return;
+    <select name="category" required class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]">
+      <option value="Inteligencia Artificial">Inteligencia Artificial</option>
+      <option value="Auditoría Forense">Auditoría Forense</option>
+      <option value="OSINT">OSINT</option>
+      <option value="Ciberseguridad">Ciberseguridad</option>
+      <option value="Inteligencia Patrimonial">Inteligencia Patrimonial</option>
+      <option value="Gaceta Mundial IA">Gaceta Mundial IA</option>
+    </select>
+
+    <textarea name="content" required placeholder="# Escribe aquí el contenido en Markdown" class="w-full bg-black border border-white/10 px-4 py-4 text-white min-h-[420px] outline-none focus:border-[#C8A96B] font-mono"></textarea>
+
+    <button type="submit" class="bg-[#C8A96B] text-black px-8 py-4 font-medium">
+      Publicar post
+    </button>
+
+    <p id="message" class="text-white/60"></p>
+  </form>
+
+  <script is:inline>
+    const form = document.getElementById("post-form");
+    const message = document.getElementById("message");
+
+    if (form && message) {
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const payload = Object.fromEntries(formData.entries());
+
+        message.textContent = "Publicando...";
+
+        const response = await fetch("/.netlify/functions/create-post", {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          message.textContent = `Error: ${data.error}`;
+          return;
+        }
+
+        message.textContent = "Post creado correctamente. Netlify redeployará el sitio.";
+        form.reset();
+      });
     }
-
-    message.textContent = "Post creado correctamente. Netlify redeployará el sitio.";
-    form.reset();
-  });
-</script>
+  </script>
+</DashboardLayout>
