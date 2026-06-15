@@ -1,4 +1,6 @@
 ---
+import "../../styles/global.css";
+
 interface Props {
   title?: string;
 }
@@ -14,6 +16,7 @@ const nav = [
 ];
 ---
 
+<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -21,14 +24,27 @@ const nav = [
     <title>{title}</title>
   </head>
 
-  <body class="bg-black text-white">
+  <body class="bg-black text-white antialiased">
     <div class="min-h-screen grid lg:grid-cols-[280px_1fr]">
+
+      <!-- Sidebar -->
       <aside class="border-r border-white/10 bg-white/[0.02] p-6">
+
         <div class="flex items-center gap-3 mb-10">
-          <img src="/logo.png" alt="ForenseIA" class="w-11 h-11 object-contain" />
+          <img
+            src="/logo.png"
+            alt="ForenseIA"
+            class="w-11 h-11 object-contain"
+          />
+
           <div>
-            <p class="font-semibold">FORENSEIA</p>
-            <p class="text-[#C8A96B] text-xs tracking-widest uppercase">Admin</p>
+            <p class="font-semibold">
+              FORENSEIA
+            </p>
+
+            <p class="text-[#C8A96B] text-xs tracking-widest uppercase">
+              Admin
+            </p>
           </div>
         </div>
 
@@ -36,17 +52,20 @@ const nav = [
           {nav.map((item) => (
             <a
               href={item.href}
-              class="block rounded-xl px-4 py-3 text-white/60 hover:bg-white/[0.04] hover:text-[#C8A96B] transition"
+              class="block rounded-xl px-4 py-3 text-white/60 transition hover:bg-white/[0.04] hover:text-[#C8A96B]"
             >
               {item.label}
             </a>
           ))}
         </nav>
+
       </aside>
 
+      <!-- Main -->
       <main class="p-6 lg:p-10">
         <slot />
       </main>
+
     </div>
   </body>
 </html>

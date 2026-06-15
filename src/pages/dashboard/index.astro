@@ -1,35 +1,55 @@
 ---
-import DashboardLayout from "../../components/dashboard/DashboardLayout.astro";
+import "../../styles/global.css";
 
-const stats = [
-  { label: "Posts publicados", value: "0" },
-  { label: "Cursos creados", value: "0" },
-  { label: "Casos registrados", value: "0" },
-  { label: "Usuarios activos", value: "1" },
+interface Props {
+  title?: string;
+}
+
+const { title = "Dashboard | ForenseIA" } = Astro.props;
+
+const nav = [
+  { label: "Inicio", href: "/dashboard" },
+  { label: "Posts", href: "/dashboard/posts" },
+  { label: "Cursos", href: "/dashboard/cursos" },
+  { label: "Casos", href: "/dashboard/casos" },
+  { label: "Ver sitio", href: "/" },
 ];
 ---
 
-<DashboardLayout title="Dashboard | ForenseIA">
-  <div class="mb-10">
-    <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
-      Panel administrativo
-    </p>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+  </head>
 
-    <h1 class="text-4xl font-semibold mt-4">
-      Dashboard ForenseIA
-    </h1>
+  <body class="bg-black text-white antialiased">
+    <div class="min-h-screen grid lg:grid-cols-[280px_1fr]">
+      <aside class="border-r border-white/10 bg-white/[0.02] p-6">
+        <div class="flex items-center gap-3 mb-10">
+          <img src="/logo.png" alt="ForenseIA" class="w-11 h-11 object-contain" />
 
-    <p class="text-white/50 mt-4">
-      Administra publicaciones, cursos, casos y contenido de la plataforma.
-    </p>
-  </div>
+          <div>
+            <p class="font-semibold">FORENSEIA</p>
+            <p class="text-[#C8A96B] text-xs tracking-widest uppercase">Admin</p>
+          </div>
+        </div>
 
-  <div class="grid md:grid-cols-4 gap-6">
-    {stats.map((item) => (
-      <div class="border border-white/10 bg-white/[0.03] p-6">
-        <p class="text-4xl font-semibold text-[#C8A96B]">{item.value}</p>
-        <p class="text-white/50 mt-2">{item.label}</p>
-      </div>
-    ))}
-  </div>
-</DashboardLayout>
+        <nav class="space-y-2">
+          {nav.map((item) => (
+            <a
+              href={item.href}
+              class="block rounded-xl px-4 py-3 text-white/60 hover:bg-white/[0.04] hover:text-[#C8A96B] transition"
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      </aside>
+
+      <main class="p-6 lg:p-10">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>
