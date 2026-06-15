@@ -35,32 +35,47 @@ import DashboardLayout from "../../../components/dashboard/DashboardLayout.astro
 
     <textarea name="content" required placeholder="# Escribe aquí el contenido en Markdown" class="w-full bg-black border border-white/10 px-4 py-4 text-white min-h-[420px] outline-none focus:border-[#C8A96B] font-mono"></textarea>
 
-    <button type="submit" class="bg-[#C8A96B] text-black px-8 py-4 font-medium">
+    <button id="publish-button" type="button" class="bg-[#C8A96B] text-black px-8 py-4 font-medium">
       Publicar post
     </button>
 
     <p id="message" class="text-white/60"></p>
   </form>
 
-<script is:inline>
-  console.log("SCRIPT CARGADO");
+  <script is:inline>
+    const button = document.getElementById("publish-button");
+    const form = document.getElementById("post-form");
+    const message = document.getElementById("message");
 
-  const form = document.getElementById("post-form");
-  const message = document.getElementById("message");
+    button?.addEventListener("click", async () => {
+      if (!form || !message) return;
 
-  console.log("FORM:", form);
-  console.log("MESSAGE:", message);
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
 
-  if (form) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
+      message.textContent = "Publicando...";
 
-      console.log("BOTON FUNCIONA");
+      try {
+        const response = await fetch("/.netlify/functions/create-post", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
 
-      if (message) {
-        message.textContent = "El botón sí funciona";
+        const data = await response.json();
+
+        if (!response.ok) {
+          message.textContent = `Error: ${data.error}`;
+          return;
+        }
+
+        message.textContent = "Post creado correctamente.";
+        form.reset();
+      } catch (error) {
+        message.textContent = `Error: ${error.message}`;
       }
     });
-  }
-</script>
+  </script>
 </DashboardLayout>
