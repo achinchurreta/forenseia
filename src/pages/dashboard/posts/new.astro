@@ -42,34 +42,25 @@ import DashboardLayout from "../../../components/dashboard/DashboardLayout.astro
     <p id="message" class="text-white/60"></p>
   </form>
 
-  <script is:inline>
-    const form = document.getElementById("post-form");
-    const message = document.getElementById("message");
+<script is:inline>
+  console.log("SCRIPT CARGADO");
 
-    if (form && message) {
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
+  const form = document.getElementById("post-form");
+  const message = document.getElementById("message");
 
-        const formData = new FormData(form);
-        const payload = Object.fromEntries(formData.entries());
+  console.log("FORM:", form);
+  console.log("MESSAGE:", message);
 
-        message.textContent = "Publicando...";
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
 
-        const response = await fetch("/.netlify/functions/create-post", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
+      console.log("BOTON FUNCIONA");
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          message.textContent = `Error: ${data.error}`;
-          return;
-        }
-
-        message.textContent = "Post creado correctamente. Netlify redeployará el sitio.";
-        form.reset();
-      });
-    }
-  </script>
+      if (message) {
+        message.textContent = "El botón sí funciona";
+      }
+    });
+  }
+</script>
 </DashboardLayout>
