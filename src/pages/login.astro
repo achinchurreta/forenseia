@@ -1,0 +1,36 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Login | ForenseIA">
+  <section class="min-h-screen flex items-center justify-center px-6 pt-24">
+    <div class="w-full max-w-md border border-white/10 bg-white/[0.03] p-8">
+      <h1 class="text-3xl font-semibold">Acceso ForenseIA</h1>
+
+      <p class="text-white/50 mt-3">
+        Ingresa al panel administrativo para gestionar contenido.
+      </p>
+
+      <form class="space-y-5 mt-8">
+        <input
+          type="email"
+          placeholder="Correo"
+          class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
+        />
+
+        <input
+          type="password"
+          placeholder="Contraseña"
+          class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
+        />
+
+        <a
+          href="/dashboard"
+          class="block text-center bg-[#C8A96B] text-black px-6 py-4 font-medium"
+        >
+          Entrar al dashboard
+        </a>
+      </form>
+    </div>
+  </section>
+</BaseLayout>

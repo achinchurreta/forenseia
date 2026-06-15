@@ -1,0 +1,35 @@
+---
+import DashboardLayout from "../../components/dashboard/DashboardLayout.astro";
+
+const stats = [
+  { label: "Posts publicados", value: "0" },
+  { label: "Cursos creados", value: "0" },
+  { label: "Casos registrados", value: "0" },
+  { label: "Usuarios activos", value: "1" },
+];
+---
+
+<DashboardLayout title="Dashboard | ForenseIA">
+  <div class="mb-10">
+    <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+      Panel administrativo
+    </p>
+
+    <h1 class="text-4xl font-semibold mt-4">
+      Dashboard ForenseIA
+    </h1>
+
+    <p class="text-white/50 mt-4">
+      Administra publicaciones, cursos, casos y contenido de la plataforma.
+    </p>
+  </div>
+
+  <div class="grid md:grid-cols-4 gap-6">
+    {stats.map((item) => (
+      <div class="border border-white/10 bg-white/[0.03] p-6">
+        <p class="text-4xl font-semibold text-[#C8A96B]">{item.value}</p>
+        <p class="text-white/50 mt-2">{item.label}</p>
+      </div>
+    ))}
+  </div>
+</DashboardLayout>

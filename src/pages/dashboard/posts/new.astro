@@ -1,0 +1,30 @@
+<script>
+  const form = document.getElementById("post-form") as HTMLFormElement | null;
+  const message = document.getElementById("message") as HTMLParagraphElement | null;
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!form || !message) return;
+
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
+
+    message.textContent = "Publicando...";
+
+    const response = await fetch("/.netlify/functions/create-post", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      message.textContent = `Error: ${data.error}`;
+      return;
+    }
+
+    message.textContent = "Post creado correctamente. Netlify redeployará el sitio.";
+    form.reset();
+  });
+</script>

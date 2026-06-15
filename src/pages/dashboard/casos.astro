@@ -1,0 +1,27 @@
+---
+import DashboardLayout from "../../components/dashboard/DashboardLayout.astro";
+---
+
+<DashboardLayout title="Casos | ForenseIA">
+  <div class="flex items-center justify-between gap-6 mb-10">
+    <div>
+      <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+        Evidencia
+      </p>
+
+      <h1 class="text-4xl font-semibold mt-4">
+        Casos
+      </h1>
+    </div>
+
+    <button class="bg-[#C8A96B] text-black px-6 py-3 font-medium">
+      Nuevo caso
+    </button>
+  </div>
+
+  <div class="border border-white/10 bg-white/[0.03] p-8">
+    <p class="text-white/50">
+      Aquí aparecerán los casos o ejemplos anonimizados.
+    </p>
+  </div>
+</DashboardLayout>
