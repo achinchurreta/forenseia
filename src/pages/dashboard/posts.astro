@@ -1,16 +1,12 @@
 ---
 import DashboardLayout from "../../components/dashboard/DashboardLayout.astro";
 import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
 
-type BlogPost = CollectionEntry<"blog">;
+const posts = await getCollection("blog");
 
-const posts: BlogPost[] = await getCollection("blog");
-
-const sortedPosts = posts.sort(
-  (a: BlogPost, b: BlogPost) =>
-    new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
+const sortedPosts = posts.sort((a: any, b: any) => {
+  return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+});
 ---
 
 <DashboardLayout title="Posts | ForenseIA">
@@ -33,16 +29,18 @@ const sortedPosts = posts.sort(
     </a>
   </div>
 
-  <div class="space-y-4">
-    {sortedPosts.length === 0 ? (
-      <div class="border border-white/10 bg-white/[0.03] p-8">
-        <p class="text-white/50">
-          Todavía no hay posts creados.
-        </p>
-      </div>
-    ) : (
-      sortedPosts.map((post: BlogPost) => (
-        <div class="border border-white/10 bg-white/[0.03] p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+  {sortedPosts.length === 0 && (
+    <div class="border border-white/10 bg-white/[0.03] p-8">
+      <p class="text-white/50">
+        Todavía no hay posts creados.
+      </p>
+    </div>
+  )}
+
+  {sortedPosts.length > 0 && (
+    <div class="space-y-4">
+      {sortedPosts.map((post: any) => (
+        <article class="border border-white/10 bg-white/[0.03] p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
             <p class="text-[#C8A96B] text-xs uppercase tracking-[0.25em]">
               {post.data.category}
@@ -63,7 +61,7 @@ const sortedPosts = posts.sort(
               target="_blank"
               class="border border-white/10 px-5 py-3 text-white/70 hover:text-[#C8A96B] hover:border-[#C8A96B]/60 transition"
             >
-              Ver en blog
+              Ver
             </a>
 
             <a
@@ -72,9 +70,59 @@ const sortedPosts = posts.sort(
             >
               Editar
             </a>
+
+            <button
+              type="button"
+              data-slug={post.slug}
+              class="delete-post border border-red-500/30 px-5 py-3 text-red-300 hover:bg-red-500/10 transition"
+            >
+              Eliminar
+            </button>
           </div>
-        </div>
-      ))
-    )}
-  </div>
+        </article>
+      ))}
+    </div>
+  )}
+
+  <script is:inline>
+    const buttons = document.querySelectorAll(".delete-post");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", async () => {
+        const slug = button.getAttribute("data-slug");
+
+        if (!slug) return;
+
+        const confirmDelete = confirm(`¿Eliminar el post "${slug}"?`);
+
+        if (!confirmDelete) return;
+
+        button.textContent = "Eliminando...";
+
+        try {
+          const response = await fetch("/.netlify/functions/delete-post", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ slug }),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            alert(`Error: ${data.error}`);
+            button.textContent = "Eliminar";
+            return;
+          }
+
+          alert("Post eliminado. Netlify redeployará el sitio.");
+          window.location.reload();
+        } catch (error) {
+          alert("Error al eliminar el post.");
+          button.textContent = "Eliminar";
+        }
+      });
+    });
+  </script>
 </DashboardLayout>
