@@ -1,19 +1,18 @@
 <script is:inline>
-  const allowedEmails = [
-    "augustochinchurreta@gmail.com"
-  ];
+  async function checkDashboardAccess() {
+    try {
+      const response = await fetch("/.netlify/functions/auth-check", {
+        method: "GET",
+        credentials: "include",
+      });
 
-  const currentPath = window.location.pathname;
-
-  async function checkAccess() {
-    const userEmail = localStorage.getItem("forenseia_user_email");
-
-    if (!userEmail || !allowedEmails.includes(userEmail)) {
+      if (!response.ok) {
+        window.location.href = "/login";
+      }
+    } catch (error) {
       window.location.href = "/login";
     }
   }
 
-  if (currentPath.startsWith("/dashboard")) {
-    checkAccess();
-  }
+  checkDashboardAccess();
 </script>

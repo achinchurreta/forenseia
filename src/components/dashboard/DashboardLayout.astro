@@ -31,11 +31,7 @@ const nav = [
     <div class="min-h-screen grid lg:grid-cols-[280px_1fr]">
       <aside class="border-r border-white/10 bg-white/[0.02] p-6">
         <div class="flex items-center gap-3 mb-10">
-          <img
-            src="/logo.png"
-            alt="ForenseIA"
-            class="w-11 h-11 object-contain"
-          />
+          <img src="/logo.png" alt="ForenseIA" class="w-11 h-11 object-contain" />
 
           <div>
             <p class="font-semibold">FORENSEIA</p>
@@ -73,8 +69,12 @@ const nav = [
     <script is:inline>
       const logoutButton = document.getElementById("logout-button");
 
-      logoutButton?.addEventListener("click", () => {
-        localStorage.removeItem("forenseia_user_email");
+      logoutButton?.addEventListener("click", async () => {
+        await fetch("/.netlify/functions/logout", {
+          method: "POST",
+          credentials: "include",
+        });
+
         window.location.href = "/login";
       });
     </script>
