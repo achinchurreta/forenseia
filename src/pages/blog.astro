@@ -25,16 +25,24 @@ const sortedPosts = posts.sort(
 
   <section class="py-24">
     <Container>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sortedPosts.map((post: BlogPost) => (
-          <ServiceCard
-            title={post.data.title}
-            description={post.data.description}
-            href={`/blog/${post.slug}`}
-            label="Leer artículo"
-          />
-        ))}
-      </div>
+      {sortedPosts.length === 0 ? (
+        <div class="border border-white/10 bg-white/[0.03] p-10">
+          <p class="text-white/50">
+            Todavía no hay publicaciones disponibles.
+          </p>
+        </div>
+      ) : (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedPosts.map((post: BlogPost) => (
+            <ServiceCard
+              title={post.data.title}
+              description={post.data.description}
+              href={`/blog/${post.slug}`}
+              label="Leer artículo"
+            />
+          ))}
+        </div>
+      )}
     </Container>
   </section>
 </BaseLayout>
