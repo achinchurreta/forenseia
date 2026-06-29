@@ -1,5 +1,16 @@
 ---
 import DashboardLayout from "../../components/dashboard/DashboardLayout.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+type BlogPost = CollectionEntry<"blog">;
+
+const posts: BlogPost[] = await getCollection("blog");
+
+const sortedPosts = posts.sort(
+  (a: BlogPost, b: BlogPost) =>
+    new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
 ---
 
 <DashboardLayout title="Posts | ForenseIA">
@@ -22,9 +33,39 @@ import DashboardLayout from "../../components/dashboard/DashboardLayout.astro";
     </a>
   </div>
 
-  <div class="border border-white/10 bg-white/[0.03] p-8">
-    <p class="text-white/50">
-      Aquí aparecerán los posts creados desde el dashboard.
-    </p>
+  <div class="space-y-4">
+    {sortedPosts.length === 0 ? (
+      <div class="border border-white/10 bg-white/[0.03] p-8">
+        <p class="text-white/50">
+          Todavía no hay posts creados.
+        </p>
+      </div>
+    ) : (
+      sortedPosts.map((post: BlogPost) => (
+        <div class="border border-white/10 bg-white/[0.03] p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <p class="text-[#C8A96B] text-xs uppercase tracking-[0.25em]">
+              {post.data.category}
+            </p>
+
+            <h2 class="text-2xl font-semibold mt-3">
+              {post.data.title}
+            </h2>
+
+            <p class="text-white/50 mt-2">
+              {post.data.description}
+            </p>
+          </div>
+
+          <a
+            href={`/blog/${post.slug}`}
+            target="_blank"
+            class="border border-white/10 px-5 py-3 text-white/70 hover:text-[#C8A96B] hover:border-[#C8A96B]/60 transition"
+          >
+            Ver en blog
+          </a>
+        </div>
+      ))
+    )}
   </div>
 </DashboardLayout>
