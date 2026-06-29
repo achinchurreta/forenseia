@@ -1,8 +1,19 @@
+import { verifySession } from "./_auth.js";
+
 export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
       body: JSON.stringify({ error: "Método no permitido" }),
+    };
+  }
+
+  const user = verifySession(event);
+
+  if (!user) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ error: "No autorizado" }),
     };
   }
 

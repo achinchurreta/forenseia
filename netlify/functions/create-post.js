@@ -1,8 +1,19 @@
+import { verifySession } from "./_auth.js";
+
 export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
       body: JSON.stringify({ error: "Método no permitido" }),
+    };
+  }
+
+  const user = verifySession(event);
+
+  if (!user) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ error: "No autorizado" }),
     };
   }
 
@@ -15,6 +26,7 @@ export async function handler(event) {
     const branch = process.env.GITHUB_BRANCH || "main";
 
     const safeSlug = slug.toLowerCase().trim().replace(/[^a-z0-9-]/g, "-");
+
     const filePath = `src/content/blog/${safeSlug}.mdx`;
 
     const markdown = `---
@@ -58,7 +70,10 @@ ${content}
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, path: filePath }),
+      body: JSON.stringify({
+        success: true,
+        path: filePath,
+      }),
     };
   } catch (error) {
     return {
