@@ -8,29 +8,56 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <h1 class="text-3xl font-semibold">Acceso ForenseIA</h1>
 
       <p class="text-white/50 mt-3">
-        Ingresa al panel administrativo para gestionar contenido.
+        Ingresa al panel administrativo.
       </p>
 
-      <form class="space-y-5 mt-8">
+      <form id="login-form" class="space-y-5 mt-8">
         <input
+          id="email"
           type="email"
           placeholder="Correo"
+          required
           class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
         />
 
         <input
+          id="password"
           type="password"
           placeholder="Contraseña"
+          required
           class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
         />
 
-        <a
-          href="/dashboard"
-          class="block text-center bg-[#C8A96B] text-black px-6 py-4 font-medium"
+        <button
+          type="submit"
+          class="w-full bg-[#C8A96B] text-black px-6 py-4 font-medium"
         >
-          Entrar al dashboard
-        </a>
+          Entrar
+        </button>
+
+        <p id="message" class="text-white/50"></p>
       </form>
     </div>
   </section>
+
+  <script is:inline>
+    const form = document.getElementById("login-form");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const message = document.getElementById("message");
+
+    form?.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const allowedEmail = "augustochinchurreta@gmail.com";
+      const allowedPassword = "ForenseIA2026";
+
+      if (email.value === allowedEmail && password.value === allowedPassword) {
+        localStorage.setItem("forenseia_user_email", email.value);
+        window.location.href = "/dashboard";
+      } else {
+        message.textContent = "Correo o contraseña incorrectos.";
+      }
+    });
+  </script>
 </BaseLayout>

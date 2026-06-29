@@ -1,5 +1,6 @@
 ---
 import "../../styles/global.css";
+import DashboardGuard from "../auth/DashboardGuard.astro";
 
 interface Props {
   title?: string;
@@ -26,7 +27,7 @@ const nav = [
 
   <body class="bg-black text-white antialiased">
     <div class="min-h-screen grid lg:grid-cols-[280px_1fr]">
-
+      <DashboardGuard />
       <!-- Sidebar -->
       <aside class="border-r border-white/10 bg-white/[0.02] p-6">
 
