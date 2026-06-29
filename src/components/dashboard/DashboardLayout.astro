@@ -26,11 +26,10 @@ const nav = [
   </head>
 
   <body class="bg-black text-white antialiased">
-    <div class="min-h-screen grid lg:grid-cols-[280px_1fr]">
-      <DashboardGuard />
-      <!-- Sidebar -->
-      <aside class="border-r border-white/10 bg-white/[0.02] p-6">
+    <DashboardGuard />
 
+    <div class="min-h-screen grid lg:grid-cols-[280px_1fr]">
+      <aside class="border-r border-white/10 bg-white/[0.02] p-6">
         <div class="flex items-center gap-3 mb-10">
           <img
             src="/logo.png"
@@ -39,10 +38,7 @@ const nav = [
           />
 
           <div>
-            <p class="font-semibold">
-              FORENSEIA
-            </p>
-
+            <p class="font-semibold">FORENSEIA</p>
             <p class="text-[#C8A96B] text-xs tracking-widest uppercase">
               Admin
             </p>
@@ -58,15 +54,29 @@ const nav = [
               {item.label}
             </a>
           ))}
-        </nav>
 
+          <button
+            id="logout-button"
+            type="button"
+            class="block w-full text-left rounded-xl px-4 py-3 text-white/60 hover:bg-white/[0.04] hover:text-red-300 transition"
+          >
+            Cerrar sesión
+          </button>
+        </nav>
       </aside>
 
-      <!-- Main -->
       <main class="p-6 lg:p-10">
         <slot />
       </main>
-
     </div>
+
+    <script is:inline>
+      const logoutButton = document.getElementById("logout-button");
+
+      logoutButton?.addEventListener("click", () => {
+        localStorage.removeItem("forenseia_user_email");
+        window.location.href = "/login";
+      });
+    </script>
   </body>
 </html>
