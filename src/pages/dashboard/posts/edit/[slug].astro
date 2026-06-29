@@ -1,0 +1,48 @@
+---
+import DashboardLayout from "../../../../components/dashboard/DashboardLayout.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+type BlogPost = CollectionEntry<"blog">;
+
+export async function getStaticPaths() {
+  const posts: BlogPost[] = await getCollection("blog");
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props as { post: BlogPost };
+---
+
+<DashboardLayout title={`Editar ${post.data.title} | ForenseIA`}>
+  <div class="mb-10">
+    <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+      Editar post
+    </p>
+
+    <h1 class="text-4xl font-semibold mt-4">
+      {post.data.title}
+    </h1>
+
+    <p class="text-white/50 mt-4">
+      Edición visual pendiente. Por ahora abre el archivo en GitHub.
+    </p>
+  </div>
+
+  <div class="border border-white/10 bg-white/[0.03] p-8">
+    <p class="text-white/60">
+      Slug: {post.slug}
+    </p>
+
+    <a
+      href={`https://github.com/achinchurreta/forenseia/tree/main/src/content/blog`}
+      target="_blank"
+      class="inline-flex mt-6 bg-[#C8A96B] text-black px-6 py-3 font-medium"
+    >
+      Abrir posts en GitHub
+    </a>
+  </div>
+</DashboardLayout>

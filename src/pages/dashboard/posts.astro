@@ -57,13 +57,22 @@ const sortedPosts = posts.sort(
             </p>
           </div>
 
-          <a
-            href={`/blog/${post.slug}`}
-            target="_blank"
-            class="border border-white/10 px-5 py-3 text-white/70 hover:text-[#C8A96B] hover:border-[#C8A96B]/60 transition"
-          >
-            Ver en blog
-          </a>
+          <div class="flex flex-wrap gap-3">
+            <a
+              href={`/blog/${post.slug}`}
+              target="_blank"
+              class="border border-white/10 px-5 py-3 text-white/70 hover:text-[#C8A96B] hover:border-[#C8A96B]/60 transition"
+            >
+              Ver en blog
+            </a>
+
+            <a
+              href={`/dashboard/posts/edit/${post.slug}`}
+              class="border border-white/10 px-5 py-3 text-white/70 hover:text-[#C8A96B] hover:border-[#C8A96B]/60 transition"
+            >
+              Editar
+            </a>
+          </div>
         </div>
       ))
     )}
