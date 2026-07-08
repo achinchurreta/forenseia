@@ -2,55 +2,152 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 import Container from "../components/ui/Container.astro";
-import SectionTitle from "../components/ui/SectionTitle.astro";
 import ServiceCard from "../components/ui/ServiceCard.astro";
 import Button from "../components/ui/Button.astro";
 import Reveal from "../components/ui/Reveal.astro";
 
-import IntroSection from "../components/home/IntroSection.astro";
-import MethodPreview from "../components/home/MethodPreview.astro";
-import AuthoritySection from "../components/home/AuthoritySection.astro";
-import FinalCTA from "../components/home/FinalCTA.astro";
-
 import { services } from "../data/services";
 import { courses } from "../data/courses";
-import { posts } from "../data/posts";
-import PlatformSection from "../components/home/PlatformSection.astro";
-import SectorsSection from "../components/home/SectorsSection.astro";
-import ResourcesSection from "../components/home/ResourcesSection.astro";
-import ProcessSection from "../components/home/ProcessSection.astro";
 ---
 
-<BaseLayout title="ForenseIA | Inteligencia Estratégica">
+<BaseLayout title="ForenseIA | Inteligencia Artificial e Investigación Digital">
   <section class="relative min-h-screen flex items-center overflow-hidden pt-24">
     <div class="absolute inset-0 bg-black"></div>
-    <div class="absolute top-0 right-0 w-[700px] h-[700px] bg-[#C8A96B]/10 blur-[160px] rounded-full"></div>
-    <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-white/[0.03] blur-[140px] rounded-full"></div>
-    <div class="absolute inset-0 opacity-[0.03] bg-[linear-gradient(rgba(255,255,255,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.07)_1px,transparent_1px)] bg-[size:90px_90px]"></div>
+    <div class="absolute right-0 top-0 h-[700px] w-[700px] rounded-full bg-[#C8A96B]/10 blur-[160px]"></div>
 
     <Container class="relative z-10">
-      <div class="grid lg:grid-cols-2 gap-20 items-center">
+      <div class="grid lg:grid-cols-2 gap-14 items-center">
         <Reveal>
           <div class="max-w-2xl">
-            <span class="text-[#C8A96B] uppercase tracking-[0.35em] text-sm">
-              Inteligencia Estratégica
-            </span>
-
-            <h1 class="text-5xl md:text-7xl font-semibold leading-[0.96] tracking-[-0.05em] mt-8">
-              Convertimos información compleja en inteligencia accionable.
-            </h1>
-
-            <p class="text-white/60 text-lg leading-relaxed mt-10 max-w-xl">
-              ForenseIA integra auditoría forense, OSINT, inteligencia patrimonial,
-              ciberseguridad e inteligencia artificial aplicada para investigar,
-              enseñar y acompañar decisiones estratégicas.
+            <p class="text-[#C8A96B] uppercase tracking-[0.35em] text-sm">
+              Inteligencia aplicada
             </p>
 
-            <div class="flex flex-wrap gap-5 mt-12">
-              <Button href="/contacto">
-                Solicitar diagnóstico
-              </Button>
+            <h1 class="mt-7 text-5xl md:text-7xl font-semibold leading-[0.96] tracking-[-0.05em]">
+              IA e investigación digital para decisiones estratégicas.
+            </h1>
 
+            <p class="mt-8 max-w-xl text-lg leading-relaxed text-white/55">
+              Formación, análisis y servicios especializados en inteligencia artificial,
+              OSINT, ciberseguridad y auditoría forense.
+            </p>
+
+            <div class="mt-10 flex flex-wrap gap-4">
+              <Button href="/contacto">Solicitar diagnóstico</Button>
+              <Button href="/blog" variant="secondary">Leer blog</Button>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={120}>
+          <div class="flex justify-center lg:justify-end">
+            <img
+              src="/logo.png"
+              alt="ForenseIA"
+              class="w-[250px] md:w-[390px] object-contain drop-shadow-[0_0_60px_rgba(200,169,107,0.22)]"
+            />
+          </div>
+        </Reveal>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-t border-white/10 py-20">
+    <Container>
+      <Reveal>
+        <div class="max-w-2xl mb-10">
+          <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+            Plataforma
+          </p>
+
+          <h2 class="mt-4 text-4xl font-semibold">
+            Tres formas de usar ForenseIA.
+          </h2>
+        </div>
+      </Reveal>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <Reveal>
+          <div class="border border-white/10 bg-white/[0.03] p-8">
+            <h3 class="text-2xl font-semibold">Aprender</h3>
+            <p class="mt-4 text-white/50 leading-relaxed">
+              Cursos prácticos y contenido especializado.
+            </p>
+          </div>
+        </Reveal>
+
+        <Reveal delay={100}>
+          <div class="border border-white/10 bg-white/[0.03] p-8">
+            <h3 class="text-2xl font-semibold">Investigar</h3>
+            <p class="mt-4 text-white/50 leading-relaxed">
+              Artículos, análisis y metodología aplicada.
+            </p>
+          </div>
+        </Reveal>
+
+        <Reveal delay={200}>
+          <div class="border border-white/10 bg-white/[0.03] p-8">
+            <h3 class="text-2xl font-semibold">Resolver</h3>
+            <p class="mt-4 text-white/50 leading-relaxed">
+              Diagnósticos, consultoría y servicios técnicos.
+            </p>
+          </div>
+        </Reveal>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-t border-white/10 bg-white/[0.02] py-20">
+    <Container>
+      <div class="flex items-end justify-between gap-6 mb-10">
+        <div>
+          <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+            Servicios
+          </p>
+
+          <h2 class="mt-4 text-4xl font-semibold">
+            Áreas principales
+          </h2>
+        </div>
+
+        <a href="/servicios" class="hidden md:block text-[#C8A96B]">
+          Ver servicios →
+        </a>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        {services.slice(0, 3).map((service, index) => (
+          <Reveal delay={index * 100}>
+            <ServiceCard
+              title={service.title}
+              description={service.description}
+              href={service.href}
+              label="Ver más"
+            />
+          </Reveal>
+        ))}
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-t border-white/10 py-20">
+    <Container>
+      <div class="grid lg:grid-cols-[0.85fr_1.15fr] gap-10 items-start">
+        <Reveal>
+          <div>
+            <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+              Cursos
+            </p>
+
+            <h2 class="mt-4 text-4xl font-semibold">
+              Formación sin complicaciones.
+            </h2>
+
+            <p class="mt-5 text-white/50 leading-relaxed">
+              Cursos claros, prácticos y orientados a aplicación real.
+            </p>
+
+            <div class="mt-8">
               <Button href="/cursos" variant="secondary">
                 Ver cursos
               </Button>
@@ -58,140 +155,46 @@ import ProcessSection from "../components/home/ProcessSection.astro";
           </div>
         </Reveal>
 
-        <Reveal delay={180}>
-          <div class="relative flex justify-center lg:justify-end">
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="w-[420px] h-[420px] bg-[#C8A96B]/10 blur-[120px] rounded-full"></div>
-            </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          {courses.slice(0, 2).map((course, index) => (
+            <Reveal delay={index * 100}>
+              <ServiceCard
+                title={course.title}
+                description={`${course.duration} · ${course.modality}`}
+                href={course.href}
+                label="Ver curso"
+              />
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </Container>
+  </section>
 
-            <img
-              src="/logo.png"
-              alt="ForenseIA"
-              class="relative z-10 w-[260px] md:w-[420px] object-contain drop-shadow-[0_0_60px_rgba(200,169,107,0.25)]"
-            />
+  <section class="border-t border-white/10 py-24">
+    <Container>
+      <Reveal>
+        <div class="mx-auto max-w-3xl text-center">
+          <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+            Blog
+          </p>
+
+          <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
+            El contenido profundo vive en el blog.
+          </h2>
+
+          <p class="mx-auto mt-6 max-w-xl text-white/50 leading-relaxed">
+            Ahí publicaremos artículos, guías, análisis, casos y material técnico.
+          </p>
+
+          <div class="mt-9 flex justify-center gap-4">
+            <Button href="/blog">Leer blog</Button>
+            <Button href="/contacto" variant="secondary">
+              Contactar
+            </Button>
           </div>
-        </Reveal>
-      </div>
+        </div>
+      </Reveal>
     </Container>
   </section>
-
-  <IntroSection />
-
-  <PlatformSection />
-
-  <AuthoritySection />
-
-  <SectorsSection />
-
-  <ResourcesSection />
-
-  <ProcessSection />
-
-  <MethodPreview />
-
-  <section class="border-y border-white/10 bg-white/[0.02] py-28">
-    <Container>
-      <div class="flex items-end justify-between gap-6 mb-14">
-        <Reveal>
-          <SectionTitle
-            eyebrow="Servicios"
-            title="Áreas de especialización"
-            description="Servicios diseñados para análisis, investigación, cumplimiento, formación y toma de decisiones."
-          />
-        </Reveal>
-
-        <a
-          href="/servicios"
-          class="hidden md:block text-[#C8A96B] hover:opacity-80 transition"
-        >
-          Ver todos →
-        </a>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6">
-        {services.slice(0, 3).map((service, index) => (
-          <Reveal delay={index * 120}>
-            <ServiceCard
-              title={service.title}
-              description={service.description}
-              href={service.href}
-              label="Ver servicio"
-            />
-          </Reveal>
-        ))}
-      </div>
-    </Container>
-  </section>
-
-  <section class="py-28">
-    <Container>
-      <div class="flex items-end justify-between gap-6 mb-14">
-        <Reveal>
-          <SectionTitle
-            eyebrow="Academia"
-            title="Cursos destacados"
-            description="Formación especializada para profesionales, instituciones, investigadores y equipos de cumplimiento."
-          />
-        </Reveal>
-
-        <a
-          href="/cursos"
-          class="hidden md:block text-[#C8A96B] hover:opacity-80 transition"
-        >
-          Ver cursos →
-        </a>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6">
-        {courses.map((course, index) => (
-          <Reveal delay={index * 120}>
-            <ServiceCard
-              title={course.title}
-              description={course.description}
-              href={course.href}
-              label="Ver curso"
-            />
-          </Reveal>
-        ))}
-      </div>
-    </Container>
-  </section>
-
-  <section class="border-t border-white/10 bg-white/[0.02] py-28">
-    <Container>
-      <div class="flex items-end justify-between gap-6 mb-14">
-        <Reveal>
-          <SectionTitle
-            eyebrow="Gaceta"
-            title="Últimos análisis"
-            description="Publicaciones para enseñar, posicionar autoridad y conectar conocimiento técnico con soluciones reales."
-          />
-        </Reveal>
-
-        <a
-          href="/blog"
-          class="hidden md:block text-[#C8A96B] hover:opacity-80 transition"
-        >
-          Ver blog →
-        </a>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6">
-        {posts.map((post, index) => (
-          <Reveal delay={index * 120}>
-            <ServiceCard
-              title={post.title}
-              description={post.description}
-              href={post.href}
-              label="Leer artículo"
-            />
-          </Reveal>
-        ))}
-      </div>
-    </Container>
-  </section>
-
-  <MethodPreview />
-
-  <FinalCTA />
 </BaseLayout>
