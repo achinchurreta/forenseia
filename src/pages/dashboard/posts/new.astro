@@ -1,80 +1,279 @@
 ---
 import DashboardLayout from "../../../components/dashboard/DashboardLayout.astro";
+
+const categories = [
+  "Inteligencia Artificial",
+  "Gobierno Digital",
+  "Automatización",
+  "OSINT",
+  "Investigación Digital",
+  "Ciberseguridad",
+  "Inteligencia Patrimonial",
+  "Auditoría Forense",
+  "Psicología Criminal",
+  "Análisis Conductual",
+  "Prevención",
+];
+
+const authors = [
+  "Gonzalo García",
+  "Augusto Chinchurreta",
+  "Tania Pérez",
+  "ForenseIA",
+];
 ---
 
-<DashboardLayout title="Nuevo post | ForenseIA">
+<DashboardLayout title="Nuevo artículo | ForenseIA">
   <div class="mb-10">
-    <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
-      Blog / Gaceta
+    <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+      Biblioteca
     </p>
 
-    <h1 class="text-4xl font-semibold mt-4">
-      Nuevo post
+    <h1 class="mt-4 text-4xl font-semibold">
+      Nuevo artículo
     </h1>
 
-    <p class="text-white/50 mt-4">
-      Crea un artículo para publicarlo en el blog de ForenseIA.
+    <p class="mt-4 text-white/50">
+      Crea contenido para el blog y define el autor responsable.
     </p>
   </div>
 
-  <form id="post-form" class="max-w-4xl space-y-6">
-    <input name="title" required placeholder="Título" class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]" />
+  <form id="post-form" class="max-w-5xl space-y-6">
+    <div class="grid gap-6 md:grid-cols-2">
+      <div>
+        <label for="title" class="mb-2 block text-sm text-white/55">
+          Título
+        </label>
 
-    <input name="slug" required placeholder="slug-del-articulo" class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]" />
+        <input
+          id="title"
+          name="title"
+          required
+          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
+        />
+      </div>
 
-    <textarea name="description" required placeholder="Descripción SEO" class="w-full bg-black border border-white/10 px-4 py-4 text-white min-h-28 outline-none focus:border-[#C8A96B]"></textarea>
+      <div>
+        <label for="slug" class="mb-2 block text-sm text-white/55">
+          Slug
+        </label>
 
-    <select name="category" required class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]">
-      <option value="Inteligencia Artificial">Inteligencia Artificial</option>
-      <option value="Auditoría Forense">Auditoría Forense</option>
-      <option value="OSINT">OSINT</option>
-      <option value="Ciberseguridad">Ciberseguridad</option>
-      <option value="Inteligencia Patrimonial">Inteligencia Patrimonial</option>
-      <option value="Gaceta Mundial IA">Gaceta Mundial IA</option>
-    </select>
+        <input
+          id="slug"
+          name="slug"
+          placeholder="se-genera-del-titulo"
+          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
+        />
+      </div>
+    </div>
 
-    <textarea name="content" required placeholder="# Escribe aquí el contenido en Markdown" class="w-full bg-black border border-white/10 px-4 py-4 text-white min-h-[420px] outline-none focus:border-[#C8A96B] font-mono"></textarea>
+    <div>
+      <label for="description" class="mb-2 block text-sm text-white/55">
+        Descripción SEO
+      </label>
 
-    <button id="publish-button" type="button" class="bg-[#C8A96B] text-black px-8 py-4 font-medium">
-      Publicar post
-    </button>
+      <textarea
+        id="description"
+        name="description"
+        required
+        rows="3"
+        maxlength="180"
+        class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
+      ></textarea>
+    </div>
 
-    <p id="message" class="text-white/60"></p>
+    <div class="grid gap-6 md:grid-cols-3">
+      <div>
+        <label for="category" class="mb-2 block text-sm text-white/55">
+          Categoría
+        </label>
+
+        <select
+          id="category"
+          name="category"
+          required
+          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
+        >
+          {categories.map((category) => (
+            <option value={category}>{category}</option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label for="author" class="mb-2 block text-sm text-white/55">
+          Autor
+        </label>
+
+        <select
+          id="author"
+          name="author"
+          required
+          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
+        >
+          {authors.map((author) => (
+            <option value={author}>{author}</option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label for="status" class="mb-2 block text-sm text-white/55">
+          Estado
+        </label>
+
+        <select
+          id="status"
+          name="status"
+          required
+          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
+        >
+          <option value="published">Publicado</option>
+          <option value="draft">Borrador</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2">
+      <div>
+        <label for="cover" class="mb-2 block text-sm text-white/55">
+          URL de portada
+        </label>
+
+        <input
+          id="cover"
+          name="cover"
+          type="url"
+          placeholder="https://..."
+          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
+        />
+      </div>
+
+      <div>
+        <label for="tags" class="mb-2 block text-sm text-white/55">
+          Etiquetas
+        </label>
+
+        <input
+          id="tags"
+          name="tags"
+          placeholder="osint, fiscalías, investigación"
+          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label for="content" class="mb-2 block text-sm text-white/55">
+        Contenido en Markdown
+      </label>
+
+      <textarea
+        id="content"
+        name="content"
+        required
+        rows="20"
+        placeholder="# Introducción"
+        class="min-h-[500px] w-full border border-white/10 bg-black px-4 py-4 font-mono text-white outline-none focus:border-[#C8A96B]"
+      ></textarea>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-4">
+      <button
+        id="publish-button"
+        type="submit"
+        class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Guardar artículo
+      </button>
+
+      <a
+        href="/dashboard/posts"
+        class="border border-white/10 px-8 py-4 text-white/60 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+      >
+        Cancelar
+      </a>
+    </div>
+
+    <p id="message" class="min-h-6 text-sm text-white/55"></p>
   </form>
 
   <script is:inline>
-    const button = document.getElementById("publish-button");
     const form = document.getElementById("post-form");
+    const button = document.getElementById("publish-button");
     const message = document.getElementById("message");
+    const titleInput = document.getElementById("title");
+    const slugInput = document.getElementById("slug");
 
-    button?.addEventListener("click", async () => {
-      if (!form || !message) return;
+    function createSlug(value) {
+      return value
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    titleInput?.addEventListener("input", () => {
+      if (slugInput && !slugInput.dataset.edited) {
+        slugInput.value = createSlug(titleInput.value);
+      }
+    });
+
+    slugInput?.addEventListener("input", () => {
+      slugInput.dataset.edited = slugInput.value ? "true" : "";
+    });
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!form || !button || !message) return;
 
       const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries());
 
-      message.textContent = "Publicando...";
+      button.disabled = true;
+      button.textContent = "Guardando...";
+      message.textContent = "Creando artículo...";
 
       try {
         const response = await fetch("/.netlify/functions/create-post", {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(payload),
         });
 
-        const data = await response.json();
+        const text = await response.text();
+        let data = {};
 
-        if (!response.ok) {
-          message.textContent = `Error: ${data.error}`;
-          return;
+        try {
+          data = JSON.parse(text);
+        } catch {
+          throw new Error(text || "La función devolvió una respuesta inválida");
         }
 
-        message.textContent = "Post creado correctamente.";
-        form.reset();
+        if (!response.ok) {
+          throw new Error(data.error || "No se pudo crear el artículo");
+        }
+
+        message.textContent =
+          "Artículo guardado. Netlify iniciará un nuevo despliegue.";
+
+        setTimeout(() => {
+          window.location.href = "/dashboard/posts";
+        }, 1500);
       } catch (error) {
-        message.textContent = `Error: ${error.message}`;
+        message.textContent =
+          error instanceof Error
+            ? `Error: ${error.message}`
+            : "No se pudo guardar el artículo";
+
+        button.disabled = false;
+        button.textContent = "Guardar artículo";
       }
     });
   </script>

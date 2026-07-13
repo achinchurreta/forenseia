@@ -10,14 +10,15 @@ import { getCollection } from "astro:content";
 import { services } from "../data/services";
 import { courses } from "../data/courses";
 
-const posts = await getCollection("blog");
-
-const latestPosts = [...posts]
+const posts = (await getCollection("blog"))
+  .filter((post) => post.data.status === "published")
   .sort(
-    (a: any, b: any) =>
-      new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-  )
-  .slice(0, 3);
+    (a, b) =>
+      new Date(b.data.date).getTime() -
+      new Date(a.data.date).getTime()
+  );
+
+const latestPosts = posts.slice(0, 3);
 ---
 
 <BaseLayout
@@ -27,26 +28,32 @@ const latestPosts = [...posts]
   <section class="relative min-h-screen overflow-hidden pt-24">
     <div class="absolute inset-0 bg-black"></div>
 
-    <div class="absolute right-[-160px] top-[-180px] h-[760px] w-[760px] rounded-full bg-[#C8A96B]/10 blur-[180px]"></div>
+    <div
+      class="absolute right-[-160px] top-[-180px] h-[760px] w-[760px] rounded-full bg-[#C8A96B]/10 blur-[180px]"
+    ></div>
 
-    <div class="absolute left-[-220px] bottom-[-260px] h-[640px] w-[640px] rounded-full bg-white/[0.025] blur-[160px]"></div>
+    <div
+      class="absolute bottom-[-260px] left-[-220px] h-[640px] w-[640px] rounded-full bg-white/[0.025] blur-[160px]"
+    ></div>
 
-    <div class="absolute inset-0 opacity-[0.025] bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:96px_96px]"></div>
+    <div
+      class="absolute inset-0 opacity-[0.025] bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:96px_96px]"
+    ></div>
 
     <Container class="relative z-10">
-      <div class="min-h-[calc(100vh-6rem)] flex items-center">
-        <div class="grid w-full lg:grid-cols-[1.15fr_0.85fr] gap-16 items-center">
+      <div class="flex min-h-[calc(100vh-6rem)] items-center">
+        <div class="grid w-full items-center gap-16 lg:grid-cols-[1.15fr_0.85fr]">
           <Reveal>
             <div class="max-w-4xl">
-              <p class="text-[#C8A96B] uppercase tracking-[0.4em] text-xs md:text-sm">
+              <p class="text-xs uppercase tracking-[0.4em] text-[#C8A96B] md:text-sm">
                 Inteligencia aplicada
               </p>
 
-              <h1 class="mt-7 text-5xl md:text-7xl xl:text-8xl font-semibold leading-[0.94] tracking-[-0.06em]">
+              <h1 class="mt-7 text-5xl font-semibold leading-[0.94] tracking-[-0.06em] md:text-7xl xl:text-8xl">
                 Conocimiento especializado para decisiones complejas.
               </h1>
 
-              <p class="mt-8 max-w-2xl text-lg md:text-xl leading-relaxed text-white/55">
+              <p class="mt-8 max-w-2xl text-lg leading-relaxed text-white/55 md:text-xl">
                 Integramos inteligencia artificial, investigación digital,
                 ciberseguridad y psicología criminal para instituciones,
                 fiscalías, agencias y organizaciones.
@@ -66,13 +73,15 @@ const latestPosts = [...posts]
 
           <Reveal delay={140}>
             <div class="relative flex justify-center lg:justify-end">
-              <div class="absolute h-[360px] w-[360px] rounded-full bg-[#C8A96B]/10 blur-[110px]"></div>
+              <div
+                class="absolute h-[360px] w-[360px] rounded-full bg-[#C8A96B]/10 blur-[110px]"
+              ></div>
 
               <div class="relative border border-white/10 bg-white/[0.02] p-10">
                 <img
                   src="/logo.png"
                   alt="ForenseIA"
-                  class="w-[220px] md:w-[320px] object-contain"
+                  class="w-[220px] object-contain md:w-[320px]"
                 />
 
                 <div class="mt-8 border-t border-white/10 pt-6 text-center">
@@ -90,21 +99,21 @@ const latestPosts = [...posts]
 
   <section class="border-t border-white/10 py-24">
     <Container>
-      <div class="grid lg:grid-cols-[0.7fr_1.3fr] gap-14 items-start">
+      <div class="grid items-start gap-14 lg:grid-cols-[0.7fr_1.3fr]">
         <Reveal>
           <div>
-            <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+            <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
               Quiénes somos
             </p>
 
-            <h2 class="mt-5 text-4xl md:text-6xl font-semibold leading-tight tracking-[-0.04em]">
+            <h2 class="mt-5 text-4xl font-semibold leading-tight tracking-[-0.04em] md:text-6xl">
               Una plataforma con tres áreas especializadas.
             </h2>
           </div>
         </Reveal>
 
         <Reveal delay={120}>
-          <div class="grid md:grid-cols-3 gap-4">
+          <div class="grid gap-4 md:grid-cols-3">
             <article class="border border-white/10 bg-white/[0.02] p-6">
               <p class="text-xs uppercase tracking-[0.25em] text-[#C8A96B]">
                 Área 01
@@ -154,14 +163,14 @@ const latestPosts = [...posts]
 
   <section class="border-t border-white/10 bg-white/[0.02] py-24">
     <Container>
-      <div class="flex items-end justify-between gap-8 mb-12">
+      <div class="mb-12 flex items-end justify-between gap-8">
         <Reveal>
           <div>
-            <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+            <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
               Biblioteca
             </p>
 
-            <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
+            <h2 class="mt-5 text-4xl font-semibold md:text-5xl">
               Últimos artículos
             </h2>
           </div>
@@ -169,7 +178,7 @@ const latestPosts = [...posts]
 
         <a
           href="/blog"
-          class="hidden md:block text-sm text-[#C8A96B] hover:opacity-80 transition"
+          class="hidden text-sm text-[#C8A96B] transition hover:opacity-80 md:block"
         >
           Ver todos →
         </a>
@@ -182,13 +191,13 @@ const latestPosts = [...posts]
           </p>
         </div>
       ) : (
-        <div class="grid md:grid-cols-3 gap-6">
-          {latestPosts.map((post: any, index: number) => (
+        <div class="grid gap-6 md:grid-cols-3">
+          {latestPosts.map((post, index) => (
             <Reveal delay={index * 100}>
               <ServiceCard
                 title={post.data.title}
                 description={post.data.description}
-                href={`/blog/${post.slug}`}
+                href={`/blog/${post.id}`}
                 label="Leer artículo"
               />
             </Reveal>
@@ -202,17 +211,17 @@ const latestPosts = [...posts]
     <Container>
       <Reveal>
         <div class="mb-12 max-w-2xl">
-          <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+          <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
             Servicios
           </p>
 
-          <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
+          <h2 class="mt-5 text-4xl font-semibold md:text-5xl">
             Soluciones por especialidad.
           </h2>
         </div>
       </Reveal>
 
-      <div class="grid md:grid-cols-3 gap-6">
+      <div class="grid gap-6 md:grid-cols-3">
         {services.slice(0, 3).map((service, index) => (
           <Reveal delay={index * 100}>
             <ServiceCard
@@ -235,14 +244,14 @@ const latestPosts = [...posts]
 
   <section class="border-t border-white/10 bg-white/[0.02] py-24">
     <Container>
-      <div class="grid lg:grid-cols-[0.8fr_1.2fr] gap-12 items-start">
+      <div class="grid items-start gap-12 lg:grid-cols-[0.8fr_1.2fr]">
         <Reveal>
           <div>
-            <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+            <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
               Formación
             </p>
 
-            <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
+            <h2 class="mt-5 text-4xl font-semibold md:text-5xl">
               Cursos para equipos e instituciones.
             </h2>
 
@@ -258,7 +267,7 @@ const latestPosts = [...posts]
           </div>
         </Reveal>
 
-        <div class="grid md:grid-cols-2 gap-6">
+        <div class="grid gap-6 md:grid-cols-2">
           {courses.slice(0, 2).map((course, index) => (
             <Reveal delay={index * 100}>
               <ServiceCard
@@ -278,11 +287,11 @@ const latestPosts = [...posts]
     <Container>
       <Reveal>
         <div class="mx-auto max-w-3xl text-center">
-          <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+          <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
             Contacto
           </p>
 
-          <h2 class="mt-5 text-4xl md:text-6xl font-semibold tracking-[-0.04em]">
+          <h2 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-6xl">
             Encuentra el área adecuada para tu necesidad.
           </h2>
 

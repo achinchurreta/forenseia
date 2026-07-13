@@ -4,19 +4,28 @@ import Container from "../components/ui/Container.astro";
 import Button from "../components/ui/Button.astro";
 import { getCollection } from "astro:content";
 
-const posts = await getCollection("blog");
+const posts = (await getCollection("blog"))
+  .filter((post) => post.data.status === "published")
+  .sort(
+    (a, b) =>
+      new Date(b.data.date).getTime() -
+      new Date(a.data.date).getTime()
+  );
 
-const sortedPosts = [...posts].sort(
-  (a: any, b: any) =>
-    new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
-
-const featuredPost = sortedPosts[0];
-const remainingPosts = sortedPosts.slice(1);
+const featuredPost = posts[0];
+const remainingPosts = posts.slice(1);
 
 const categories = [
-  ...new Set(sortedPosts.map((post: any) => post.data.category)),
+  ...new Set(posts.map((post) => post.data.category)),
 ];
+
+function formatDate(date: Date | string) {
+  return new Intl.DateTimeFormat("es-MX", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(date));
+}
 ---
 
 <BaseLayout
@@ -25,13 +34,13 @@ const categories = [
 >
   <section class="border-b border-white/10 pt-40 pb-20">
     <Container>
-      <div class="grid lg:grid-cols-[0.75fr_1.25fr] gap-12 items-end">
+      <div class="grid items-end gap-12 lg:grid-cols-[0.75fr_1.25fr]">
         <div>
-          <p class="text-[#C8A96B] uppercase tracking-[0.35em] text-xs">
+          <p class="text-xs uppercase tracking-[0.35em] text-[#C8A96B]">
             Biblioteca ForenseIA
           </p>
 
-          <h1 class="mt-6 text-5xl md:text-7xl font-semibold tracking-[-0.05em] leading-[0.96]">
+          <h1 class="mt-6 text-5xl font-semibold leading-[0.96] tracking-[-0.05em] md:text-7xl">
             Conocimiento para decisiones complejas.
           </h1>
         </div>
@@ -44,18 +53,19 @@ const categories = [
     </Container>
   </section>
 
-  <section class="py-16">
+  <section class="py-12">
     <Container>
       <div class="flex flex-wrap gap-3">
-        <a
-          href="/blog"
+        <span
           class="border border-[#C8A96B]/60 px-4 py-2 text-sm text-[#C8A96B]"
         >
           Todos
-        </a>
+        </span>
 
-        {categories.map((category: any) => (
-          <span class="border border-white/10 px-4 py-2 text-sm text-white/45">
+        {categories.map((category) => (
+          <span
+            class="border border-white/10 px-4 py-2 text-sm text-white/45"
+          >
             {category}
           </span>
         ))}
@@ -63,10 +73,12 @@ const categories = [
     </Container>
   </section>
 
-  {featuredPost && (
+  {featuredPost ? (
     <section class="pb-20">
       <Container>
-        <article class="group grid overflow-hidden border border-white/10 bg-white/[0.02] lg:grid-cols-[1.15fr_0.85fr]">
+        <article
+          class="group grid overflow-hidden border border-white/10 bg-white/[0.02] lg:grid-cols-[1.15fr_0.85fr]"
+        >
           <div class="relative min-h-[360px] overflow-hidden bg-black">
             {featuredPost.data.cover ? (
               <img
@@ -75,7 +87,9 @@ const categories = [
                 class="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
               />
             ) : (
-              <div class="flex h-full min-h-[360px] items-center justify-center bg-[radial-gradient(circle_at_center,rgba(200,169,107,0.14),transparent_55%)]">
+              <div
+                class="flex h-full min-h-[360px] items-center justify-center bg-[radial-gradient(circle_at_center,rgba(200,169,107,0.14),transparent_55%)]"
+              >
                 <img
                   src="/logo.png"
                   alt="ForenseIA"
@@ -90,11 +104,13 @@ const categories = [
               Artículo destacado
             </p>
 
-            <p class="mt-5 text-sm text-white/35">
-              {featuredPost.data.category}
-            </p>
+            <div class="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-sm text-white/35">
+              <span>{featuredPost.data.category}</span>
+              <span>{featuredPost.data.author}</span>
+              <span>{formatDate(featuredPost.data.date)}</span>
+            </div>
 
-            <h2 class="mt-4 text-3xl md:text-5xl font-semibold leading-tight">
+            <h2 class="mt-5 text-3xl font-semibold leading-tight md:text-5xl">
               {featuredPost.data.title}
             </h2>
 
@@ -103,7 +119,7 @@ const categories = [
             </p>
 
             <div class="mt-8">
-              <Button href={`/blog/${featuredPost.slug}`}>
+              <Button href={`/blog/${featuredPost.id}`}>
                 Leer artículo
               </Button>
             </div>
@@ -111,36 +127,44 @@ const categories = [
         </article>
       </Container>
     </section>
-  )}
+  ) : null}
 
   <section class="border-t border-white/10 bg-white/[0.02] py-20">
     <Container>
       <div class="mb-12 flex items-end justify-between gap-8">
         <div>
-          <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+          <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
             Publicaciones
           </p>
 
-          <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
+          <h2 class="mt-5 text-4xl font-semibold md:text-5xl">
             Últimos artículos
           </h2>
         </div>
 
         <p class="hidden text-sm text-white/35 md:block">
-          {sortedPosts.length} publicaciones
+          {posts.length} publicaciones
         </p>
       </div>
 
-      {sortedPosts.length === 0 ? (
+      {posts.length === 0 ? (
         <div class="border border-white/10 bg-black/30 p-10">
           <p class="text-white/50">
             Todavía no hay publicaciones disponibles.
           </p>
         </div>
+      ) : remainingPosts.length === 0 ? (
+        <div class="border border-white/10 bg-black/30 p-8">
+          <p class="text-white/50">
+            El artículo más reciente aparece como publicación destacada.
+          </p>
+        </div>
       ) : (
-        <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {remainingPosts.map((post: any) => (
-            <article class="group flex h-full flex-col overflow-hidden border border-white/10 bg-black/40 transition duration-300 hover:-translate-y-1 hover:border-[#C8A96B]/50">
+        <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {remainingPosts.map((post) => (
+            <article
+              class="group flex h-full flex-col overflow-hidden border border-white/10 bg-black/40 transition duration-300 hover:-translate-y-1 hover:border-[#C8A96B]/50"
+            >
               <div class="relative aspect-[16/9] overflow-hidden border-b border-white/10">
                 {post.data.cover ? (
                   <img
@@ -149,7 +173,9 @@ const categories = [
                     class="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
                   />
                 ) : (
-                  <div class="flex h-full items-center justify-center bg-[radial-gradient(circle_at_center,rgba(200,169,107,0.10),transparent_60%)]">
+                  <div
+                    class="flex h-full items-center justify-center bg-[radial-gradient(circle_at_center,rgba(200,169,107,0.10),transparent_60%)]"
+                  >
                     <img
                       src="/logo.png"
                       alt="ForenseIA"
@@ -172,9 +198,14 @@ const categories = [
                   {post.data.description}
                 </p>
 
+                <div class="mt-7 flex flex-wrap gap-x-3 gap-y-2 text-xs text-white/30">
+                  <span>{post.data.author}</span>
+                  <span>{formatDate(post.data.date)}</span>
+                </div>
+
                 <a
-                  href={`/blog/${post.slug}`}
-                  class="mt-8 text-sm text-[#C8A96B]"
+                  href={`/blog/${post.id}`}
+                  class="mt-7 text-sm text-[#C8A96B]"
                 >
                   Leer artículo →
                 </a>

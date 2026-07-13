@@ -1,9 +1,24 @@
 import { verifySession } from "./_auth.js";
 
+function cleanText(value = "") {
+  return String(value).replace(/"/g, "'").trim();
+}
+
+function createSafeSlug(value = "") {
+  return String(value)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ error: "Método no permitido" }),
     };
   }
@@ -13,33 +28,91 @@ export async function handler(event) {
   if (!user) {
     return {
       statusCode: 401,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ error: "No autorizado" }),
     };
   }
 
   try {
-    const { title, slug, description, category, content } = JSON.parse(event.body);
+    const {
+      title,
+      slug,
+      description,
+      category,
+      author,
+      status,
+      cover,
+      tags,
+      content,
+    } = JSON.parse(event.body || "{}");
+
+    if (
+      !title ||
+      !description ||
+      !category ||
+      !author ||
+      !status ||
+      !content
+    ) {
+      return {
+        statusCode: 400,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          error: "Completa todos los campos obligatorios",
+        }),
+      };
+    }
 
     const token = process.env.GITHUB_TOKEN;
     const owner = process.env.GITHUB_OWNER;
     const repo = process.env.GITHUB_REPO;
     const branch = process.env.GITHUB_BRANCH || "main";
 
-    const safeSlug = slug.toLowerCase().trim().replace(/[^a-z0-9-]/g, "-");
+    if (!token || !owner || !repo) {
+      return {
+        statusCode: 500,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          error: "Faltan variables de GitHub en Netlify",
+        }),
+      };
+    }
+
+    const safeSlug = createSafeSlug(slug || title);
+
+    if (!safeSlug) {
+      return {
+        statusCode: 400,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ error: "El slug no es válido" }),
+      };
+    }
+
+    const parsedTags = String(tags || "")
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean);
 
     const filePath = `src/content/blog/${safeSlug}.mdx`;
 
-    const markdown = `---
-title: "${title.replace(/"/g, "'")}"
-description: "${description.replace(/"/g, "'")}"
-category: "${category}"
-date: "${new Date().toISOString().split("T")[0]}"
----
+    const frontmatter = [
+      "---",
+      `title: "${cleanText(title)}"`,
+      `description: "${cleanText(description)}"`,
+      `category: "${cleanText(category)}"`,
+      `date: "${new Date().toISOString()}"`,
+      `author: "${cleanText(author)}"`,
+      `status: "${cleanText(status)}"`,
+      cover ? `cover: "${cleanText(cover)}"` : null,
+      `tags: ${JSON.stringify(parsedTags)}`,
+      "---",
+    ]
+      .filter(Boolean)
+      .join("\n");
 
-${content}
-`;
+    const markdown = `${frontmatter}\n\n${content.trim()}\n`;
 
-    const encodedContent = Buffer.from(markdown).toString("base64");
+    const encodedContent = Buffer.from(markdown, "utf8").toString("base64");
 
     const response = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`,
@@ -64,21 +137,32 @@ ${content}
     if (!response.ok) {
       return {
         statusCode: response.status,
-        body: JSON.stringify({ error: data.message }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          error: data.message || "No se pudo crear el artículo",
+        }),
       };
     }
 
     return {
       statusCode: 200,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         success: true,
+        slug: safeSlug,
         path: filePath,
       }),
     };
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        error:
+          error instanceof Error
+            ? error.message
+            : "Ocurrió un error inesperado",
+      }),
     };
   }
 }
