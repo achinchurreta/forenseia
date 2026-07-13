@@ -1,40 +1,178 @@
 ---
 import DashboardLayout from "../../components/dashboard/DashboardLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog");
+
+const publishedPosts = posts.filter(
+  (post) => post.data.status === "published"
+);
+
+const draftPosts = posts.filter(
+  (post) => post.data.status === "draft"
+);
 
 const stats = [
-  { label: "Posts publicados", value: "0" },
-  { label: "Cursos creados", value: "0" },
-  { label: "Casos registrados", value: "0" },
-  { label: "Usuarios activos", value: "1" },
+  {
+    label: "Artículos",
+    value: posts.length,
+    description: "Total de publicaciones",
+    href: "/dashboard/posts",
+  },
+  {
+    label: "Publicados",
+    value: publishedPosts.length,
+    description: "Visibles en la biblioteca",
+    href: "/blog",
+  },
+  {
+    label: "Borradores",
+    value: draftPosts.length,
+    description: "Pendientes de revisión",
+    href: "/dashboard/posts",
+  },
+  {
+    label: "Autores",
+    value: 3,
+    description: "Direcciones especializadas",
+    href: "/dashboard/autores",
+  },
+];
+
+const modules = [
+  {
+    number: "01",
+    title: "Artículos",
+    description:
+      "Crear, revisar y publicar contenido para la Biblioteca ForenseIA.",
+    href: "/dashboard/posts",
+    action: "Administrar artículos",
+  },
+  {
+    number: "02",
+    title: "Cursos",
+    description:
+      "Gestionar programas formativos por especialidad e instructor.",
+    href: "/dashboard/cursos",
+    action: "Administrar cursos",
+  },
+  {
+    number: "03",
+    title: "Recursos",
+    description:
+      "Organizar guías, documentos, plantillas y materiales descargables.",
+    href: "/dashboard/recursos",
+    action: "Administrar recursos",
+  },
+  {
+    number: "04",
+    title: "Contenido social",
+    description:
+      "Convertir artículos en ideas para reels, carruseles y publicaciones.",
+    href: "/dashboard/contenido",
+    action: "Planear contenido",
+  },
 ];
 ---
 
-<DashboardLayout title="Dashboard | ForenseIA">
-  <div class="mb-10">
-    <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
-      Panel administrativo
-    </p>
-
-    <h1 class="text-4xl font-semibold mt-4">
-      Dashboard ForenseIA
-    </h1>
-
-    <p class="text-white/50 mt-4">
-      Administra publicaciones, cursos, casos y contenido de la plataforma.
-    </p>
-  </div>
-
-  <div class="grid md:grid-cols-4 gap-6">
-    {stats.map((item) => (
-      <div class="border border-white/10 bg-white/[0.03] p-6">
-        <p class="text-4xl font-semibold text-[#C8A96B]">
-          {item.value}
+<DashboardLayout title="Centro Editorial | ForenseIA">
+  <section>
+    <div class="flex flex-col justify-between gap-8 xl:flex-row xl:items-end">
+      <div class="max-w-3xl">
+        <p
+          class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]"
+        >
+          Centro editorial
         </p>
 
-        <p class="text-white/50 mt-2">
-          {item.label}
+        <h1
+          class="mt-5 text-4xl font-semibold leading-tight tracking-[-0.04em] md:text-6xl"
+        >
+          Gestiona el conocimiento de ForenseIA.
+        </h1>
+
+        <p class="mt-5 max-w-2xl leading-relaxed text-white/45">
+          Administra artículos, cursos, recursos, casos de estudio y contenido
+          para redes sociales desde un mismo lugar.
         </p>
       </div>
+
+      <a
+        href="/dashboard/posts/new"
+        class="inline-flex w-fit bg-[#C8A96B] px-6 py-4 font-medium text-black transition hover:opacity-90"
+      >
+        Crear artículo
+      </a>
+    </div>
+  </section>
+
+  <section class="mt-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    {stats.map((stat) => (
+      <a
+        href={stat.href}
+        class="group border border-white/10 bg-white/[0.02] p-6 transition hover:-translate-y-1 hover:border-[#C8A96B]/50"
+      >
+        <p class="text-4xl font-semibold text-[#C8A96B]">
+          {stat.value}
+        </p>
+
+        <h2 class="mt-5 text-lg font-semibold">
+          {stat.label}
+        </h2>
+
+        <p class="mt-2 text-sm text-white/35">
+          {stat.description}
+        </p>
+      </a>
     ))}
-  </div>
+  </section>
+
+  <section class="mt-16">
+    <div class="mb-8">
+      <p
+        class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]"
+      >
+        Módulos
+      </p>
+
+      <h2 class="mt-4 text-3xl font-semibold">
+        Operación editorial
+      </h2>
+    </div>
+
+    <div class="grid gap-5 md:grid-cols-2">
+      {modules.map((module) => (
+        <a
+          href={module.href}
+          class="group flex min-h-[220px] flex-col border border-white/10 bg-white/[0.02] p-7 transition hover:-translate-y-1 hover:border-[#C8A96B]/50"
+        >
+          <div class="flex items-center justify-between">
+            <span
+              class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]"
+            >
+              Módulo {module.number}
+            </span>
+
+            <span
+              class="text-white/20 transition group-hover:text-[#C8A96B]"
+            >
+              ↗
+            </span>
+          </div>
+
+          <h3 class="mt-10 text-2xl font-semibold">
+            {module.title}
+          </h3>
+
+          <p class="mt-4 max-w-lg leading-relaxed text-white/40">
+            {module.description}
+          </p>
+
+          <p class="mt-auto pt-8 text-sm text-[#C8A96B]">
+            {module.action} →
+          </p>
+        </a>
+      ))}
+    </div>
+  </section>
 </DashboardLayout>

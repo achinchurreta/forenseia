@@ -8,74 +8,231 @@ interface Props {
 
 const { title = "Dashboard | ForenseIA" } = Astro.props;
 
-const nav = [
-  { label: "Inicio", href: "/dashboard" },
-  { label: "Posts", href: "/dashboard/posts" },
-  { label: "Cursos", href: "/dashboard/cursos" },
-  { label: "Casos", href: "/dashboard/casos" },
-  { label: "Ver sitio", href: "/" },
+const pathname = Astro.url.pathname;
+
+const navigation = [
+  {
+    label: "Inicio",
+    href: "/dashboard",
+    icon: "01",
+  },
+  {
+    label: "Artículos",
+    href: "/dashboard/posts",
+    icon: "02",
+  },
+  {
+    label: "Cursos",
+    href: "/dashboard/cursos",
+    icon: "03",
+  },
+  {
+    label: "Recursos",
+    href: "/dashboard/recursos",
+    icon: "04",
+  },
+  {
+    label: "Casos de estudio",
+    href: "/dashboard/casos",
+    icon: "05",
+  },
+  {
+    label: "Contenido social",
+    href: "/dashboard/contenido",
+    icon: "06",
+  },
+  {
+    label: "Autores",
+    href: "/dashboard/autores",
+    icon: "07",
+  },
+  {
+    label: "Configuración",
+    href: "/dashboard/configuracion",
+    icon: "08",
+  },
 ];
+
+function isActive(href: string) {
+  if (href === "/dashboard") {
+    return pathname === "/dashboard" || pathname === "/dashboard/";
+  }
+
+  return pathname.startsWith(href);
+}
 ---
 
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <meta name="robots" content="noindex, nofollow" />
+
     <title>{title}</title>
   </head>
 
   <body class="bg-black text-white antialiased">
     <DashboardGuard />
 
-    <div class="min-h-screen grid lg:grid-cols-[280px_1fr]">
-      <aside class="border-r border-white/10 bg-white/[0.02] p-6">
-        <div class="flex items-center gap-3 mb-10">
-          <img src="/logo.png" alt="ForenseIA" class="w-11 h-11 object-contain" />
+    <div class="min-h-screen lg:grid lg:grid-cols-[290px_1fr]">
+      <aside
+        class="border-b border-white/10 bg-[#050505] lg:sticky lg:top-0 lg:h-screen lg:border-b-0 lg:border-r"
+      >
+        <div class="flex h-full flex-col p-5 lg:p-6">
+          <div class="flex items-center justify-between gap-4">
+            <a href="/dashboard" class="flex items-center gap-3">
+              <img
+                src="/logo.png"
+                alt="ForenseIA"
+                class="h-11 w-11 object-contain"
+              />
 
-          <div>
-            <p class="font-semibold">FORENSEIA</p>
-            <p class="text-[#C8A96B] text-xs tracking-widest uppercase">
-              Admin
+              <div>
+                <p class="font-semibold tracking-wide">
+                  FORENSEIA
+                </p>
+
+                <p
+                  class="mt-1 text-[10px] uppercase tracking-[0.3em] text-[#C8A96B]"
+                >
+                  Centro editorial
+                </p>
+              </div>
+            </a>
+
+            <a
+              href="/"
+              target="_blank"
+              class="border border-white/10 px-3 py-2 text-xs text-white/45 transition hover:border-[#C8A96B]/50 hover:text-[#C8A96B] lg:hidden"
+            >
+              Sitio
+            </a>
+          </div>
+
+          <div class="mt-7 border-t border-white/10 pt-6">
+            <p
+              class="mb-3 px-3 text-[10px] uppercase tracking-[0.3em] text-white/25"
+            >
+              Administración
             </p>
+
+            <nav class="grid gap-1 sm:grid-cols-2 lg:grid-cols-1">
+              {navigation.map((item) => (
+                <a
+                  href={item.href}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  class:list={[
+                    "group flex items-center gap-4 px-3 py-3 text-sm transition",
+                    isActive(item.href)
+                      ? "bg-[#C8A96B] text-black"
+                      : "text-white/50 hover:bg-white/[0.04] hover:text-white",
+                  ]}
+                >
+                  <span
+                    class:list={[
+                      "text-[10px] tracking-[0.2em]",
+                      isActive(item.href)
+                        ? "text-black/60"
+                        : "text-[#C8A96B]",
+                    ]}
+                  >
+                    {item.icon}
+                  </span>
+
+                  <span>{item.label}</span>
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          <div class="mt-auto hidden border-t border-white/10 pt-6 lg:block">
+            <a
+              href="/"
+              target="_blank"
+              class="block px-3 py-3 text-sm text-white/45 transition hover:text-[#C8A96B]"
+            >
+              Ver sitio público →
+            </a>
+
+            <button
+              id="logout-button"
+              type="button"
+              class="mt-1 block w-full px-3 py-3 text-left text-sm text-white/45 transition hover:bg-red-500/10 hover:text-red-300"
+            >
+              Cerrar sesión
+            </button>
           </div>
         </div>
-
-        <nav class="space-y-2">
-          {nav.map((item) => (
-            <a
-              href={item.href}
-              class="block rounded-xl px-4 py-3 text-white/60 transition hover:bg-white/[0.04] hover:text-[#C8A96B]"
-            >
-              {item.label}
-            </a>
-          ))}
-
-          <button
-            id="logout-button"
-            type="button"
-            class="block w-full text-left rounded-xl px-4 py-3 text-white/60 hover:bg-white/[0.04] hover:text-red-300 transition"
-          >
-            Cerrar sesión
-          </button>
-        </nav>
       </aside>
 
-      <main class="p-6 lg:p-10">
-        <slot />
+      <main class="min-w-0">
+        <header
+          class="border-b border-white/10 bg-black/80 px-6 py-5 backdrop-blur-xl lg:px-10"
+        >
+          <div class="flex items-center justify-between gap-6">
+            <div>
+              <p
+                class="text-[10px] uppercase tracking-[0.3em] text-[#C8A96B]"
+              >
+                ForenseIA
+              </p>
+
+              <p class="mt-1 text-sm text-white/40">
+                Gestión de conocimiento y contenido
+              </p>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <a
+                href="/dashboard/posts/new"
+                class="bg-[#C8A96B] px-4 py-3 text-sm font-medium text-black transition hover:opacity-90"
+              >
+                Nuevo artículo
+              </a>
+
+              <button
+                id="mobile-logout-button"
+                type="button"
+                class="border border-white/10 px-4 py-3 text-sm text-white/50 lg:hidden"
+              >
+                Salir
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <div class="p-6 lg:p-10">
+          <slot />
+        </div>
       </main>
     </div>
 
     <script is:inline>
-      const logoutButton = document.getElementById("logout-button");
+      const logoutButtons = [
+        document.getElementById("logout-button"),
+        document.getElementById("mobile-logout-button"),
+      ];
 
-      logoutButton?.addEventListener("click", async () => {
-        await fetch("/.netlify/functions/logout", {
-          method: "POST",
-          credentials: "include",
+      logoutButtons.forEach((button) => {
+        button?.addEventListener("click", async () => {
+          button.disabled = true;
+          button.textContent = "Cerrando...";
+
+          try {
+            await fetch("/.netlify/functions/logout", {
+              method: "POST",
+              credentials: "include",
+            });
+          } finally {
+            window.location.href = "/login";
+          }
         });
-
-        window.location.href = "/login";
       });
     </script>
   </body>
