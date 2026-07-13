@@ -38,17 +38,17 @@ const principles = [
       "Soluciones diseñadas para organismos públicos, fiscalías, agencias y organizaciones.",
   },
   {
-    title: "Especialización profunda",
+    title: "Especialización",
     description:
-      "Conocimiento técnico y profesional aplicado a problemas reales y contextos complejos.",
+      "Conocimiento técnico y profesional aplicado a escenarios reales.",
   },
   {
     title: "Confidencialidad",
     description:
-      "Manejo responsable de la información con criterios de seguridad, ética y discreción.",
+      "Manejo responsable de la información con seguridad, ética y discreción.",
   },
   {
-    title: "Trabajo colaborativo",
+    title: "Trabajo coordinado",
     description:
       "Integramos tecnología, investigación y análisis del comportamiento.",
   },
@@ -61,8 +61,8 @@ const principles = [
 >
   <PageHeader
     eyebrow="Equipo"
-    title="Equipo de especialistas."
-    description="Tres áreas de especialización que trabajan de manera integrada para resolver problemas complejos en instituciones y organizaciones."
+    title="Equipo ForenseIA."
+    description="Tres agentes especializados. Un objetivo común: aplicar conocimiento, tecnología e investigación para resolver problemas complejos."
   />
 
   <section class="py-20">
@@ -70,22 +70,16 @@ const principles = [
       <div class="grid xl:grid-cols-3 gap-6 items-stretch">
         {team.map((member, index) => (
           <article
-            class="group relative flex h-full min-h-[560px] flex-col overflow-hidden border border-white/10 bg-white/[0.02] p-8 transition duration-300 hover:-translate-y-1 hover:border-[#C8A96B]/60"
+            class="group relative flex h-full min-h-[520px] flex-col overflow-hidden border border-white/10 bg-white/[0.02] p-8 text-center transition duration-300 hover:-translate-y-1 hover:border-[#C8A96B]/60"
           >
             <div class="absolute inset-0 bg-gradient-to-b from-[#C8A96B]/0 to-[#C8A96B]/[0.025] opacity-0 transition duration-300 group-hover:opacity-100"></div>
 
-            <div class="relative z-10 flex h-full flex-col">
-              <div class="flex items-center justify-between">
-                <span class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
-                  Perfil 0{index + 1}
-                </span>
+            <div class="relative z-10 flex h-full flex-col items-center">
+              <span class="text-xs uppercase tracking-[0.35em] text-[#C8A96B]">
+                Agente 0{index + 1}
+              </span>
 
-                <span class="text-xs text-white/25">
-                  ForenseIA
-                </span>
-              </div>
-
-              <div class="mt-10 flex h-20 w-20 items-center justify-center rounded-full border border-[#C8A96B]/50 text-lg font-semibold text-[#C8A96B]">
+              <div class="mt-10 flex h-24 w-24 items-center justify-center rounded-full border border-[#C8A96B]/50 bg-[#C8A96B]/5 text-xl font-semibold text-[#C8A96B]">
                 {member.accent}
               </div>
 
@@ -93,31 +87,22 @@ const principles = [
                 {member.name}
               </h2>
 
-              <p class="mt-3 min-h-[56px] text-[#C8A96B]">
+              <p class="mt-4 min-h-[56px] font-medium text-[#C8A96B]">
                 {member.role}
               </p>
 
-              <p class="mt-6 min-h-[120px] leading-relaxed text-white/55">
+              <p class="mx-auto mt-6 max-w-sm min-h-[120px] leading-relaxed text-white/55">
                 {member.description}
               </p>
 
-              <div class="mt-8 border-t border-white/10 pt-6">
+              <div class="mt-8 w-full border-t border-white/10 pt-8">
                 <p class="text-xs uppercase tracking-[0.25em] text-white/35">
                   Área de especialización
                 </p>
 
-                <p class="mt-3 text-lg font-medium text-white">
+                <p class="mx-auto mt-4 max-w-xs text-lg font-semibold text-white">
                   {member.area}
                 </p>
-              </div>
-
-              <div class="mt-auto pt-10">
-                <a
-                  href="/contacto"
-                  class="inline-flex border border-[#C8A96B]/60 px-5 py-3 text-sm text-[#C8A96B] transition hover:bg-[#C8A96B] hover:text-black"
-                >
-                  Contactar
-                </a>
               </div>
             </div>
           </article>
@@ -128,7 +113,7 @@ const principles = [
 
   <section class="border-t border-white/10 bg-white/[0.02] py-20">
     <Container>
-      <div class="mb-12 max-w-2xl">
+      <div class="mx-auto mb-12 max-w-2xl text-center">
         <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
           Nuestra forma de trabajo
         </p>
@@ -140,7 +125,7 @@ const principles = [
 
       <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
         {principles.map((principle, index) => (
-          <article class="border border-white/10 bg-black/30 p-6">
+          <article class="border border-white/10 bg-black/30 p-6 text-center">
             <p class="text-sm text-[#C8A96B]">
               0{index + 1}
             </p>
@@ -170,7 +155,7 @@ const principles = [
         </h2>
 
         <p class="mx-auto mt-6 max-w-xl leading-relaxed text-white/50">
-          Cuéntanos tu necesidad y te canalizamos con el director responsable del área.
+          Cuéntanos tu necesidad y te canalizamos con la dirección responsable.
         </p>
 
         <div class="mt-10">
