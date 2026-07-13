@@ -9,24 +9,33 @@ import { authors } from "../data/authors";
 <BaseLayout title="Nosotros | ForenseIA">
   <PageHeader
     eyebrow="Nosotros"
-    title="Una plataforma de inteligencia aplicada."
-    description="ForenseIA une tecnología, conocimiento e investigación para resolver problemas complejos con método, claridad y criterio técnico."
+    title="Conocimiento especializado para instituciones y organizaciones."
+    description="ForenseIA integra inteligencia artificial, investigación digital, ciberseguridad y psicología aplicada."
   />
 
   <section class="py-24">
     <Container>
       <div class="grid lg:grid-cols-[0.8fr_1.2fr] gap-12">
-        <h2 class="text-4xl md:text-6xl font-semibold leading-tight tracking-[-0.04em]">
-          Inteligencia artificial, ciberseguridad e investigación digital aplicada.
-        </h2>
+        <div>
+          <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+            Quiénes somos
+          </p>
+
+          <h2 class="mt-5 text-4xl md:text-6xl font-semibold leading-tight tracking-[-0.04em]">
+            Tres especialidades. Una plataforma.
+          </h2>
+        </div>
 
         <div class="space-y-6 text-white/55 leading-relaxed text-lg">
           <p>
-            ForenseIA nace como una plataforma especializada en formación, análisis y servicios técnicos para instituciones, organizaciones y profesionales.
+            ForenseIA es una plataforma de conocimiento, formación y servicios
+            especializados para instituciones, organizaciones y profesionales.
           </p>
 
           <p>
-            Integramos dos líneas complementarias: inteligencia artificial aplicada para gobierno e instituciones, e investigación digital con enfoque en OSINT, ciberseguridad, auditoría forense e inteligencia patrimonial.
+            Integramos tecnología, investigación y análisis del comportamiento
+            para capacitar equipos, producir conocimiento y apoyar decisiones
+            en escenarios complejos.
           </p>
         </div>
       </div>
@@ -45,10 +54,10 @@ import { authors } from "../data/authors";
         </h2>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-6">
+      <div class="grid lg:grid-cols-3 gap-6">
         {authors.map((author) => (
           <article class="border border-white/10 bg-black/40 p-8">
-            <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+            <p class="text-[#C8A96B] uppercase tracking-[0.25em] text-xs">
               {author.role}
             </p>
 
@@ -56,7 +65,11 @@ import { authors } from "../data/authors";
               {author.name}
             </h3>
 
-            <p class="mt-4 text-white/55 leading-relaxed">
+            <p class="mt-2 text-sm text-white/35">
+              {author.audience}
+            </p>
+
+            <p class="mt-5 text-white/55 leading-relaxed">
               {author.description}
             </p>
 
@@ -73,7 +86,7 @@ import { authors } from "../data/authors";
 
       <div class="mt-12">
         <Button href="/contacto">
-          Contactar
+          Contactar al equipo
         </Button>
       </div>
     </Container>

@@ -3,8 +3,9 @@ export const authors = [
     id: "gonzalo-garcia",
     name: "Gonzalo García",
     role: "Inteligencia Artificial Aplicada",
+    audience: "Gobierno e instituciones",
     description:
-      "Enfocado en inteligencia artificial, automatización y transformación digital para gobierno, instituciones y organizaciones.",
+      "Especialista en inteligencia artificial, automatización y transformación digital aplicada a procesos institucionales.",
     areas: [
       "IA aplicada",
       "Automatización institucional",
@@ -17,14 +18,30 @@ export const authors = [
     id: "augusto-chinchurreta",
     name: "Augusto Chinchurreta",
     role: "Investigación Digital y Ciberseguridad",
+    audience: "Fiscalías y organizaciones de investigación",
     description:
-      "Enfocado en OSINT, ciberseguridad, inteligencia patrimonial e investigación digital aplicada para fiscalías, organizaciones de investigación y equipos técnicos.",
+      "Especialista en OSINT, ciberseguridad, inteligencia patrimonial e investigación digital aplicada.",
     areas: [
       "OSINT",
       "Ciberseguridad",
       "Investigación digital",
       "Inteligencia patrimonial",
       "Auditoría forense",
+    ],
+  },
+  {
+    id: "tania-perez",
+    name: "Tania Pérez",
+    role: "Psicología Criminal y Educativa",
+    audience: "Instituciones educativas y organizaciones",
+    description:
+      "Especialista en psicología criminal y educativa, análisis del comportamiento, prevención y capacitación.",
+    areas: [
+      "Psicología criminal",
+      "Psicología educativa",
+      "Análisis conductual",
+      "Prevención",
+      "Capacitación",
     ],
   },
 ];
