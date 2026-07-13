@@ -2,27 +2,36 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/ui/PageHeader.astro";
 import Container from "../components/ui/Container.astro";
-import ServiceCard from "../components/ui/ServiceCard.astro";
+import Button from "../components/ui/Button.astro";
 import { services } from "../data/services";
 ---
 
 <BaseLayout title="Servicios | ForenseIA">
   <PageHeader
     eyebrow="Servicios"
-    title="Análisis, investigación y soluciones aplicadas."
-    description="Servicios enfocados en IA aplicada, OSINT, ciberseguridad, auditoría forense e inteligencia patrimonial."
+    title="Soluciones aplicadas para problemas complejos."
+    description="IA, investigación digital, ciberseguridad, OSINT, auditoría forense e inteligencia patrimonial."
   />
 
   <section class="py-20">
     <Container>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid gap-4">
         {services.map((service) => (
-          <ServiceCard
-            title={service.title}
-            description={service.description}
-            href={service.href}
-            label="Ver servicio"
-          />
+          <article class="border border-white/10 bg-white/[0.03] p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <h2 class="text-2xl font-semibold">
+                {service.title}
+              </h2>
+
+              <p class="mt-2 max-w-2xl text-white/50">
+                {service.description}
+              </p>
+            </div>
+
+            <Button href={service.href} variant="secondary">
+              Ver área
+            </Button>
+          </article>
         ))}
       </div>
     </Container>

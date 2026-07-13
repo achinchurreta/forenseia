@@ -1,32 +1,38 @@
 export const services = [
   {
-    title: "Inteligencia Artificial",
-    description: "Automatización, análisis inteligente, agentes IA y soluciones aplicadas.",
-    href: "/servicios/inteligencia-artificial",
+    title: "IA para Gobierno e Instituciones",
+    description:
+      "Automatización, agentes inteligentes, análisis documental y soluciones de IA para procesos institucionales.",
+    href: "/servicios/ia-gobierno",
   },
   {
-    title: "Investigación Digital",
-    description: "OSINT, análisis de exposición digital, perfiles, vínculos y fuentes abiertas.",
-    href: "/servicios/investigacion-digital",
+    title: "Automatización Institucional",
+    description:
+      "Flujos inteligentes para reducir tareas repetitivas, ordenar información y acelerar procesos administrativos.",
+    href: "/servicios/automatizacion-institucional",
+  },
+  {
+    title: "OSINT e Investigación Digital",
+    description:
+      "Búsqueda, análisis y correlación de información en fuentes abiertas para investigación técnica.",
+    href: "/servicios/osint-investigacion-digital",
   },
   {
     title: "Ciberseguridad",
-    description: "Diagnóstico, hardening, exposición digital y protección defensiva.",
+    description:
+      "Diagnóstico, exposición digital, hardening, análisis defensivo y reducción de riesgos.",
     href: "/servicios/ciberseguridad",
   },
   {
-    title: "Auditoría Forense",
-    description: "Análisis documental, evidencia digital, trazabilidad e informes técnicos.",
-    href: "/servicios/auditoria-forense",
-  },
-  {
     title: "Inteligencia Patrimonial",
-    description: "Análisis de bienes, empresas, vínculos, riesgos y congruencia patrimonial.",
+    description:
+      "Análisis de bienes, empresas, vínculos, riesgos, congruencia patrimonial y señales de alerta.",
     href: "/servicios/inteligencia-patrimonial",
   },
   {
-    title: "Capacitación",
-    description: "Cursos, talleres, diplomados y programas institucionales.",
+    title: "Capacitación Especializada",
+    description:
+      "Cursos y talleres para gobierno, fiscalías, organizaciones de investigación y equipos técnicos.",
     href: "/cursos",
   },
 ];

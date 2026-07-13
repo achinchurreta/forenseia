@@ -2,27 +2,36 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/ui/PageHeader.astro";
 import Container from "../components/ui/Container.astro";
-import ServiceCard from "../components/ui/ServiceCard.astro";
+import Button from "../components/ui/Button.astro";
 import { courses } from "../data/courses";
 ---
 
 <BaseLayout title="Cursos | ForenseIA">
   <PageHeader
-    eyebrow="Formación"
-    title="Cursos claros, prácticos y aplicables."
-    description="Capacitación en inteligencia artificial, OSINT, ciberseguridad e investigación digital."
+    eyebrow="Cursos"
+    title="Formación práctica, clara y aplicable."
+    description="Programas cortos para instituciones, organizaciones y equipos técnicos."
   />
 
   <section class="py-20">
     <Container>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid gap-4">
         {courses.map((course) => (
-          <ServiceCard
-            title={course.title}
-            description={course.description}
-            href={course.href}
-            label="Ver curso"
-          />
+          <article class="border border-white/10 bg-white/[0.03] p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <h2 class="text-2xl font-semibold">
+                {course.title}
+              </h2>
+
+              <p class="mt-2 text-white/50">
+                {course.duration} · {course.modality} · {course.level}
+              </p>
+            </div>
+
+            <Button href={course.href} variant="secondary">
+              Ver curso
+            </Button>
+          </article>
         ))}
       </div>
     </Container>

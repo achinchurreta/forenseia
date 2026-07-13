@@ -2,151 +2,86 @@
 import { CONTACT } from "../../constants/contact";
 ---
 
-<footer class="border-t border-white/10 bg-black py-24 mt-20">
+<footer class="border-t border-white/10 bg-black py-16">
   <div class="max-w-7xl mx-auto px-6">
-
-    <div class="grid md:grid-cols-3 gap-16">
-
-      <!-- BRAND -->
-      <div>
-
+    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-10">
+      <div class="max-w-md">
         <div class="flex items-center gap-4">
-
           <img
             src="/logo.png"
             alt="ForenseIA"
-            class="w-12 h-12 object-contain"
+            class="w-11 h-11 object-contain"
           />
 
           <div>
-            <h3 class="text-white text-lg font-semibold tracking-wide">
+            <h3 class="text-white font-semibold tracking-wide">
               FORENSEIA
             </h3>
 
-            <p class="text-[#C6A15B] text-[10px] uppercase tracking-[0.3em]">
-              Inteligencia Estratégica
+            <p class="text-[#C8A96B] text-[10px] uppercase tracking-[0.3em]">
+              Inteligencia aplicada
             </p>
           </div>
-
         </div>
 
-        <p class="text-white/50 leading-relaxed mt-6 max-w-sm">
-          Auditoría forense, inteligencia patrimonial,
-          OSINT, ciberseguridad e inteligencia artificial aplicada.
+        <p class="mt-6 text-white/45 leading-relaxed">
+          Tecnología, inteligencia y conocimiento para resolver problemas complejos.
         </p>
-
       </div>
 
-      <!-- LINKS -->
-      <div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-10 text-sm">
+        <div>
+          <h4 class="text-white mb-4">Sitio</h4>
 
-        <h4 class="text-white font-semibold mb-6">
-          Plataforma
-        </h4>
-
-        <div class="space-y-4">
-
-          <a
-            href="/servicios"
-            class="block text-white/50 hover:text-[#C6A15B] transition"
-          >
-            Servicios
-          </a>
-
-          <a
-            href="/cursos"
-            class="block text-white/50 hover:text-[#C6A15B] transition"
-          >
-            Cursos
-          </a>
-
-          <a
-            href="/blog"
-            class="block text-white/50 hover:text-[#C6A15B] transition"
-          >
-            Blog / Gaceta
-          </a>
-
-          <a
-            href="/contacto"
-            class="block text-white/50 hover:text-[#C6A15B] transition"
-          >
-            Contacto
-          </a>
-
+          <div class="space-y-3 text-white/45">
+            <a href="/servicios" class="block hover:text-[#C8A96B]">Servicios</a>
+            <a href="/cursos" class="block hover:text-[#C8A96B]">Cursos</a>
+            <a href="/blog" class="block hover:text-[#C8A96B]">Blog</a>
+            <a href="/nosotros" class="block hover:text-[#C8A96B]">Nosotros</a>
+          </div>
         </div>
 
-      </div>
+        <div>
+          <h4 class="text-white mb-4">Contacto</h4>
 
-      <!-- CONTACT -->
-      <div>
+          <div class="space-y-3 text-white/45">
+            <a href={CONTACT.whatsapp} target="_blank" class="block hover:text-[#C8A96B]">
+              WhatsApp
+            </a>
 
-        <h4 class="text-white font-semibold mb-6">
-          Contacto
-        </h4>
+            <a href={`mailto:${CONTACT.email}`} class="block hover:text-[#C8A96B]">
+              Correo
+            </a>
 
-        <div class="space-y-4">
-
-          <a
-            href={CONTACT.whatsapp}
-            target="_blank"
-            class="block text-white/50 hover:text-[#C6A15B] transition"
-          >
-            WhatsApp
-          </a>
-
-          <a
-            href={CONTACT.facebook}
-            target="_blank"
-            class="block text-white/50 hover:text-[#C6A15B] transition"
-          >
-            Facebook
-          </a>
-
-          <a
-            href={CONTACT.instagram}
-            target="_blank"
-            class="block text-white/50 hover:text-[#C6A15B] transition"
-          >
-            Instagram
-          </a>
-
-          <a
-            href={CONTACT.tiktok}
-            target="_blank"
-            class="block text-white/50 hover:text-[#C6A15B] transition"
-          >
-            TikTok
-          </a>
-
-          <a
-            href={`mailto:${CONTACT.email}`}
-            class="block text-white/50 hover:text-[#C6A15B] transition"
-          >
-            {CONTACT.email}
-          </a>
-
-          <p class="text-white/40">
-            +52 993 133 6447
-          </p>
-
+            <a href="/contacto" class="block hover:text-[#C8A96B]">
+              Diagnóstico
+            </a>
+          </div>
         </div>
 
+        <div>
+          <h4 class="text-white mb-4">Redes</h4>
+
+          <div class="space-y-3 text-white/45">
+            <a href={CONTACT.facebook} target="_blank" class="block hover:text-[#C8A96B]">
+              Facebook
+            </a>
+
+            <a href={CONTACT.instagram} target="_blank" class="block hover:text-[#C8A96B]">
+              Instagram
+            </a>
+
+            <a href={CONTACT.tiktok} target="_blank" class="block hover:text-[#C8A96B]">
+              TikTok
+            </a>
+          </div>
+        </div>
       </div>
-
     </div>
 
-    <div class="border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between gap-4 text-white/30 text-sm">
-
-      <p>
-        © 2026 ForenseIA. Todos los derechos reservados.
-      </p>
-
-      <p>
-        Inteligencia · Evidencia · Estrategia
-      </p>
-
+    <div class="mt-14 border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between gap-4 text-xs text-white/30">
+      <p>© 2026 ForenseIA.</p>
+      <p>IA · Investigación Digital · Ciberseguridad</p>
     </div>
-
   </div>
 </footer>

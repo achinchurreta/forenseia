@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Container from "../../components/ui/Container.astro";
+import Button from "../../components/ui/Button.astro";
+import { courses } from "../../data/courses";
+
+export function getStaticPaths() {
+  return courses.map((course) => ({
+    params: { slug: course.href.split("/").pop() },
+    props: { course },
+  }));
+}
+
+const { course } = Astro.props;
+---
+
+<BaseLayout
+  title={`${course.title} | ForenseIA`}
+  description={course.description}
+>
+  <section class="pt-40 pb-20 border-b border-white/10">
+    <Container>
+      <div class="grid lg:grid-cols-[1fr_360px] gap-12">
+        <div>
+          <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+            Curso
+          </p>
+
+          <h1 class="mt-6 text-4xl md:text-6xl font-semibold leading-tight">
+            {course.title}
+          </h1>
+
+          <p class="mt-6 max-w-2xl text-lg text-white/55 leading-relaxed">
+            {course.description}
+          </p>
+        </div>
+
+        <aside class="border border-white/10 bg-white/[0.03] p-8 h-fit">
+          <p class="text-white/40">Duración</p>
+          <p class="mt-2 text-white">{course.duration}</p>
+
+          <p class="mt-6 text-white/40">Modalidad</p>
+          <p class="mt-2 text-white">{course.modality}</p>
+
+          <p class="mt-6 text-white/40">Nivel</p>
+          <p class="mt-2 text-white">{course.level}</p>
+
+          <div class="mt-8">
+            <Button href="/contacto">
+              Solicitar información
+            </Button>
+          </div>
+        </aside>
+      </div>
+    </Container>
+  </section>
+
+  <section class="py-20">
+    <Container>
+      <div class="max-w-3xl">
+        <h2 class="text-3xl font-semibold">
+          Enfoque del curso
+        </h2>
+
+        <p class="mt-5 text-white/55 leading-relaxed">
+          Curso práctico, directo y orientado a aplicación real. El objetivo es que el participante comprenda los fundamentos, conozca herramientas útiles y pueda aplicar criterios técnicos en escenarios reales.
+        </p>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

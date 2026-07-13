@@ -1,23 +1,19 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import PageHeader from "../../components/ui/PageHeader.astro";
 import Container from "../../components/ui/Container.astro";
 import Button from "../../components/ui/Button.astro";
 import { getCollection, render } from "astro:content";
-import type { CollectionEntry } from "astro:content";
-
-type BlogPost = CollectionEntry<"blog">;
 
 export async function getStaticPaths() {
-  const posts: BlogPost[] = await getCollection("blog");
+  const posts = await getCollection("blog");
 
-  return posts.map((post) => ({
+  return posts.map((post: any) => ({
     params: { slug: post.slug },
     props: { post },
   }));
 }
 
-const { post } = Astro.props as { post: BlogPost };
+const { post } = Astro.props as any;
 const { Content } = await render(post);
 ---
 
@@ -25,39 +21,53 @@ const { Content } = await render(post);
   title={`${post.data.title} | ForenseIA`}
   description={post.data.description}
 >
-  <PageHeader
-    eyebrow={post.data.category}
-    title={post.data.title}
-    description={post.data.description}
-  />
-
-  <section class="py-20">
-    <Container>
-      <article class="max-w-3xl mx-auto">
-        <p class="text-white/40 text-sm mb-10">
-          Publicado el {post.data.date}
-        </p>
-
-        <div class="prose prose-invert prose-lg max-w-none">
-          <Content />
-        </div>
-
-        <div class="border-t border-white/10 mt-14 pt-10">
-          <h2 class="text-2xl font-semibold">
-            ¿Necesitas aplicar este análisis a un caso real?
-          </h2>
-
-          <p class="text-white/55 mt-4 leading-relaxed">
-            Solicita un diagnóstico inicial para analizar información, documentos, evidencia digital o riesgos institucionales.
+  <article>
+    <header class="pt-40 pb-16 border-b border-white/10">
+      <Container>
+        <div class="max-w-4xl">
+          <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+            {post.data.category}
           </p>
 
-          <div class="mt-8">
-            <Button href="/contacto">
-              Solicitar diagnóstico
-            </Button>
+          <h1 class="mt-6 text-4xl md:text-6xl font-semibold leading-tight tracking-[-0.04em]">
+            {post.data.title}
+          </h1>
+
+          <p class="mt-6 max-w-2xl text-lg text-white/55 leading-relaxed">
+            {post.data.description}
+          </p>
+
+          <p class="mt-8 text-sm text-white/35">
+            Publicado el {post.data.date}
+          </p>
+        </div>
+      </Container>
+    </header>
+
+    <section class="py-20">
+      <Container>
+        <div class="mx-auto max-w-3xl">
+          <div class="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-p:text-white/65 prose-a:text-[#C8A96B] prose-strong:text-white">
+            <Content />
+          </div>
+
+          <div class="mt-16 border-t border-white/10 pt-10">
+            <h2 class="text-2xl font-semibold">
+              ¿Quieres profundizar en este tema?
+            </h2>
+
+            <p class="mt-4 text-white/55 leading-relaxed">
+              Podemos ayudarte con capacitación, diagnóstico o análisis aplicado.
+            </p>
+
+            <div class="mt-8">
+              <Button href="/contacto">
+                Contactar
+              </Button>
+            </div>
           </div>
         </div>
-      </article>
-    </Container>
-  </section>
+      </Container>
+    </section>
+  </article>
 </BaseLayout>

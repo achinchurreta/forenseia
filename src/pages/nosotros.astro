@@ -3,60 +3,72 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/ui/PageHeader.astro";
 import Container from "../components/ui/Container.astro";
 import Button from "../components/ui/Button.astro";
+import { authors } from "../data/authors";
 ---
 
 <BaseLayout title="Nosotros | ForenseIA">
   <PageHeader
     eyebrow="Nosotros"
-    title="Una plataforma de IA, ciberseguridad e investigación digital."
-    description="ForenseIA une formación, análisis técnico y servicios especializados para convertir información compleja en decisiones claras."
+    title="Una plataforma de inteligencia aplicada."
+    description="ForenseIA une tecnología, conocimiento e investigación para resolver problemas complejos con método, claridad y criterio técnico."
   />
 
-  <section class="py-20">
+  <section class="py-24">
     <Container>
-      <div class="grid lg:grid-cols-2 gap-12">
-        <div>
-          <h2 class="text-4xl font-semibold">
-            Menos ruido. Más método.
-          </h2>
-        </div>
+      <div class="grid lg:grid-cols-[0.8fr_1.2fr] gap-12">
+        <h2 class="text-4xl md:text-6xl font-semibold leading-tight tracking-[-0.04em]">
+          Inteligencia artificial, ciberseguridad e investigación digital aplicada.
+        </h2>
 
-        <div class="space-y-5 text-white/55 leading-relaxed">
+        <div class="space-y-6 text-white/55 leading-relaxed text-lg">
           <p>
-            ForenseIA nace para enseñar, investigar y aplicar tecnología en contextos donde la información necesita orden, criterio y trazabilidad.
+            ForenseIA nace como una plataforma especializada en formación, análisis y servicios técnicos para instituciones, organizaciones y profesionales.
           </p>
 
           <p>
-            Trabajamos en dos líneas principales: inteligencia artificial aplicada y análisis digital para OSINT, ciberseguridad, auditoría forense e inteligencia patrimonial.
+            Integramos dos líneas complementarias: inteligencia artificial aplicada para gobierno e instituciones, e investigación digital con enfoque en OSINT, ciberseguridad, auditoría forense e inteligencia patrimonial.
           </p>
         </div>
       </div>
     </Container>
   </section>
 
-  <section class="border-t border-white/10 bg-white/[0.02] py-20">
+  <section class="border-t border-white/10 bg-white/[0.02] py-24">
     <Container>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="border border-white/10 p-8">
-          <h3 class="text-2xl font-semibold">IA aplicada</h3>
-          <p class="text-white/50 mt-4">
-            Automatización, análisis inteligente y soluciones prácticas.
-          </p>
-        </div>
+      <div class="mb-12">
+        <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+          Equipo
+        </p>
 
-        <div class="border border-white/10 p-8">
-          <h3 class="text-2xl font-semibold">Investigación digital</h3>
-          <p class="text-white/50 mt-4">
-            OSINT, ciberseguridad, exposición digital y análisis técnico.
-          </p>
-        </div>
+        <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
+          Líneas de especialización
+        </h2>
+      </div>
 
-        <div class="border border-white/10 p-8">
-          <h3 class="text-2xl font-semibold">Formación</h3>
-          <p class="text-white/50 mt-4">
-            Cursos y contenidos para aprender con claridad.
-          </p>
-        </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        {authors.map((author) => (
+          <article class="border border-white/10 bg-black/40 p-8">
+            <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+              {author.role}
+            </p>
+
+            <h3 class="mt-5 text-3xl font-semibold">
+              {author.name}
+            </h3>
+
+            <p class="mt-4 text-white/55 leading-relaxed">
+              {author.description}
+            </p>
+
+            <div class="mt-6 flex flex-wrap gap-2">
+              {author.areas.map((area) => (
+                <span class="border border-white/10 px-3 py-2 text-sm text-white/50">
+                  {area}
+                </span>
+              ))}
+            </div>
+          </article>
+        ))}
       </div>
 
       <div class="mt-12">
