@@ -12,90 +12,140 @@ import { courses } from "../data/courses";
 
 const posts = await getCollection("blog");
 
-const latestPosts = posts
-  .sort((a: any, b: any) => {
-    return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
-  })
+const latestPosts = [...posts]
+  .sort(
+    (a: any, b: any) =>
+      new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  )
   .slice(0, 3);
 ---
 
-<BaseLayout title="ForenseIA | Inteligencia, Tecnología e Investigación Digital">
-  <section class="relative min-h-screen flex items-center overflow-hidden pt-24">
+<BaseLayout
+  title="ForenseIA | Inteligencia aplicada para instituciones"
+  description="Inteligencia artificial, investigación digital, ciberseguridad y psicología criminal aplicada para instituciones y organizaciones."
+>
+  <section class="relative min-h-screen overflow-hidden pt-24">
     <div class="absolute inset-0 bg-black"></div>
-    <div class="absolute right-[-120px] top-[-120px] h-[720px] w-[720px] rounded-full bg-[#C8A96B]/10 blur-[160px]"></div>
-    <div class="absolute left-[-120px] bottom-[-160px] h-[520px] w-[520px] rounded-full bg-white/[0.03] blur-[140px]"></div>
+
+    <div class="absolute right-[-160px] top-[-180px] h-[760px] w-[760px] rounded-full bg-[#C8A96B]/10 blur-[180px]"></div>
+
+    <div class="absolute left-[-220px] bottom-[-260px] h-[640px] w-[640px] rounded-full bg-white/[0.025] blur-[160px]"></div>
+
+    <div class="absolute inset-0 opacity-[0.025] bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:96px_96px]"></div>
 
     <Container class="relative z-10">
-      <div class="max-w-5xl">
-        <Reveal>
-          <p class="text-[#C8A96B] uppercase tracking-[0.35em] text-sm">
-            ForenseIA
-          </p>
+      <div class="min-h-[calc(100vh-6rem)] flex items-center">
+        <div class="grid w-full lg:grid-cols-[1.15fr_0.85fr] gap-16 items-center">
+          <Reveal>
+            <div class="max-w-4xl">
+              <p class="text-[#C8A96B] uppercase tracking-[0.4em] text-xs md:text-sm">
+                Inteligencia aplicada
+              </p>
 
-          <h1 class="mt-8 text-5xl md:text-8xl font-semibold leading-[0.95] tracking-[-0.06em]">
-            Tecnología, inteligencia y conocimiento para resolver problemas complejos.
-          </h1>
+              <h1 class="mt-7 text-5xl md:text-7xl xl:text-8xl font-semibold leading-[0.94] tracking-[-0.06em]">
+                Conocimiento especializado para decisiones complejas.
+              </h1>
 
-          <p class="mt-8 max-w-2xl text-lg md:text-xl leading-relaxed text-white/55">
-            Desarrollamos soluciones en inteligencia artificial, investigación digital y ciberseguridad aplicada para instituciones, organizaciones y profesionales.
-          </p>
+              <p class="mt-8 max-w-2xl text-lg md:text-xl leading-relaxed text-white/55">
+                Integramos inteligencia artificial, investigación digital,
+                ciberseguridad y psicología criminal para instituciones,
+                fiscalías, agencias y organizaciones.
+              </p>
 
-          <div class="mt-10 flex flex-wrap gap-4">
-            <Button href="/blog">Explorar biblioteca</Button>
-            <Button href="/contacto" variant="secondary">Solicitar diagnóstico</Button>
-          </div>
-        </Reveal>
+              <div class="mt-10 flex flex-wrap gap-4">
+                <Button href="/contacto">
+                  Solicitar diagnóstico
+                </Button>
+
+                <Button href="/blog" variant="secondary">
+                  Explorar biblioteca
+                </Button>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={140}>
+            <div class="relative flex justify-center lg:justify-end">
+              <div class="absolute h-[360px] w-[360px] rounded-full bg-[#C8A96B]/10 blur-[110px]"></div>
+
+              <div class="relative border border-white/10 bg-white/[0.02] p-10">
+                <img
+                  src="/logo.png"
+                  alt="ForenseIA"
+                  class="w-[220px] md:w-[320px] object-contain"
+                />
+
+                <div class="mt-8 border-t border-white/10 pt-6 text-center">
+                  <p class="text-xs uppercase tracking-[0.3em] text-white/30">
+                    Tecnología · Investigación · Psicología
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </Container>
   </section>
 
   <section class="border-t border-white/10 py-24">
     <Container>
-      <div class="grid lg:grid-cols-[0.8fr_1.2fr] gap-12 items-start">
+      <div class="grid lg:grid-cols-[0.7fr_1.3fr] gap-14 items-start">
         <Reveal>
           <div>
             <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
               Quiénes somos
             </p>
 
-            <h2 class="mt-5 text-4xl md:text-6xl font-semibold tracking-[-0.04em] leading-tight">
-              Inteligencia aplicada para decisiones reales.
+            <h2 class="mt-5 text-4xl md:text-6xl font-semibold leading-tight tracking-[-0.04em]">
+              Una plataforma con tres áreas especializadas.
             </h2>
           </div>
         </Reveal>
 
         <Reveal delay={120}>
-          <div class="space-y-6">
-            <p class="text-white/60 text-lg leading-relaxed">
-              ForenseIA es una plataforma especializada en inteligencia artificial, investigación digital y ciberseguridad aplicada.
-            </p>
+          <div class="grid md:grid-cols-3 gap-4">
+            <article class="border border-white/10 bg-white/[0.02] p-6">
+              <p class="text-xs uppercase tracking-[0.25em] text-[#C8A96B]">
+                Área 01
+              </p>
 
-            <p class="text-white/50 leading-relaxed">
-              Creamos conocimiento, capacitamos equipos y desarrollamos soluciones para ordenar información, reducir riesgos y apoyar la toma de decisiones estratégicas.
-            </p>
+              <h3 class="mt-5 text-2xl font-semibold">
+                Inteligencia Artificial
+              </h3>
 
-            <div class="grid md:grid-cols-3 gap-4 pt-4">
-              <div class="border border-white/10 p-5">
-                <h3 class="font-semibold">Investigación</h3>
-                <p class="mt-3 text-sm text-white/45">
-                  OSINT, auditoría forense e inteligencia patrimonial.
-                </p>
-              </div>
+              <p class="mt-4 text-sm leading-relaxed text-white/45">
+                Soluciones para gobierno, instituciones y procesos estratégicos.
+              </p>
+            </article>
 
-              <div class="border border-white/10 p-5">
-                <h3 class="font-semibold">Tecnología</h3>
-                <p class="mt-3 text-sm text-white/45">
-                  IA aplicada, automatización y soluciones digitales.
-                </p>
-              </div>
+            <article class="border border-white/10 bg-white/[0.02] p-6">
+              <p class="text-xs uppercase tracking-[0.25em] text-[#C8A96B]">
+                Área 02
+              </p>
 
-              <div class="border border-white/10 p-5">
-                <h3 class="font-semibold">Formación</h3>
-                <p class="mt-3 text-sm text-white/45">
-                  Cursos, talleres y programas especializados.
-                </p>
-              </div>
-            </div>
+              <h3 class="mt-5 text-2xl font-semibold">
+                Investigación Digital
+              </h3>
+
+              <p class="mt-4 text-sm leading-relaxed text-white/45">
+                OSINT, ciberseguridad y apoyo técnico para fiscalías y agencias.
+              </p>
+            </article>
+
+            <article class="border border-white/10 bg-white/[0.02] p-6">
+              <p class="text-xs uppercase tracking-[0.25em] text-[#C8A96B]">
+                Área 03
+              </p>
+
+              <h3 class="mt-5 text-2xl font-semibold">
+                Psicología Criminal
+              </h3>
+
+              <p class="mt-4 text-sm leading-relaxed text-white/45">
+                Análisis conductual, prevención y capacitación especializada.
+              </p>
+            </article>
           </div>
         </Reveal>
       </div>
@@ -104,21 +154,32 @@ const latestPosts = posts
 
   <section class="border-t border-white/10 bg-white/[0.02] py-24">
     <Container>
-      <Reveal>
-        <div class="mb-12 max-w-2xl">
-          <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
-            Biblioteca
-          </p>
+      <div class="flex items-end justify-between gap-8 mb-12">
+        <Reveal>
+          <div>
+            <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+              Biblioteca
+            </p>
 
-          <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
-            Últimos artículos
-          </h2>
-        </div>
-      </Reveal>
+            <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
+              Últimos artículos
+            </h2>
+          </div>
+        </Reveal>
+
+        <a
+          href="/blog"
+          class="hidden md:block text-sm text-[#C8A96B] hover:opacity-80 transition"
+        >
+          Ver todos →
+        </a>
+      </div>
 
       {latestPosts.length === 0 ? (
-        <div class="border border-white/10 bg-white/[0.03] p-8">
-          <p class="text-white/50">Pronto publicaremos artículos especializados.</p>
+        <div class="border border-white/10 bg-black/30 p-8">
+          <p class="text-white/50">
+            Próximamente publicaremos artículos especializados.
+          </p>
         </div>
       ) : (
         <div class="grid md:grid-cols-3 gap-6">
@@ -134,10 +195,6 @@ const latestPosts = posts
           ))}
         </div>
       )}
-
-      <div class="mt-10">
-        <Button href="/blog" variant="secondary">Ver biblioteca</Button>
-      </div>
     </Container>
   </section>
 
@@ -150,7 +207,7 @@ const latestPosts = posts
           </p>
 
           <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
-            Áreas principales
+            Soluciones por especialidad.
           </h2>
         </div>
       </Reveal>
@@ -162,33 +219,41 @@ const latestPosts = posts
               title={service.title}
               description={service.description}
               href={service.href}
-              label="Ver área"
+              label="Ver servicio"
             />
           </Reveal>
         ))}
+      </div>
+
+      <div class="mt-10">
+        <Button href="/servicios" variant="secondary">
+          Ver todos los servicios
+        </Button>
       </div>
     </Container>
   </section>
 
   <section class="border-t border-white/10 bg-white/[0.02] py-24">
     <Container>
-      <div class="grid lg:grid-cols-[0.85fr_1.15fr] gap-10 items-start">
+      <div class="grid lg:grid-cols-[0.8fr_1.2fr] gap-12 items-start">
         <Reveal>
           <div>
             <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
-              Cursos
+              Formación
             </p>
 
             <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
-              Formación práctica.
+              Cursos para equipos e instituciones.
             </h2>
 
-            <p class="mt-5 text-white/50 leading-relaxed">
-              Cursos claros, cortos y orientados a aplicación real.
+            <p class="mt-5 max-w-lg leading-relaxed text-white/50">
+              Programas claros, especializados y orientados a aplicación real.
             </p>
 
             <div class="mt-8">
-              <Button href="/cursos" variant="secondary">Ver cursos</Button>
+              <Button href="/cursos" variant="secondary">
+                Ver cursos
+              </Button>
             </div>
           </div>
         </Reveal>
@@ -218,12 +283,17 @@ const latestPosts = posts
           </p>
 
           <h2 class="mt-5 text-4xl md:text-6xl font-semibold tracking-[-0.04em]">
-            ¿Necesitas capacitar un equipo o analizar un caso?
+            Encuentra el área adecuada para tu necesidad.
           </h2>
 
-          <div class="mt-10 flex justify-center gap-4">
-            <Button href="/contacto">Contactar</Button>
-            <Button href="/blog" variant="secondary">Leer artículos</Button>
+          <p class="mx-auto mt-6 max-w-xl leading-relaxed text-white/50">
+            Cuéntanos el contexto y te conectamos con la dirección especializada.
+          </p>
+
+          <div class="mt-10">
+            <Button href="/contacto">
+              Contactar al equipo
+            </Button>
           </div>
         </div>
       </Reveal>
