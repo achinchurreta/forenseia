@@ -18,25 +18,25 @@ export const services = [
   {
     area: "Investigación Digital",
     owner: "Augusto Chinchurreta",
-    title: "OSINT e Investigación Digital",
+    title: "OSINT para Fiscalías y Agencias de Inteligencia",
     description:
-      "Búsqueda, análisis y correlación de información pública para investigaciones técnicas.",
+      "Investigación en fuentes abiertas, análisis de perfiles, empresas, redes, ubicaciones y vínculos para apoyar investigaciones institucionales.",
     href: "/servicios/osint-investigacion-digital",
   },
   {
     area: "Ciberseguridad",
     owner: "Augusto Chinchurreta",
-    title: "Ciberseguridad Aplicada",
+    title: "Ciberseguridad para Unidades de Investigación",
     description:
-      "Diagnóstico de exposición digital, hardening, análisis defensivo y reducción de riesgos.",
+      "Diagnóstico de exposición digital, protección defensiva, hardening y análisis técnico para fiscalías, instituciones navales y grupos especializados.",
     href: "/servicios/ciberseguridad",
   },
   {
     area: "Inteligencia Patrimonial",
     owner: "Augusto Chinchurreta",
-    title: "Inteligencia Patrimonial",
+    title: "Inteligencia Patrimonial y Análisis de Vínculos",
     description:
-      "Análisis de personas, empresas, bienes, vínculos, riesgos y congruencia patrimonial.",
+      "Análisis de personas, empresas, bienes, relaciones, riesgos y congruencia patrimonial para investigaciones complejas.",
     href: "/servicios/inteligencia-patrimonial",
   },
   {
@@ -68,7 +68,7 @@ export const services = [
     owner: "ForenseIA",
     title: "Capacitación Especializada",
     description:
-      "Cursos y talleres para gobierno, fiscalías, instituciones educativas y organizaciones.",
+      "Cursos y talleres para gobierno, fiscalías, agencias de inteligencia, instituciones educativas y organizaciones.",
     href: "/cursos",
   },
 ];

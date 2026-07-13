@@ -17,16 +17,19 @@ export const authors = [
   {
     id: "augusto-chinchurreta",
     name: "Augusto Chinchurreta",
-    role: "Investigación Digital y Ciberseguridad",
-    audience: "Fiscalías y organizaciones de investigación",
+    role: "Investigación Digital, OSINT y Ciberseguridad",
+    audience:
+      "Fiscalías, agencias de inteligencia, instituciones navales y grupos especializados de investigación",
     description:
-      "Especialista en OSINT, ciberseguridad, inteligencia patrimonial e investigación digital aplicada.",
+      "Especialista en investigación digital, OSINT, ciberseguridad e inteligencia patrimonial aplicada al apoyo de fiscalías, agencias de inteligencia, instituciones navales, policías de investigación y grupos técnicos especializados.",
     areas: [
-      "OSINT",
-      "Ciberseguridad",
+      "OSINT aplicado",
       "Investigación digital",
+      "Ciberseguridad defensiva",
       "Inteligencia patrimonial",
-      "Auditoría forense",
+      "Análisis de vínculos",
+      "Apoyo técnico a investigaciones",
+      "Auditoría forense digital",
     ],
   },
   {
