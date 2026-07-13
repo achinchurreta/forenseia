@@ -3,49 +3,135 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/ui/PageHeader.astro";
 import Container from "../components/ui/Container.astro";
 import Button from "../components/ui/Button.astro";
-import { authors } from "../data/authors";
+
+const specialists = [
+  {
+    name: "Gonzalo García",
+    role: "Director de Inteligencia Artificial Aplicada",
+    audience: "Gobierno, instituciones públicas y organizaciones",
+    description:
+      "Especialista en inteligencia artificial aplicada, automatización institucional y transformación digital. Su enfoque está orientado al diseño de soluciones para optimizar procesos, analizar información y fortalecer la toma de decisiones en instituciones públicas y privadas.",
+    specialties: [
+      "Inteligencia Artificial Generativa",
+      "Automatización Institucional",
+      "Agentes Inteligentes",
+      "Gobierno Digital",
+      "Análisis Documental",
+      "IA para Auditoría",
+    ],
+  },
+  {
+    name: "Augusto Chinchurreta",
+    role: "Director de Investigación Digital y Ciberseguridad",
+    audience:
+      "Fiscalías, agencias de inteligencia, instituciones navales y unidades especializadas",
+    description:
+      "Especialista en investigación digital, OSINT, ciberseguridad e inteligencia patrimonial. Su trabajo está orientado al apoyo técnico de fiscalías, agencias de inteligencia, instituciones navales, policías de investigación y grupos especializados que requieren capacidades avanzadas de obtención, análisis y correlación de información.",
+    specialties: [
+      "OSINT Avanzado",
+      "Investigación Digital",
+      "Inteligencia Patrimonial",
+      "Ciberseguridad Defensiva",
+      "Análisis de Vínculos",
+      "Auditoría Forense Digital",
+      "Apoyo Técnico a Investigaciones",
+      "Inteligencia Estratégica",
+    ],
+  },
+  {
+    name: "Tania Pérez",
+    role: "Directora de Psicología Criminal y Educativa",
+    audience:
+      "Instituciones educativas, organizaciones y equipos multidisciplinarios",
+    description:
+      "Especialista en psicología criminal, psicología educativa y análisis conductual aplicado. Su trabajo se centra en comprender el comportamiento humano desde una perspectiva preventiva, educativa y criminalística, mediante evaluación, capacitación y estrategias de intervención.",
+    specialties: [
+      "Psicología Criminal",
+      "Psicología Educativa",
+      "Análisis Conductual",
+      "Factores de Riesgo",
+      "Prevención",
+      "Intervención Psicológica",
+      "Capacitación Institucional",
+      "Desarrollo Humano",
+    ],
+  },
+];
+
+const process = [
+  "Necesidad",
+  "Diagnóstico",
+  "Planeación",
+  "Análisis especializado",
+  "Entrega de resultados",
+  "Capacitación y seguimiento",
+];
+
+const knowledgeAreas = [
+  "Inteligencia Artificial",
+  "Investigación Digital",
+  "OSINT",
+  "Ciberseguridad",
+  "Inteligencia Patrimonial",
+  "Auditoría Forense",
+  "Psicología Criminal",
+  "Psicología Educativa",
+];
+
+const sectors = [
+  "Fiscalías",
+  "Agencias de inteligencia",
+  "Instituciones navales",
+  "Dependencias gubernamentales",
+  "Órganos fiscalizadores",
+  "Universidades",
+  "Instituciones educativas",
+  "Empresas privadas",
+  "Despachos",
+  "Organizaciones de investigación",
+];
 ---
 
-<BaseLayout title="Nosotros | ForenseIA">
+<BaseLayout
+  title="Nosotros | ForenseIA"
+  description="Conoce al equipo de especialistas de ForenseIA en inteligencia artificial, investigación digital, ciberseguridad y psicología aplicada."
+>
   <PageHeader
     eyebrow="Nosotros"
-    title="Conocimiento especializado para instituciones y organizaciones."
-    description="ForenseIA integra inteligencia artificial, investigación digital, ciberseguridad y psicología aplicada."
+    title="Especialistas para problemas complejos."
+    description="Integramos tecnología, investigación y análisis del comportamiento para desarrollar conocimiento, capacitar equipos y apoyar decisiones institucionales."
   />
 
   <section class="py-24">
     <Container>
-      <div class="grid lg:grid-cols-[0.8fr_1.2fr] gap-12">
+      <div class="grid lg:grid-cols-[0.8fr_1.2fr] gap-12 items-start">
         <div>
           <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
             Quiénes somos
           </p>
 
           <h2 class="mt-5 text-4xl md:text-6xl font-semibold leading-tight tracking-[-0.04em]">
-            Tres especialidades. Una plataforma.
+            Tres disciplinas. Una visión estratégica.
           </h2>
         </div>
 
-        <div class="space-y-6 text-white/55 leading-relaxed text-lg">
+        <div class="space-y-6 text-lg leading-relaxed text-white/55">
           <p>
-            ForenseIA es una plataforma de conocimiento, formación y servicios
-            especializados para instituciones públicas, organizaciones de
-            investigación y equipos profesionales.
+            ForenseIA es una plataforma especializada en inteligencia artificial,
+            investigación digital, ciberseguridad y psicología aplicada.
           </p>
 
           <p>
-            Integramos inteligencia artificial, investigación digital,
-            ciberseguridad y psicología aplicada para capacitar personal,
-            analizar información y apoyar decisiones en contextos
-            institucionales y operativos.
+            Combinamos capacidades técnicas, analíticas y humanas para atender
+            necesidades de gobierno, fiscalías, agencias de inteligencia,
+            instituciones navales, organizaciones de investigación e instituciones
+            educativas.
           </p>
 
           <p>
-            Nuestra línea de investigación digital está especialmente orientada
-            a fiscalías, agencias de inteligencia, instituciones navales,
-            policías de investigación y grupos especializados que requieren
-            metodologías OSINT, análisis de vínculos, inteligencia patrimonial y
-            apoyo técnico en investigaciones complejas.
+            Nuestro objetivo es transformar información dispersa en conocimiento
+            útil, metodologías aplicables y soluciones que fortalezcan la toma de
+            decisiones.
           </p>
         </div>
       </div>
@@ -54,50 +140,171 @@ import { authors } from "../data/authors";
 
   <section class="border-t border-white/10 bg-white/[0.02] py-24">
     <Container>
-      <div class="mb-12">
+      <div class="mb-14 max-w-3xl">
         <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
-          Equipo
+          Consejo técnico
         </p>
 
-        <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
-          Líneas de especialización
+        <h2 class="mt-5 text-4xl md:text-6xl font-semibold tracking-[-0.04em]">
+          Equipo de especialistas
         </h2>
+
+        <p class="mt-5 text-white/50 leading-relaxed">
+          Tres perfiles complementarios para abordar retos tecnológicos,
+          investigativos, institucionales y conductuales.
+        </p>
       </div>
 
-      <div class="grid lg:grid-cols-3 gap-6">
-        {authors.map((author) => (
-          <article class="border border-white/10 bg-black/40 p-8">
-            <p class="text-[#C8A96B] uppercase tracking-[0.25em] text-xs">
-              {author.role}
-            </p>
+      <div class="grid xl:grid-cols-3 gap-6">
+        {specialists.map((specialist, index) => (
+          <article class="group relative overflow-hidden border border-white/10 bg-black/50 p-8 transition duration-500 hover:-translate-y-1 hover:border-[#C8A96B]/60">
+            <div class="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-[#C8A96B]/0 blur-3xl transition duration-500 group-hover:bg-[#C8A96B]/10"></div>
 
-            <h3 class="mt-5 text-3xl font-semibold">
-              {author.name}
-            </h3>
-
-            <p class="mt-2 text-sm text-white/35">
-              {author.audience}
-            </p>
-
-            <p class="mt-5 text-white/55 leading-relaxed">
-              {author.description}
-            </p>
-
-            <div class="mt-6 flex flex-wrap gap-2">
-              {author.areas.map((area) => (
-                <span class="border border-white/10 px-3 py-2 text-sm text-white/50">
-                  {area}
+            <div class="relative z-10">
+              <div class="flex items-center justify-between gap-4">
+                <span class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+                  Especialista 0{index + 1}
                 </span>
-              ))}
+
+                <span class="text-sm text-white/25">
+                  ForenseIA
+                </span>
+              </div>
+
+              <h3 class="mt-8 text-3xl font-semibold leading-tight">
+                {specialist.name}
+              </h3>
+
+              <p class="mt-3 text-[#C8A96B]">
+                {specialist.role}
+              </p>
+
+              <p class="mt-4 text-sm leading-relaxed text-white/35">
+                {specialist.audience}
+              </p>
+
+              <p class="mt-7 leading-relaxed text-white/55">
+                {specialist.description}
+              </p>
+
+              <div class="mt-8 border-t border-white/10 pt-6">
+                <p class="mb-4 text-xs uppercase tracking-[0.25em] text-white/35">
+                  Especialidades
+                </p>
+
+                <div class="flex flex-wrap gap-2">
+                  {specialist.specialties.map((specialty) => (
+                    <span class="border border-white/10 bg-white/[0.02] px-3 py-2 text-sm text-white/50 transition group-hover:border-[#C8A96B]/30">
+                      {specialty}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </article>
         ))}
       </div>
+    </Container>
+  </section>
 
-      <div class="mt-12">
-        <Button href="/contacto">
-          Contactar al equipo
-        </Button>
+  <section class="border-t border-white/10 py-24">
+    <Container>
+      <div class="grid lg:grid-cols-[0.75fr_1.25fr] gap-12 items-start">
+        <div>
+          <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+            Metodología
+          </p>
+
+          <h2 class="mt-5 text-4xl md:text-5xl font-semibold tracking-[-0.04em]">
+            Cómo trabajamos
+          </h2>
+
+          <p class="mt-5 max-w-lg leading-relaxed text-white/50">
+            Cada proyecto comienza con una necesidad concreta y se desarrolla con
+            diagnóstico, método, análisis especializado y seguimiento.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          {process.map((step, index) => (
+            <div class="border border-white/10 bg-white/[0.02] p-6">
+              <p class="text-sm text-[#C8A96B]">
+                0{index + 1}
+              </p>
+
+              <h3 class="mt-4 text-xl font-semibold">
+                {step}
+              </h3>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-t border-white/10 bg-white/[0.02] py-24">
+    <Container>
+      <div class="grid lg:grid-cols-2 gap-14">
+        <div>
+          <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+            Capacidades
+          </p>
+
+          <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
+            Áreas de conocimiento
+          </h2>
+
+          <div class="mt-10 grid sm:grid-cols-2 gap-4">
+            {knowledgeAreas.map((area) => (
+              <div class="border border-white/10 bg-black/40 px-5 py-5 text-white/65">
+                {area}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+            Sectores
+          </p>
+
+          <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
+            Organizaciones a las que dirigimos nuestras soluciones
+          </h2>
+
+          <div class="mt-10 grid sm:grid-cols-2 gap-4">
+            {sectors.map((sector) => (
+              <div class="border border-white/10 bg-black/40 px-5 py-5 text-white/65">
+                {sector}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-t border-white/10 py-28">
+    <Container>
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+          Colaboración
+        </p>
+
+        <h2 class="mt-5 text-4xl md:text-6xl font-semibold tracking-[-0.04em]">
+          Conecta tu institución con el especialista adecuado.
+        </h2>
+
+        <p class="mx-auto mt-6 max-w-xl leading-relaxed text-white/50">
+          Cuéntanos el contexto y te ayudamos a definir el área, alcance y
+          siguiente paso.
+        </p>
+
+        <div class="mt-10">
+          <Button href="/contacto">
+            Contactar al equipo
+          </Button>
+        </div>
       </div>
     </Container>
   </section>
