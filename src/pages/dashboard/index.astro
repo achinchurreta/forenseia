@@ -1,178 +1,408 @@
 ---
-import DashboardLayout from "../../components/dashboard/DashboardLayout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+import ServiceCard from "../components/ui/ServiceCard.astro";
+import Button from "../components/ui/Button.astro";
+import Reveal from "../components/ui/Reveal.astro";
+
 import { getCollection } from "astro:content";
 
-const posts = await getCollection("blog");
+/* -------------------------------------------------------
+   ARTÍCULOS
+------------------------------------------------------- */
 
-const publishedPosts = posts.filter(
-  (post) => post.data.status === "published"
-);
+const posts = (await getCollection("blog"))
+  .filter((post) => post.data.status === "published")
+  .sort(
+    (a, b) =>
+      new Date(b.data.date).getTime() -
+      new Date(a.data.date).getTime()
+  );
 
-const draftPosts = posts.filter(
-  (post) => post.data.status === "draft"
-);
+const latestPosts = posts.slice(0, 3);
 
-const stats = [
-  {
-    label: "Artículos",
-    value: posts.length,
-    description: "Total de publicaciones",
-    href: "/dashboard/posts",
-  },
-  {
-    label: "Publicados",
-    value: publishedPosts.length,
-    description: "Visibles en la biblioteca",
-    href: "/blog",
-  },
-  {
-    label: "Borradores",
-    value: draftPosts.length,
-    description: "Pendientes de revisión",
-    href: "/dashboard/posts",
-  },
-  {
-    label: "Autores",
-    value: 3,
-    description: "Direcciones especializadas",
-    href: "/dashboard/autores",
-  },
-];
+/* -------------------------------------------------------
+   SERVICIOS
+------------------------------------------------------- */
 
-const modules = [
+const services = (await getCollection("services"))
+  .filter((service) => service.data.status === "published")
+  .sort((a, b) => {
+    if (a.data.featured !== b.data.featured) {
+      return Number(b.data.featured) - Number(a.data.featured);
+    }
+
+    return a.data.order - b.data.order;
+  });
+
+const featuredServices = services.slice(0, 3);
+
+/* -------------------------------------------------------
+   CURSOS
+------------------------------------------------------- */
+
+const courses = (await getCollection("courses"))
+  .filter((course) => course.data.status === "published")
+  .sort((a, b) => {
+    if (a.data.featured !== b.data.featured) {
+      return Number(b.data.featured) - Number(a.data.featured);
+    }
+
+    return (
+      new Date(b.data.date).getTime() -
+      new Date(a.data.date).getTime()
+    );
+  });
+
+const featuredCourses = courses.slice(0, 2);
+
+/* -------------------------------------------------------
+   ÁREAS DE FORENSEIA
+------------------------------------------------------- */
+
+const areas = [
   {
     number: "01",
-    title: "Artículos",
+    title: "Inteligencia Artificial",
     description:
-      "Crear, revisar y publicar contenido para la Biblioteca ForenseIA.",
-    href: "/dashboard/posts",
-    action: "Administrar artículos",
+      "Automatización, agentes inteligentes y soluciones para gobierno e instituciones.",
+    href: "/servicios#ia",
   },
   {
     number: "02",
-    title: "Cursos",
+    title: "Investigación Digital",
     description:
-      "Gestionar programas formativos por especialidad e instructor.",
-    href: "/dashboard/cursos",
-    action: "Administrar cursos",
+      "OSINT, ciberseguridad y apoyo técnico para fiscalías, agencias y unidades especializadas.",
+    href: "/servicios#investigacion",
   },
   {
     number: "03",
-    title: "Recursos",
+    title: "Psicología Criminal",
     description:
-      "Organizar guías, documentos, plantillas y materiales descargables.",
-    href: "/dashboard/recursos",
-    action: "Administrar recursos",
-  },
-  {
-    number: "04",
-    title: "Contenido social",
-    description:
-      "Convertir artículos en ideas para reels, carruseles y publicaciones.",
-    href: "/dashboard/contenido",
-    action: "Planear contenido",
+      "Análisis conductual, prevención y capacitación para instituciones y organizaciones.",
+    href: "/servicios#psicologia",
   },
 ];
 ---
 
-<DashboardLayout title="Centro Editorial | ForenseIA">
-  <section>
-    <div class="flex flex-col justify-between gap-8 xl:flex-row xl:items-end">
-      <div class="max-w-3xl">
-        <p
-          class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]"
-        >
-          Centro editorial
-        </p>
+<BaseLayout
+  title="ForenseIA | Inteligencia aplicada para instituciones"
+  description="Inteligencia artificial, investigación digital, ciberseguridad y psicología criminal aplicada para instituciones y organizaciones."
+>
+  <!-- HERO -->
 
-        <h1
-          class="mt-5 text-4xl font-semibold leading-tight tracking-[-0.04em] md:text-6xl"
-        >
-          Gestiona el conocimiento de ForenseIA.
-        </h1>
+  <section class="relative min-h-screen overflow-hidden pt-24">
+    <div class="absolute inset-0 bg-black"></div>
 
-        <p class="mt-5 max-w-2xl leading-relaxed text-white/45">
-          Administra artículos, cursos, recursos, casos de estudio y contenido
-          para redes sociales desde un mismo lugar.
-        </p>
+    <div
+      class="absolute right-[-180px] top-[-200px] h-[760px] w-[760px] rounded-full bg-[#C8A96B]/10 blur-[180px]"
+    ></div>
+
+    <div
+      class="absolute bottom-[-300px] left-[-240px] h-[650px] w-[650px] rounded-full bg-white/[0.025] blur-[170px]"
+    ></div>
+
+    <div
+      class="absolute inset-0 opacity-[0.025] bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:96px_96px]"
+    ></div>
+
+    <Container class="relative z-10">
+      <div class="flex min-h-[calc(100vh-6rem)] items-center">
+        <div class="grid w-full items-center gap-16 lg:grid-cols-[1.15fr_0.85fr]">
+          <Reveal>
+            <div class="max-w-4xl">
+              <p class="text-xs uppercase tracking-[0.4em] text-[#C8A96B] md:text-sm">
+                Inteligencia aplicada
+              </p>
+
+              <h1 class="mt-7 text-5xl font-semibold leading-[0.94] tracking-[-0.06em] md:text-7xl xl:text-8xl">
+                Conocimiento especializado para decisiones complejas.
+              </h1>
+
+              <p class="mt-8 max-w-2xl text-lg leading-relaxed text-white/55 md:text-xl">
+                Integramos inteligencia artificial, investigación digital,
+                ciberseguridad y psicología criminal para instituciones,
+                fiscalías, agencias y organizaciones.
+              </p>
+
+              <div class="mt-10 flex flex-wrap gap-4">
+                <Button href="/contacto">
+                  Solicitar diagnóstico
+                </Button>
+
+                <Button href="/blog" variant="secondary">
+                  Explorar biblioteca
+                </Button>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={140}>
+            <div class="relative flex justify-center lg:justify-end">
+              <div
+                class="absolute h-[360px] w-[360px] rounded-full bg-[#C8A96B]/10 blur-[110px]"
+              ></div>
+
+              <div class="relative border border-white/10 bg-white/[0.02] p-10">
+                <img
+                  src="/logo.png"
+                  alt="ForenseIA"
+                  class="w-[220px] object-contain md:w-[320px]"
+                />
+
+                <div class="mt-8 border-t border-white/10 pt-6 text-center">
+                  <p class="text-xs uppercase tracking-[0.3em] text-white/30">
+                    Tecnología · Investigación · Psicología
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <!-- ÁREAS -->
+
+  <section class="border-t border-white/10 py-24">
+    <Container>
+      <Reveal>
+        <div class="mx-auto mb-14 max-w-3xl text-center">
+          <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+            Especialidades
+          </p>
+
+          <h2 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-6xl">
+            Tres áreas. Una visión estratégica.
+          </h2>
+
+          <p class="mx-auto mt-6 max-w-2xl leading-relaxed text-white/45">
+            Integramos capacidades tecnológicas, investigativas y conductuales
+            para atender necesidades institucionales.
+          </p>
+        </div>
+      </Reveal>
+
+      <div class="grid gap-5 lg:grid-cols-3">
+        {areas.map((area, index) => (
+          <Reveal delay={index * 100}>
+            <a
+              href={area.href}
+              class="group flex min-h-[320px] flex-col border border-white/10 bg-white/[0.02] p-8 text-center transition duration-300 hover:-translate-y-1 hover:border-[#C8A96B]/50"
+            >
+              <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+                Área {area.number}
+              </p>
+
+              <h3 class="mt-10 text-3xl font-semibold">
+                {area.title}
+              </h3>
+
+              <p class="mx-auto mt-5 max-w-sm leading-relaxed text-white/45">
+                {area.description}
+              </p>
+
+              <p class="mt-auto pt-10 text-sm text-[#C8A96B]">
+                Conocer área →
+              </p>
+            </a>
+          </Reveal>
+        ))}
+      </div>
+    </Container>
+  </section>
+
+  <!-- ARTÍCULOS -->
+
+  <section class="border-t border-white/10 bg-white/[0.02] py-24">
+    <Container>
+      <div class="mb-12 flex items-end justify-between gap-8">
+        <Reveal>
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+              Biblioteca
+            </p>
+
+            <h2 class="mt-5 text-4xl font-semibold md:text-5xl">
+              Últimos artículos
+            </h2>
+
+            <p class="mt-4 max-w-xl leading-relaxed text-white/45">
+              Investigación, análisis y conocimiento especializado.
+            </p>
+          </div>
+        </Reveal>
+
+        <a
+          href="/blog"
+          class="hidden text-sm text-[#C8A96B] transition hover:opacity-80 md:block"
+        >
+          Ver biblioteca →
+        </a>
       </div>
 
-      <a
-        href="/dashboard/posts/new"
-        class="inline-flex w-fit bg-[#C8A96B] px-6 py-4 font-medium text-black transition hover:opacity-90"
-      >
-        Crear artículo
-      </a>
-    </div>
+      {latestPosts.length === 0 ? (
+        <div class="border border-white/10 bg-black/30 p-8">
+          <p class="text-white/45">
+            Próximamente publicaremos nuevos artículos.
+          </p>
+        </div>
+      ) : (
+        <div class="grid gap-6 md:grid-cols-3">
+          {latestPosts.map((post, index) => (
+            <Reveal delay={index * 100}>
+              <ServiceCard
+                title={post.data.title}
+                description={post.data.description}
+                href={`/blog/${post.id}`}
+                label="Leer artículo"
+              />
+            </Reveal>
+          ))}
+        </div>
+      )}
+
+      <div class="mt-10 md:hidden">
+        <Button href="/blog" variant="secondary">
+          Ver biblioteca
+        </Button>
+      </div>
+    </Container>
   </section>
 
-  <section class="mt-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-    {stats.map((stat) => (
-      <a
-        href={stat.href}
-        class="group border border-white/10 bg-white/[0.02] p-6 transition hover:-translate-y-1 hover:border-[#C8A96B]/50"
-      >
-        <p class="text-4xl font-semibold text-[#C8A96B]">
-          {stat.value}
-        </p>
+  <!-- SERVICIOS -->
 
-        <h2 class="mt-5 text-lg font-semibold">
-          {stat.label}
-        </h2>
+  <section class="border-t border-white/10 py-24">
+    <Container>
+      <Reveal>
+        <div class="mb-12 max-w-3xl">
+          <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+            Servicios
+          </p>
 
-        <p class="mt-2 text-sm text-white/35">
-          {stat.description}
-        </p>
-      </a>
-    ))}
+          <h2 class="mt-5 text-4xl font-semibold md:text-5xl">
+            Soluciones por especialidad.
+          </h2>
+
+          <p class="mt-5 max-w-2xl leading-relaxed text-white/45">
+            Servicios diseñados para instituciones, fiscalías, agencias,
+            organizaciones y equipos profesionales.
+          </p>
+        </div>
+      </Reveal>
+
+      {featuredServices.length === 0 ? (
+        <div class="border border-white/10 bg-white/[0.02] p-8">
+          <p class="text-white/45">
+            Próximamente publicaremos nuestro catálogo de servicios.
+          </p>
+        </div>
+      ) : (
+        <div class="grid gap-6 md:grid-cols-3">
+          {featuredServices.map((service, index) => (
+            <Reveal delay={index * 100}>
+              <ServiceCard
+                title={service.data.title}
+                description={service.data.description}
+                href={`/servicios/${service.id}`}
+                label="Ver servicio"
+              />
+            </Reveal>
+          ))}
+        </div>
+      )}
+
+      <div class="mt-10">
+        <Button href="/servicios" variant="secondary">
+          Ver todos los servicios
+        </Button>
+      </div>
+    </Container>
   </section>
 
-  <section class="mt-16">
-    <div class="mb-8">
-      <p
-        class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]"
-      >
-        Módulos
-      </p>
+  <!-- CURSOS -->
 
-      <h2 class="mt-4 text-3xl font-semibold">
-        Operación editorial
-      </h2>
-    </div>
+  <section class="border-t border-white/10 bg-white/[0.02] py-24">
+    <Container>
+      <div class="grid items-start gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+        <Reveal>
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+              Formación
+            </p>
 
-    <div class="grid gap-5 md:grid-cols-2">
-      {modules.map((module) => (
-        <a
-          href={module.href}
-          class="group flex min-h-[220px] flex-col border border-white/10 bg-white/[0.02] p-7 transition hover:-translate-y-1 hover:border-[#C8A96B]/50"
-        >
-          <div class="flex items-center justify-between">
-            <span
-              class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]"
-            >
-              Módulo {module.number}
-            </span>
+            <h2 class="mt-5 text-4xl font-semibold md:text-5xl">
+              Cursos para equipos e instituciones.
+            </h2>
 
-            <span
-              class="text-white/20 transition group-hover:text-[#C8A96B]"
-            >
-              ↗
-            </span>
+            <p class="mt-5 max-w-lg leading-relaxed text-white/45">
+              Programas especializados, claros y orientados a la aplicación
+              práctica.
+            </p>
+
+            <div class="mt-8">
+              <Button href="/cursos" variant="secondary">
+                Ver cursos
+              </Button>
+            </div>
           </div>
+        </Reveal>
 
-          <h3 class="mt-10 text-2xl font-semibold">
-            {module.title}
-          </h3>
-
-          <p class="mt-4 max-w-lg leading-relaxed text-white/40">
-            {module.description}
-          </p>
-
-          <p class="mt-auto pt-8 text-sm text-[#C8A96B]">
-            {module.action} →
-          </p>
-        </a>
-      ))}
-    </div>
+        {featuredCourses.length === 0 ? (
+          <div class="border border-white/10 bg-black/30 p-8">
+            <p class="text-white/45">
+              Próximamente publicaremos nuevos programas de formación.
+            </p>
+          </div>
+        ) : (
+          <div class="grid gap-6 md:grid-cols-2">
+            {featuredCourses.map((course, index) => (
+              <Reveal delay={index * 100}>
+                <ServiceCard
+                  title={course.data.title}
+                  description={`${course.data.duration} · ${course.data.modality} · ${course.data.level}`}
+                  href={`/cursos/${course.id}`}
+                  label="Ver curso"
+                />
+              </Reveal>
+            ))}
+          </div>
+        )}
+      </div>
+    </Container>
   </section>
-</DashboardLayout>
+
+  <!-- CTA -->
+
+  <section class="border-t border-white/10 py-28">
+    <Container>
+      <Reveal>
+        <div class="mx-auto max-w-3xl text-center">
+          <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+            Contacto
+          </p>
+
+          <h2 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-6xl">
+            Encuentra el área adecuada para tu necesidad.
+          </h2>
+
+          <p class="mx-auto mt-6 max-w-xl leading-relaxed text-white/45">
+            Cuéntanos el contexto y te conectamos con la dirección
+            especializada.
+          </p>
+
+          <div class="mt-10 flex flex-wrap justify-center gap-4">
+            <Button href="/contacto">
+              Contactar al equipo
+            </Button>
+
+            <Button href="/nosotros" variant="secondary">
+              Conocer al equipo
+            </Button>
+          </div>
+        </div>
+      </Reveal>
+    </Container>
+  </section>
+</BaseLayout>
