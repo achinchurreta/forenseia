@@ -3,112 +3,160 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/ui/PageHeader.astro";
 import Container from "../components/ui/Container.astro";
 import Button from "../components/ui/Button.astro";
-import { services } from "../data/services";
+import { getCollection } from "astro:content";
+
+const services = (await getCollection("services"))
+  .filter((service) => service.data.status === "published")
+  .sort((a, b) => {
+    if (a.data.featured !== b.data.featured) {
+      return Number(b.data.featured) - Number(a.data.featured);
+    }
+
+    return a.data.order - b.data.order;
+  });
 
 const groups = [
   {
     id: "ia",
-    label: "Inteligencia Artificial",
+    title: "Inteligencia Artificial",
     description:
-      "Soluciones de IA, automatización y transformación digital para gobierno e instituciones.",
+      "Soluciones de inteligencia artificial, automatización y transformación digital para gobierno e instituciones.",
+    director: "Gonzalo García",
     services: services.filter(
-      (service) => service.owner === "Gonzalo García"
+      (service) => service.data.area === "Inteligencia Artificial"
     ),
   },
   {
     id: "investigacion",
-    label: "Investigación Digital y Ciberseguridad",
+    title: "Investigación Digital y Ciberseguridad",
     description:
-      "Servicios para fiscalías, organizaciones de investigación y equipos técnicos.",
+      "Servicios técnicos para fiscalías, agencias de inteligencia, instituciones navales y unidades especializadas.",
+    director: "Augusto Chinchurreta",
     services: services.filter(
-      (service) => service.owner === "Augusto Chinchurreta"
+      (service) =>
+        service.data.area ===
+        "Investigación Digital y Ciberseguridad"
     ),
   },
   {
     id: "psicologia",
-    label: "Psicología Criminal y Educativa",
+    title: "Psicología Criminal",
     description:
-      "Análisis del comportamiento, prevención y capacitación para instituciones y organizaciones.",
+      "Análisis del comportamiento, prevención y capacitación para instituciones y equipos multidisciplinarios.",
+    director: "Tania Pérez",
     services: services.filter(
-      (service) => service.owner === "Tania Pérez"
+      (service) => service.data.area === "Psicología Criminal"
     ),
   },
 ];
 ---
 
-<BaseLayout title="Servicios | ForenseIA">
+<BaseLayout
+  title="Servicios | ForenseIA"
+  description="Servicios en inteligencia artificial, investigación digital, ciberseguridad y psicología criminal."
+>
   <PageHeader
     eyebrow="Servicios"
-    title="Tres áreas especializadas."
-    description="Tecnología, investigación digital y psicología aplicada para instituciones, organizaciones y profesionales."
+    title="Tres áreas para necesidades complejas."
+    description="Servicios especializados para instituciones públicas, fiscalías, agencias, organizaciones y equipos profesionales."
   />
 
   <section class="py-20">
     <Container>
-      <div class="space-y-20">
-        {groups.map((group, groupIndex) => (
-          <section id={group.id}>
-            <div class="grid lg:grid-cols-[0.8fr_1.2fr] gap-10 mb-10">
-              <div>
-                <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
-                  Área 0{groupIndex + 1}
-                </p>
-
-                <h2 class="mt-4 text-4xl md:text-5xl font-semibold">
-                  {group.label}
-                </h2>
-              </div>
-
-              <p class="text-white/50 leading-relaxed max-w-2xl">
-                {group.description}
-              </p>
-            </div>
-
-            <div class="grid gap-4">
-              {group.services.map((service) => (
-                <article class="border border-white/10 bg-white/[0.03] p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      {services.length === 0 ? (
+        <div class="border border-white/10 bg-white/[0.02] p-10">
+          <p class="text-white/50">
+            Próximamente publicaremos nuestro catálogo de servicios.
+          </p>
+        </div>
+      ) : (
+        <div class="space-y-20">
+          {groups.map((group, groupIndex) =>
+            group.services.length > 0 && (
+              <section id={group.id}>
+                <div class="mb-10 grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
                   <div>
-                    <p class="text-[#C8A96B] text-xs uppercase tracking-[0.25em]">
-                      {service.area}
+                    <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+                      Dirección 0{groupIndex + 1}
                     </p>
 
-                    <h3 class="mt-3 text-2xl font-semibold">
-                      {service.title}
-                    </h3>
+                    <h2 class="mt-4 text-4xl font-semibold md:text-5xl">
+                      {group.title}
+                    </h2>
 
-                    <p class="mt-3 max-w-2xl text-white/50 leading-relaxed">
-                      {service.description}
+                    <p class="mt-4 text-sm text-[#C8A96B]">
+                      Director: {group.director}
                     </p>
                   </div>
 
-                  <Button href={service.href} variant="secondary">
-                    Ver servicio
-                  </Button>
-                </article>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
+                  <p class="max-w-2xl leading-relaxed text-white/45">
+                    {group.description}
+                  </p>
+                </div>
+
+                <div class="grid gap-5">
+                  {group.services.map((service) => (
+                    <article class="group flex flex-col justify-between gap-8 border border-white/10 bg-white/[0.02] p-7 transition hover:border-[#C8A96B]/50 lg:flex-row lg:items-center">
+                      <div class="max-w-3xl">
+                        <div class="flex flex-wrap gap-3 text-xs">
+                          <span class="uppercase tracking-[0.22em] text-[#C8A96B]">
+                            {service.data.area}
+                          </span>
+
+                          {service.data.featured && (
+                            <span class="text-white/30">
+                              Destacado
+                            </span>
+                          )}
+                        </div>
+
+                        <h3 class="mt-4 text-2xl font-semibold md:text-3xl">
+                          {service.data.title}
+                        </h3>
+
+                        <p class="mt-4 leading-relaxed text-white/45">
+                          {service.data.description}
+                        </p>
+
+                        <p class="mt-5 text-sm text-white/30">
+                          Dirigido a: {service.data.audience}
+                        </p>
+                      </div>
+
+                      <Button
+                        href={`/servicios/${service.id}`}
+                        variant="secondary"
+                      >
+                        Ver servicio
+                      </Button>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            )
+          )}
+        </div>
+      )}
     </Container>
   </section>
 
   <section class="border-t border-white/10 py-24">
     <Container>
-      <div class="max-w-3xl">
-        <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
           Diagnóstico
         </p>
 
-        <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
-          ¿No sabes qué servicio necesitas?
+        <h2 class="mt-5 text-4xl font-semibold md:text-5xl">
+          Define el servicio adecuado para tu institución.
         </h2>
 
-        <p class="mt-5 text-white/50 leading-relaxed">
-          Cuéntanos el contexto y te ayudamos a definir el área, alcance y siguiente paso.
+        <p class="mx-auto mt-6 max-w-xl leading-relaxed text-white/45">
+          Analizamos la necesidad, identificamos el área responsable y
+          proponemos el alcance inicial.
         </p>
 
-        <div class="mt-8">
+        <div class="mt-9">
           <Button href="/contacto">
             Solicitar diagnóstico
           </Button>

@@ -3,36 +3,165 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/ui/PageHeader.astro";
 import Container from "../components/ui/Container.astro";
 import Button from "../components/ui/Button.astro";
-import { courses } from "../data/courses";
+import { getCollection } from "astro:content";
+
+const courses = (await getCollection("courses"))
+  .filter((course) => course.data.status === "published")
+  .sort((a, b) => {
+    if (a.data.featured !== b.data.featured) {
+      return Number(b.data.featured) - Number(a.data.featured);
+    }
+
+    return (
+      new Date(b.data.date).getTime() -
+      new Date(a.data.date).getTime()
+    );
+  });
+
+const groups = [
+  {
+    id: "inteligencia-artificial",
+    title: "Inteligencia Artificial",
+    description:
+      "Programas de inteligencia artificial, automatización y transformación digital para gobierno e instituciones.",
+    courses: courses.filter(
+      (course) => course.data.area === "Inteligencia Artificial"
+    ),
+  },
+  {
+    id: "investigacion-digital",
+    title: "Investigación Digital y Ciberseguridad",
+    description:
+      "Formación dirigida a fiscalías, agencias, unidades de investigación y equipos técnicos.",
+    courses: courses.filter((course) =>
+      ["Investigación Digital", "Ciberseguridad"].includes(
+        course.data.area
+      )
+    ),
+  },
+  {
+    id: "psicologia",
+    title: "Psicología Criminal y Educativa",
+    description:
+      "Cursos sobre comportamiento, prevención, análisis conductual y contextos educativos.",
+    courses: courses.filter((course) =>
+      ["Psicología Criminal", "Psicología Educativa"].includes(
+        course.data.area
+      )
+    ),
+  },
+];
 ---
 
-<BaseLayout title="Cursos | ForenseIA">
+<BaseLayout
+  title="Cursos | ForenseIA"
+  description="Cursos especializados en inteligencia artificial, investigación digital, ciberseguridad y psicología criminal."
+>
   <PageHeader
-    eyebrow="Cursos"
-    title="Formación práctica, clara y aplicable."
-    description="Programas cortos para instituciones, organizaciones y equipos técnicos."
+    eyebrow="Formación"
+    title="Cursos especializados y aplicables."
+    description="Programas para instituciones, organizaciones, fiscalías, agencias y equipos profesionales."
   />
 
   <section class="py-20">
     <Container>
-      <div class="grid gap-4">
-        {courses.map((course) => (
-          <article class="border border-white/10 bg-white/[0.03] p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div>
-              <h2 class="text-2xl font-semibold">
-                {course.title}
-              </h2>
+      {courses.length === 0 ? (
+        <div class="border border-white/10 bg-white/[0.02] p-10">
+          <p class="text-white/50">
+            Próximamente publicaremos nuevos programas de formación.
+          </p>
+        </div>
+      ) : (
+        <div class="space-y-20">
+          {groups.map((group, groupIndex) =>
+            group.courses.length > 0 && (
+              <section id={group.id}>
+                <div class="mb-10 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+                  <div>
+                    <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+                      Área 0{groupIndex + 1}
+                    </p>
 
-              <p class="mt-2 text-white/50">
-                {course.duration} · {course.modality} · {course.level}
-              </p>
-            </div>
+                    <h2 class="mt-4 text-4xl font-semibold md:text-5xl">
+                      {group.title}
+                    </h2>
+                  </div>
 
-            <Button href={course.href} variant="secondary">
-              Ver curso
-            </Button>
-          </article>
-        ))}
+                  <p class="max-w-2xl leading-relaxed text-white/45">
+                    {group.description}
+                  </p>
+                </div>
+
+                <div class="grid gap-5">
+                  {group.courses.map((course) => (
+                    <article class="group flex flex-col justify-between gap-8 border border-white/10 bg-white/[0.02] p-7 transition hover:border-[#C8A96B]/50 lg:flex-row lg:items-center">
+                      <div class="max-w-3xl">
+                        <div class="flex flex-wrap gap-3 text-xs">
+                          <span class="uppercase tracking-[0.22em] text-[#C8A96B]">
+                            {course.data.area}
+                          </span>
+
+                          {course.data.featured && (
+                            <span class="text-white/30">
+                              Destacado
+                            </span>
+                          )}
+                        </div>
+
+                        <h3 class="mt-4 text-2xl font-semibold md:text-3xl">
+                          {course.data.title}
+                        </h3>
+
+                        <p class="mt-4 leading-relaxed text-white/45">
+                          {course.data.description}
+                        </p>
+
+                        <div class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/30">
+                          <span>{course.data.duration}</span>
+                          <span>{course.data.modality}</span>
+                          <span>{course.data.level}</span>
+                          <span>{course.data.instructor}</span>
+                        </div>
+                      </div>
+
+                      <Button
+                        href={`/cursos/${course.id}`}
+                        variant="secondary"
+                      >
+                        Ver curso
+                      </Button>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            )
+          )}
+        </div>
+      )}
+    </Container>
+  </section>
+
+  <section class="border-t border-white/10 py-24">
+    <Container>
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+          Formación institucional
+        </p>
+
+        <h2 class="mt-5 text-4xl font-semibold md:text-5xl">
+          También desarrollamos programas personalizados.
+        </h2>
+
+        <p class="mx-auto mt-6 max-w-xl leading-relaxed text-white/45">
+          Podemos adaptar duración, temario, modalidad y enfoque a las
+          necesidades de tu institución.
+        </p>
+
+        <div class="mt-9">
+          <Button href="/contacto">
+            Solicitar propuesta
+          </Button>
+        </div>
       </div>
     </Container>
   </section>
