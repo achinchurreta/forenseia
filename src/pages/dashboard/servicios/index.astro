@@ -1,0 +1,127 @@
+---
+import DashboardLayout from "../../../components/dashboard/DashboardLayout.astro";
+import { getCollection } from "astro:content";
+
+const services = await getCollection("services");
+
+const publishedServices = services.filter(
+  (service) => service.data.status === "published"
+);
+
+const draftServices = services.filter(
+  (service) => service.data.status === "draft"
+);
+---
+
+<DashboardLayout title="Servicios | ForenseIA">
+  <section>
+    <div class="flex flex-col justify-between gap-8 xl:flex-row xl:items-end">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+          Servicios
+        </p>
+
+        <h1 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-6xl">
+          Catálogo de servicios
+        </h1>
+
+        <p class="mt-5 max-w-2xl leading-relaxed text-white/45">
+          Crea, organiza y publica los servicios de cada dirección especializada.
+        </p>
+      </div>
+
+      <a
+        href="/dashboard/servicios/new"
+        class="inline-flex w-fit bg-[#C8A96B] px-6 py-4 font-medium text-black transition hover:opacity-90"
+      >
+        Nuevo servicio
+      </a>
+    </div>
+  </section>
+
+  <section class="mt-12 grid gap-4 sm:grid-cols-3">
+    <article class="border border-white/10 bg-white/[0.02] p-6">
+      <p class="text-4xl font-semibold text-[#C8A96B]">
+        {services.length}
+      </p>
+
+      <p class="mt-4 text-white/45">
+        Total
+      </p>
+    </article>
+
+    <article class="border border-white/10 bg-white/[0.02] p-6">
+      <p class="text-4xl font-semibold text-[#C8A96B]">
+        {publishedServices.length}
+      </p>
+
+      <p class="mt-4 text-white/45">
+        Publicados
+      </p>
+    </article>
+
+    <article class="border border-white/10 bg-white/[0.02] p-6">
+      <p class="text-4xl font-semibold text-[#C8A96B]">
+        {draftServices.length}
+      </p>
+
+      <p class="mt-4 text-white/45">
+        Borradores
+      </p>
+    </article>
+  </section>
+
+  <section class="mt-12 space-y-4">
+    {services.length === 0 ? (
+      <div class="border border-white/10 bg-white/[0.02] p-8">
+        <p class="text-white/45">
+          Todavía no hay servicios creados.
+        </p>
+      </div>
+    ) : (
+      services
+        .sort((a, b) => a.data.order - b.data.order)
+        .map((service) => (
+          <article class="flex flex-col justify-between gap-6 border border-white/10 bg-white/[0.02] p-6 lg:flex-row lg:items-center">
+            <div>
+              <div class="flex flex-wrap gap-3 text-xs">
+                <span class="text-[#C8A96B]">
+                  {service.data.area}
+                </span>
+
+                <span class="text-white/30">
+                  {service.data.status}
+                </span>
+
+                {service.data.featured && (
+                  <span class="text-white/30">
+                    Destacado
+                  </span>
+                )}
+              </div>
+
+              <h2 class="mt-4 text-2xl font-semibold">
+                {service.data.title}
+              </h2>
+
+              <p class="mt-3 max-w-3xl text-white/45">
+                {service.data.description}
+              </p>
+
+              <p class="mt-4 text-sm text-white/30">
+                Dirección: {service.data.director}
+              </p>
+            </div>
+
+            <a
+              href={`/servicios/${service.id}`}
+              target="_blank"
+              class="w-fit border border-white/10 px-5 py-3 text-sm text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+            >
+              Ver servicio
+            </a>
+          </article>
+        ))
+    )}
+  </section>
+</DashboardLayout>

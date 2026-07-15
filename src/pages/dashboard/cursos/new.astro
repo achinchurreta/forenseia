@@ -1,0 +1,323 @@
+---
+import DashboardLayout from "../../../components/dashboard/DashboardLayout.astro";
+
+const instructors = [
+  "Gonzalo García",
+  "Augusto Chinchurreta",
+  "Tania Pérez",
+];
+
+const areas = [
+  "Inteligencia Artificial",
+  "Investigación Digital",
+  "Ciberseguridad",
+  "Psicología Criminal",
+  "Psicología Educativa",
+];
+---
+
+<DashboardLayout title="Nuevo curso | ForenseIA">
+  <div class="max-w-5xl">
+    <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+      Formación
+    </p>
+
+    <h1 class="mt-5 text-4xl font-semibold">
+      Nuevo curso
+    </h1>
+
+    <p class="mt-4 text-white/45">
+      Publica un nuevo programa formativo en el catálogo de ForenseIA.
+    </p>
+
+    <form
+      id="content-form"
+      data-content-type="course"
+      class="mt-10 space-y-6"
+    >
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label for="title" class="mb-2 block text-sm text-white/50">
+            Nombre del curso
+          </label>
+
+          <input
+            id="title"
+            name="title"
+            required
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="slug" class="mb-2 block text-sm text-white/50">
+            Slug
+          </label>
+
+          <input
+            id="slug"
+            name="slug"
+            placeholder="se-genera-automaticamente"
+            class="input"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="description" class="mb-2 block text-sm text-white/50">
+          Descripción
+        </label>
+
+        <textarea
+          id="description"
+          name="description"
+          required
+          rows="3"
+          class="input"
+        ></textarea>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label for="area" class="mb-2 block text-sm text-white/50">
+            Área
+          </label>
+
+          <select id="area" name="area" required class="input">
+            {areas.map((area) => (
+              <option value={area}>{area}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="instructor" class="mb-2 block text-sm text-white/50">
+            Director o instructor
+          </label>
+
+          <select id="instructor" name="instructor" required class="input">
+            {instructors.map((instructor) => (
+              <option value={instructor}>{instructor}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="level" class="mb-2 block text-sm text-white/50">
+            Nivel
+          </label>
+
+          <select id="level" name="level" required class="input">
+            <option value="Inicial">Inicial</option>
+            <option value="Intermedio">Intermedio</option>
+            <option value="Avanzado">Avanzado</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label for="duration" class="mb-2 block text-sm text-white/50">
+            Duración
+          </label>
+
+          <input
+            id="duration"
+            name="duration"
+            required
+            placeholder="8 horas"
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="modality" class="mb-2 block text-sm text-white/50">
+            Modalidad
+          </label>
+
+          <input
+            id="modality"
+            name="modality"
+            required
+            placeholder="Presencial o en línea"
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="price" class="mb-2 block text-sm text-white/50">
+            Precio
+          </label>
+
+          <input
+            id="price"
+            name="price"
+            placeholder="Solicitar cotización"
+            class="input"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="audience" class="mb-2 block text-sm text-white/50">
+          Dirigido a
+        </label>
+
+        <input
+          id="audience"
+          name="audience"
+          required
+          placeholder="Fiscalías, instituciones, profesionales..."
+          class="input"
+        />
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label for="status" class="mb-2 block text-sm text-white/50">
+            Estado
+          </label>
+
+          <select id="status" name="status" class="input">
+            <option value="published">Publicado</option>
+            <option value="draft">Borrador</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="cover" class="mb-2 block text-sm text-white/50">
+            URL de portada
+          </label>
+
+          <input
+            id="cover"
+            name="cover"
+            type="url"
+            placeholder="https://..."
+            class="input"
+          />
+        </div>
+      </div>
+
+      <label class="flex items-center gap-3 text-sm text-white/55">
+        <input name="featured" type="checkbox" value="true" />
+        Mostrar como curso destacado
+      </label>
+
+      <div>
+        <label for="content" class="mb-2 block text-sm text-white/50">
+          Información completa
+        </label>
+
+        <textarea
+          id="content"
+          name="content"
+          required
+          rows="20"
+          placeholder="# Objetivo&#10;&#10;# Temario&#10;&#10;# Requisitos"
+          class="input min-h-[500px] font-mono"
+        ></textarea>
+      </div>
+
+      <button
+        id="save-button"
+        type="submit"
+        class="bg-[#C8A96B] px-8 py-4 font-medium text-black"
+      >
+        Guardar curso
+      </button>
+
+      <p id="message" class="min-h-6 text-sm text-white/50"></p>
+    </form>
+  </div>
+
+  <style>
+    .input {
+      width: 100%;
+      border: 1px solid rgb(255 255 255 / 0.1);
+      background: #000;
+      padding: 1rem;
+      color: #fff;
+      outline: none;
+    }
+
+    .input:focus {
+      border-color: #c8a96b;
+    }
+  </style>
+
+  <script is:inline>
+    const form = document.getElementById("content-form");
+    const button = document.getElementById("save-button");
+    const message = document.getElementById("message");
+    const title = document.getElementById("title");
+    const slug = document.getElementById("slug");
+
+    function createSlug(value) {
+      return value
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    title?.addEventListener("input", () => {
+      if (slug && !slug.dataset.edited) {
+        slug.value = createSlug(title.value);
+      }
+    });
+
+    slug?.addEventListener("input", () => {
+      slug.dataset.edited = slug.value ? "true" : "";
+    });
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!form || !button || !message) return;
+
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+
+      payload.contentType = form.dataset.contentType;
+      payload.featured = formData.has("featured");
+
+      button.disabled = true;
+      button.textContent = "Guardando...";
+      message.textContent = "Creando curso...";
+
+      try {
+        const response = await fetch(
+          "/.netlify/functions/create-content",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "No se pudo crear el curso");
+        }
+
+        message.textContent =
+          "Curso guardado. Netlify iniciará un nuevo despliegue.";
+
+        setTimeout(() => {
+          window.location.href = "/dashboard/cursos";
+        }, 1400);
+      } catch (error) {
+        message.textContent = `Error: ${error.message}`;
+        button.disabled = false;
+        button.textContent = "Guardar curso";
+      }
+    });
+  </script>
+</DashboardLayout>

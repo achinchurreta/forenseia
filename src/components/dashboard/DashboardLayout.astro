@@ -27,29 +27,34 @@ const navigation = [
     icon: "03",
   },
   {
+    label: "Servicios",
+    href: "/dashboard/servicios",
+    icon: "04",
+  },
+  {
     label: "Recursos",
     href: "/dashboard/recursos",
-    icon: "04",
+    icon: "05",
   },
   {
     label: "Casos de estudio",
     href: "/dashboard/casos",
-    icon: "05",
+    icon: "06",
   },
   {
     label: "Contenido social",
     href: "/dashboard/contenido",
-    icon: "06",
+    icon: "07",
   },
   {
     label: "Autores",
     href: "/dashboard/autores",
-    icon: "07",
+    icon: "08",
   },
   {
     label: "Configuración",
     href: "/dashboard/configuracion",
-    icon: "08",
+    icon: "09",
   },
 ];
 
@@ -72,7 +77,10 @@ function isActive(href: string) {
       content="width=device-width, initial-scale=1.0"
     />
 
-    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      name="robots"
+      content="noindex, nofollow"
+    />
 
     <title>{title}</title>
   </head>
@@ -86,7 +94,10 @@ function isActive(href: string) {
       >
         <div class="flex h-full flex-col p-5 lg:p-6">
           <div class="flex items-center justify-between gap-4">
-            <a href="/dashboard" class="flex items-center gap-3">
+            <a
+              href="/dashboard"
+              class="flex items-center gap-3"
+            >
               <img
                 src="/logo.png"
                 alt="ForenseIA"
@@ -98,9 +109,7 @@ function isActive(href: string) {
                   FORENSEIA
                 </p>
 
-                <p
-                  class="mt-1 text-[10px] uppercase tracking-[0.3em] text-[#C8A96B]"
-                >
+                <p class="mt-1 text-[10px] uppercase tracking-[0.3em] text-[#C8A96B]">
                   Centro editorial
                 </p>
               </div>
@@ -116,9 +125,7 @@ function isActive(href: string) {
           </div>
 
           <div class="mt-7 border-t border-white/10 pt-6">
-            <p
-              class="mb-3 px-3 text-[10px] uppercase tracking-[0.3em] text-white/25"
-            >
+            <p class="mb-3 px-3 text-[10px] uppercase tracking-[0.3em] text-white/25">
               Administración
             </p>
 
@@ -145,7 +152,9 @@ function isActive(href: string) {
                     {item.icon}
                   </span>
 
-                  <span>{item.label}</span>
+                  <span>
+                    {item.label}
+                  </span>
                 </a>
               ))}
             </nav>
@@ -172,14 +181,10 @@ function isActive(href: string) {
       </aside>
 
       <main class="min-w-0">
-        <header
-          class="border-b border-white/10 bg-black/80 px-6 py-5 backdrop-blur-xl lg:px-10"
-        >
+        <header class="border-b border-white/10 bg-black/80 px-6 py-5 backdrop-blur-xl lg:px-10">
           <div class="flex items-center justify-between gap-6">
             <div>
-              <p
-                class="text-[10px] uppercase tracking-[0.3em] text-[#C8A96B]"
-              >
+              <p class="text-[10px] uppercase tracking-[0.3em] text-[#C8A96B]">
                 ForenseIA
               </p>
 
@@ -191,7 +196,7 @@ function isActive(href: string) {
             <div class="flex items-center gap-3">
               <a
                 href="/dashboard/posts/new"
-                class="bg-[#C8A96B] px-4 py-3 text-sm font-medium text-black transition hover:opacity-90"
+                class="hidden bg-[#C8A96B] px-4 py-3 text-sm font-medium text-black transition hover:opacity-90 sm:inline-flex"
               >
                 Nuevo artículo
               </a>

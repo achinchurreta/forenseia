@@ -1,100 +1,51 @@
 ---
-import DashboardLayout from "../../../../components/dashboard/DashboardLayout.astro";
-import {
-  getCollection,
-  type CollectionEntry,
-} from "astro:content";
+import DashboardLayout from "../../../components/dashboard/DashboardLayout.astro";
 
-export async function getStaticPaths() {
-  const posts = await getCollection("blog");
-
-  return posts.map((post) => ({
-    params: {
-      slug: String(post.id),
-    },
-    props: {
-      post,
-    },
-  }));
-}
-
-interface Props {
-  post: CollectionEntry<"blog">;
-}
-
-const { post } = Astro.props as Props;
-
-const content =
-  "body" in post && typeof post.body === "string"
-    ? post.body
-    : "";
-
-const categories = [
-  "Inteligencia Artificial",
-  "Gobierno Digital",
-  "Automatización",
-  "OSINT",
-  "Investigación Digital",
-  "Ciberseguridad",
-  "Inteligencia Patrimonial",
-  "Auditoría Forense",
-  "Psicología Criminal",
-  "Psicología Educativa",
-  "Análisis Conductual",
-  "Prevención",
-];
-
-const authors = [
+const directors = [
   "Gonzalo García",
   "Augusto Chinchurreta",
   "Tania Pérez",
-  "ForenseIA",
 ];
 
-const formattedTags = Array.isArray(post.data.tags)
-  ? post.data.tags.join(", ")
-  : "";
-
-const formattedDate = new Date(post.data.date)
-  .toISOString()
-  .split("T")[0];
+const areas = [
+  "Inteligencia Artificial",
+  "Investigación Digital y Ciberseguridad",
+  "Psicología Criminal",
+];
 ---
 
-<DashboardLayout title={`Editar ${post.data.title} | ForenseIA`}>
+<DashboardLayout title="Nuevo servicio | ForenseIA">
   <div class="max-w-5xl">
     <div class="mb-10">
       <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
-        Biblioteca / Editar
+        Servicios
       </p>
 
       <h1 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-5xl">
-        Editar artículo
+        Nuevo servicio
       </h1>
 
       <p class="mt-4 max-w-2xl leading-relaxed text-white/45">
-        Modifica el contenido, los datos editoriales y el estado de la
-        publicación.
+        Publica un servicio especializado y asígnalo a la dirección responsable.
       </p>
     </div>
 
-    <form id="post-form" class="space-y-6">
-      <input
-        type="hidden"
-        name="currentSlug"
-        value={post.id}
-      />
-
+    <form
+      id="content-form"
+      data-content-type="service"
+      class="space-y-6"
+    >
       <div class="grid gap-6 md:grid-cols-2">
         <div>
           <label for="title" class="mb-2 block text-sm text-white/50">
-            Título
+            Título del servicio
           </label>
 
           <input
             id="title"
             name="title"
             required
-            value={post.data.title}
+            placeholder="Ej. OSINT para fiscalías"
             class="input"
           />
         </div>
@@ -107,20 +58,15 @@ const formattedDate = new Date(post.data.date)
           <input
             id="slug"
             name="slug"
-            required
-            value={post.id}
+            placeholder="se-genera-automaticamente"
             class="input"
           />
-
-          <p class="mt-2 text-xs text-white/30">
-            Cambiar el slug también cambiará la URL del artículo.
-          </p>
         </div>
       </div>
 
       <div>
         <label for="description" class="mb-2 block text-sm text-white/50">
-          Descripción SEO
+          Descripción breve
         </label>
 
         <textarea
@@ -128,60 +74,88 @@ const formattedDate = new Date(post.data.date)
           name="description"
           required
           rows="4"
-          maxlength="180"
+          maxlength="220"
+          placeholder="Describe el servicio de forma clara y breve."
           class="input"
-        >{post.data.description}</textarea>
+        ></textarea>
+
+        <p class="mt-2 text-xs text-white/30">
+          Esta descripción aparecerá en el catálogo público de servicios.
+        </p>
       </div>
 
-      <div class="grid gap-6 md:grid-cols-3">
+      <div class="grid gap-6 md:grid-cols-2">
         <div>
-          <label for="category" class="mb-2 block text-sm text-white/50">
-            Categoría
+          <label for="area" class="mb-2 block text-sm text-white/50">
+            Área
           </label>
 
           <select
-            id="category"
-            name="category"
+            id="area"
+            name="area"
             required
             class="input"
           >
-            {!categories.includes(post.data.category) && (
-              <option value={post.data.category} selected>
-                {post.data.category}
-              </option>
-            )}
-
-            {categories.map((category) => (
-              <option
-                value={category}
-                selected={category === post.data.category}
-              >
-                {category}
+            {areas.map((area) => (
+              <option value={area}>
+                {area}
               </option>
             ))}
           </select>
         </div>
 
         <div>
-          <label for="author" class="mb-2 block text-sm text-white/50">
-            Autor
+          <label for="director" class="mb-2 block text-sm text-white/50">
+            Director responsable
           </label>
 
           <select
-            id="author"
-            name="author"
+            id="director"
+            name="director"
             required
             class="input"
           >
-            {authors.map((author) => (
-              <option
-                value={author}
-                selected={author === post.data.author}
-              >
-                {author}
+            {directors.map((director) => (
+              <option value={director}>
+                {director}
               </option>
             ))}
           </select>
+        </div>
+      </div>
+
+      <div>
+        <label for="audience" class="mb-2 block text-sm text-white/50">
+          Público objetivo
+        </label>
+
+        <input
+          id="audience"
+          name="audience"
+          required
+          placeholder="Ej. Fiscalías, agencias de inteligencia y unidades especializadas"
+          class="input"
+        />
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label for="order" class="mb-2 block text-sm text-white/50">
+            Orden
+          </label>
+
+          <input
+            id="order"
+            name="order"
+            type="number"
+            min="0"
+            value="0"
+            class="input"
+          />
+
+          <p class="mt-2 text-xs text-white/30">
+            Los valores menores aparecerán primero.
+          </p>
         </div>
 
         <div>
@@ -195,24 +169,16 @@ const formattedDate = new Date(post.data.date)
             required
             class="input"
           >
-            <option
-              value="published"
-              selected={post.data.status === "published"}
-            >
+            <option value="published">
               Publicado
             </option>
 
-            <option
-              value="draft"
-              selected={post.data.status === "draft"}
-            >
+            <option value="draft">
               Borrador
             </option>
           </select>
         </div>
-      </div>
 
-      <div class="grid gap-6 md:grid-cols-2">
         <div>
           <label for="cover" class="mb-2 block text-sm text-white/50">
             URL de portada
@@ -222,54 +188,50 @@ const formattedDate = new Date(post.data.date)
             id="cover"
             name="cover"
             type="url"
-            value={post.data.cover ?? ""}
             placeholder="https://..."
             class="input"
           />
         </div>
-
-        <div>
-          <label for="tags" class="mb-2 block text-sm text-white/50">
-            Etiquetas
-          </label>
-
-          <input
-            id="tags"
-            name="tags"
-            value={formattedTags}
-            placeholder="osint, fiscalías, investigación"
-            class="input"
-          />
-        </div>
       </div>
 
-      <div>
-        <label for="date" class="mb-2 block text-sm text-white/50">
-          Fecha de publicación
-        </label>
-
+      <label class="flex w-fit items-center gap-3 border border-white/10 bg-white/[0.02] px-4 py-4 text-sm text-white/55">
         <input
-          id="date"
-          name="date"
-          type="date"
-          required
-          value={formattedDate}
-          class="input max-w-sm"
+          name="featured"
+          type="checkbox"
+          value="true"
+          class="h-4 w-4 accent-[#C8A96B]"
         />
-      </div>
+
+        Mostrar como servicio destacado
+      </label>
 
       <div>
         <label for="content" class="mb-2 block text-sm text-white/50">
-          Contenido en Markdown
+          Información completa
         </label>
 
         <textarea
           id="content"
           name="content"
           required
-          rows="24"
-          class="input min-h-[600px] font-mono leading-relaxed"
-        >{content}</textarea>
+          rows="22"
+          placeholder="# Descripción del servicio
+
+## Problemas que resuelve
+
+## Metodología
+
+## Entregables
+
+## Público objetivo
+
+## Solicitar diagnóstico"
+          class="input min-h-[560px] font-mono"
+        ></textarea>
+
+        <p class="mt-2 text-xs text-white/30">
+          Puedes usar Markdown para títulos, listas, enlaces y texto destacado.
+        </p>
       </div>
 
       <div class="flex flex-wrap items-center gap-4">
@@ -278,22 +240,14 @@ const formattedDate = new Date(post.data.date)
           type="submit"
           class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Guardar cambios
+          Guardar servicio
         </button>
 
         <a
-          href="/dashboard/posts"
+          href="/dashboard/servicios"
           class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
         >
           Cancelar
-        </a>
-
-        <a
-          href={`/blog/${post.id}`}
-          target="_blank"
-          class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
-        >
-          Ver artículo
         </a>
       </div>
 
@@ -328,8 +282,8 @@ const formattedDate = new Date(post.data.date)
   </style>
 
   <script is:inline>
-    const form = document.getElementById("post-form");
-    const saveButton = document.getElementById("save-button");
+    const form = document.getElementById("content-form");
+    const button = document.getElementById("save-button");
     const message = document.getElementById("message");
     const titleInput = document.getElementById("title");
     const slugInput = document.getElementById("slug");
@@ -353,26 +307,29 @@ const formattedDate = new Date(post.data.date)
     });
 
     slugInput?.addEventListener("input", () => {
-      slugInput.dataset.edited = "true";
+      slugInput.dataset.edited = slugInput.value ? "true" : "false";
     });
 
     form?.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      if (!form || !saveButton || !message) {
+      if (!form || !button || !message) {
         return;
       }
 
       const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries());
 
-      saveButton.disabled = true;
-      saveButton.textContent = "Guardando...";
-      message.textContent = "Actualizando artículo...";
+      payload.contentType = form.dataset.contentType;
+      payload.featured = formData.has("featured");
+
+      button.disabled = true;
+      button.textContent = "Guardando...";
+      message.textContent = "Creando servicio...";
 
       try {
         const response = await fetch(
-          "/.netlify/functions/update-post",
+          "/.netlify/functions/create-content",
           {
             method: "POST",
             credentials: "include",
@@ -397,24 +354,24 @@ const formattedDate = new Date(post.data.date)
 
         if (!response.ok) {
           throw new Error(
-            data.error || "No se pudo actualizar el artículo"
+            data.error || "No se pudo crear el servicio"
           );
         }
 
         message.textContent =
-          "Artículo actualizado. Netlify iniciará un nuevo despliegue.";
+          "Servicio guardado. Netlify iniciará un nuevo despliegue.";
 
         setTimeout(() => {
-          window.location.href = "/dashboard/posts";
+          window.location.href = "/dashboard/servicios";
         }, 1400);
       } catch (error) {
         message.textContent =
           error instanceof Error
             ? `Error: ${error.message}`
-            : "No se pudo actualizar el artículo.";
+            : "No se pudo guardar el servicio.";
 
-        saveButton.disabled = false;
-        saveButton.textContent = "Guardar cambios";
+        button.disabled = false;
+        button.textContent = "Guardar servicio";
       }
     });
   </script>
