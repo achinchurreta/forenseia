@@ -13,6 +13,7 @@ const PERMISSIONS = {
     "resources",
     "cases",
     "social",
+    "resources",
   ],
 
   "director-psychology": [
@@ -22,6 +23,7 @@ const PERMISSIONS = {
     "resources",
     "cases",
     "social",
+    "resources",
   ],
 };
 
