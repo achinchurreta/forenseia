@@ -39,8 +39,13 @@ const authors = [
       </h1>
 
       <p class="mt-4 max-w-2xl leading-relaxed text-white/45">
-        Publica contenido especializado y asígnalo a la dirección responsable.
+        Publica contenido especializado dentro de tu dirección.
       </p>
+
+      <div
+        id="role-notice"
+        class="mt-6 hidden border border-[#C8A96B]/20 bg-[#C8A96B]/5 p-4 text-sm text-white/55"
+      ></div>
     </div>
 
     <form id="post-form" class="space-y-6">
@@ -70,10 +75,6 @@ const authors = [
             placeholder="se-genera-automaticamente"
             class="input"
           />
-
-          <p class="mt-2 text-xs text-white/30">
-            Será utilizado en la dirección pública del artículo.
-          </p>
         </div>
       </div>
 
@@ -180,10 +181,6 @@ const authors = [
             placeholder="osint, fiscalías, investigación"
             class="input"
           />
-
-          <p class="mt-2 text-xs text-white/30">
-            Separa cada etiqueta con una coma.
-          </p>
         </div>
       </div>
 
@@ -247,6 +244,13 @@ Escribe aquí el contenido del artículo.
       background: rgb(255 255 255 / 0.015);
     }
 
+    .input:disabled {
+      cursor: not-allowed;
+      border-color: rgb(200 169 107 / 0.25);
+      background: rgb(200 169 107 / 0.04);
+      color: rgb(255 255 255 / 0.55);
+    }
+
     .input::placeholder {
       color: rgb(255 255 255 / 0.25);
     }
@@ -262,6 +266,11 @@ Escribe aquí el contenido del artículo.
     const descriptionCounter = document.getElementById(
       "description-counter"
     );
+    const authorSelect = document.getElementById("author");
+    const categorySelect = document.getElementById("category");
+    const roleNotice = document.getElementById("role-notice");
+
+    let currentUser = null;
 
     function createSlug(value) {
       return value
@@ -273,11 +282,101 @@ Escribe aquí el contenido del artículo.
         .replace(/^-+|-+$/g, "");
     }
 
+    function setAllowedOptions(select, allowedValues) {
+      if (!(select instanceof HTMLSelectElement)) {
+        return;
+      }
+
+      Array.from(select.options).forEach((option) => {
+        const allowed = allowedValues.includes(option.value);
+
+        option.hidden = !allowed;
+        option.disabled = !allowed;
+      });
+
+      if (!allowedValues.includes(select.value)) {
+        select.value = allowedValues[0];
+      }
+    }
+
+    function applyUserRestrictions(user) {
+      currentUser = user;
+
+      if (
+        !(authorSelect instanceof HTMLSelectElement) ||
+        !(categorySelect instanceof HTMLSelectElement)
+      ) {
+        return;
+      }
+
+      authorSelect.disabled = false;
+
+      Array.from(categorySelect.options).forEach((option) => {
+        option.hidden = false;
+        option.disabled = false;
+      });
+
+      if (roleNotice) {
+        roleNotice.classList.add("hidden");
+        roleNotice.textContent = "";
+      }
+
+      if (user.role === "admin") {
+        return;
+      }
+
+      if (user.role === "director-ia") {
+        authorSelect.value = "Gonzalo García";
+        authorSelect.disabled = true;
+
+        const allowedCategories = [
+          "Inteligencia Artificial",
+          "Gobierno Digital",
+          "Automatización",
+          "Agentes Inteligentes",
+          "Análisis Documental",
+        ];
+
+        setAllowedOptions(categorySelect, allowedCategories);
+
+        if (roleNotice) {
+          roleNotice.textContent =
+            "Publicarás como Gonzalo García dentro de la Dirección de Inteligencia Artificial.";
+          roleNotice.classList.remove("hidden");
+        }
+      }
+
+      if (user.role === "director-psychology") {
+        authorSelect.value = "Tania Pérez";
+        authorSelect.disabled = true;
+
+        const allowedCategories = [
+          "Psicología Criminal",
+          "Psicología Educativa",
+          "Análisis Conductual",
+          "Prevención",
+          "Factores de Riesgo",
+        ];
+
+        setAllowedOptions(categorySelect, allowedCategories);
+
+        if (roleNotice) {
+          roleNotice.textContent =
+            "Publicarás como Tania Pérez dentro de la Dirección de Psicología Criminal.";
+          roleNotice.classList.remove("hidden");
+        }
+      }
+    }
+
     function fillFieldsFromQuery() {
-      const searchParams = new URLSearchParams(window.location.search);
+      const searchParams = new URLSearchParams(
+        window.location.search
+      );
 
       for (const [field, value] of searchParams.entries()) {
-        const element = document.querySelector(`[name="${field}"]`);
+        const element = document.querySelector(
+          `[name="${field}"]`
+        );
 
         if (
           element instanceof HTMLInputElement ||
@@ -285,7 +384,6 @@ Escribe aquí el contenido del artículo.
           element instanceof HTMLSelectElement
         ) {
           element.value = value;
-          element.dispatchEvent(new Event("change"));
         }
       }
     }
@@ -302,13 +400,35 @@ Escribe aquí el contenido del artículo.
     fillFieldsFromQuery();
     updateDescriptionCounter();
 
+    try {
+      const storedUser = JSON.parse(
+        sessionStorage.getItem("forenseia_user") || "null"
+      );
+
+      if (storedUser) {
+        applyUserRestrictions(storedUser);
+      }
+    } catch {
+      sessionStorage.removeItem("forenseia_user");
+    }
+
+    document.addEventListener(
+      "forenseia:user-ready",
+      (event) => {
+        applyUserRestrictions(event.detail);
+      }
+    );
+
     descriptionInput?.addEventListener(
       "input",
       updateDescriptionCounter
     );
 
     titleInput?.addEventListener("input", () => {
-      if (!slugInput || slugInput.dataset.edited === "true") {
+      if (
+        !slugInput ||
+        slugInput.dataset.edited === "true"
+      ) {
         return;
       }
 
@@ -327,8 +447,29 @@ Escribe aquí el contenido del artículo.
         return;
       }
 
-      const formData = new FormData(form);
-      const payload = Object.fromEntries(formData.entries());
+      const payload = Object.fromEntries(
+        new FormData(form).entries()
+      );
+
+      if (
+        authorSelect instanceof HTMLSelectElement
+      ) {
+        payload.author = authorSelect.value;
+      }
+
+      if (
+        categorySelect instanceof HTMLSelectElement
+      ) {
+        payload.category = categorySelect.value;
+      }
+
+      if (currentUser?.role === "director-ia") {
+        payload.author = "Gonzalo García";
+      }
+
+      if (currentUser?.role === "director-psychology") {
+        payload.author = "Tania Pérez";
+      }
 
       button.disabled = true;
       button.textContent = "Guardando...";
@@ -355,7 +496,8 @@ Escribe aquí el contenido del artículo.
           data = JSON.parse(text);
         } catch {
           throw new Error(
-            text || "La función devolvió una respuesta inválida"
+            text ||
+              "La función devolvió una respuesta inválida"
           );
         }
 

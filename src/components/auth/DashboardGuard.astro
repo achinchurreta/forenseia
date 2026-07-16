@@ -1,5 +1,7 @@
 <script is:inline>
   async function verifyDashboardSession() {
+    document.documentElement.dataset.authState = "loading";
+
     try {
       const response = await fetch(
         "/.netlify/functions/auth-check",
@@ -11,6 +13,7 @@
       );
 
       if (!response.ok) {
+        sessionStorage.removeItem("forenseia_user");
         window.location.replace("/login");
         return;
       }
@@ -18,11 +21,19 @@
       const data = await response.json();
 
       if (!data.authenticated || !data.user) {
+        sessionStorage.removeItem("forenseia_user");
         window.location.replace("/login");
         return;
       }
 
       window.forenseiaUser = data.user;
+
+      sessionStorage.setItem(
+        "forenseia_user",
+        JSON.stringify(data.user)
+      );
+
+      document.documentElement.dataset.authState = "ready";
 
       document.dispatchEvent(
         new CustomEvent("forenseia:user-ready", {
@@ -31,6 +42,8 @@
       );
     } catch (error) {
       console.error("Dashboard session error:", error);
+
+      sessionStorage.removeItem("forenseia_user");
       window.location.replace("/login");
     }
   }

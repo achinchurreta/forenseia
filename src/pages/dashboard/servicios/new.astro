@@ -26,15 +26,16 @@ const areas = [
       </h1>
 
       <p class="mt-4 max-w-2xl leading-relaxed text-white/45">
-        Publica un servicio especializado y asígnalo a la dirección responsable.
+        Publica un servicio dentro de tu dirección especializada.
       </p>
+
+      <div
+        id="role-notice"
+        class="mt-6 hidden border border-[#C8A96B]/20 bg-[#C8A96B]/5 p-4 text-sm text-white/55"
+      ></div>
     </div>
 
-    <form
-      id="content-form"
-      data-content-type="service"
-      class="space-y-6"
-    >
+    <form id="content-form" class="space-y-6">
       <div class="grid gap-6 md:grid-cols-2">
         <div>
           <label for="title" class="mb-2 block text-sm text-white/50">
@@ -45,7 +46,7 @@ const areas = [
             id="title"
             name="title"
             required
-            placeholder="Ej. OSINT para fiscalías"
+            placeholder="Ej. Implementación de IA institucional"
             class="input"
           />
         </div>
@@ -79,9 +80,10 @@ const areas = [
           class="input"
         ></textarea>
 
-        <p class="mt-2 text-xs text-white/30">
-          Esta descripción aparecerá en el catálogo público de servicios.
-        </p>
+        <div class="mt-2 flex justify-between text-xs text-white/30">
+          <span>Esta descripción aparecerá en el catálogo público.</span>
+          <span id="description-counter">0 / 220</span>
+        </div>
       </div>
 
       <div class="grid gap-6 md:grid-cols-2">
@@ -90,12 +92,7 @@ const areas = [
             Área
           </label>
 
-          <select
-            id="area"
-            name="area"
-            required
-            class="input"
-          >
+          <select id="area" name="area" required class="input">
             {areas.map((area) => (
               <option value={area}>
                 {area}
@@ -133,7 +130,7 @@ const areas = [
           id="audience"
           name="audience"
           required
-          placeholder="Ej. Fiscalías, agencias de inteligencia y unidades especializadas"
+          placeholder="Gobierno, instituciones, organizaciones..."
           class="input"
         />
       </div>
@@ -152,10 +149,6 @@ const areas = [
             value="0"
             class="input"
           />
-
-          <p class="mt-2 text-xs text-white/30">
-            Los valores menores aparecerán primero.
-          </p>
         </div>
 
         <div>
@@ -163,19 +156,9 @@ const areas = [
             Estado
           </label>
 
-          <select
-            id="status"
-            name="status"
-            required
-            class="input"
-          >
-            <option value="published">
-              Publicado
-            </option>
-
-            <option value="draft">
-              Borrador
-            </option>
+          <select id="status" name="status" class="input">
+            <option value="published">Publicado</option>
+            <option value="draft">Borrador</option>
           </select>
         </div>
 
@@ -214,7 +197,7 @@ const areas = [
           id="content"
           name="content"
           required
-          rows="22"
+          rows="24"
           placeholder="# Descripción del servicio
 
 ## Problemas que resuelve
@@ -223,22 +206,16 @@ const areas = [
 
 ## Entregables
 
-## Público objetivo
-
-## Solicitar diagnóstico"
-          class="input min-h-[560px] font-mono"
+## Público objetivo"
+          class="input min-h-[600px] font-mono leading-relaxed"
         ></textarea>
-
-        <p class="mt-2 text-xs text-white/30">
-          Puedes usar Markdown para títulos, listas, enlaces y texto destacado.
-        </p>
       </div>
 
-      <div class="flex flex-wrap items-center gap-4">
+      <div class="flex flex-wrap gap-4">
         <button
           id="save-button"
           type="submit"
-          class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+          class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:opacity-50"
         >
           Guardar servicio
         </button>
@@ -251,10 +228,7 @@ const areas = [
         </a>
       </div>
 
-      <p
-        id="message"
-        class="min-h-6 text-sm text-white/50"
-      ></p>
+      <p id="message" class="min-h-6 text-sm text-white/50"></p>
     </form>
   </div>
 
@@ -266,14 +240,17 @@ const areas = [
       padding: 1rem;
       color: #fff;
       outline: none;
-      transition:
-        border-color 180ms ease,
-        background-color 180ms ease;
     }
 
     .input:focus {
       border-color: #c8a96b;
-      background: rgb(255 255 255 / 0.015);
+    }
+
+    .input:disabled {
+      cursor: not-allowed;
+      border-color: rgb(200 169 107 / 0.25);
+      background: rgb(200 169 107 / 0.04);
+      color: rgb(255 255 255 / 0.55);
     }
 
     .input::placeholder {
@@ -287,6 +264,15 @@ const areas = [
     const message = document.getElementById("message");
     const titleInput = document.getElementById("title");
     const slugInput = document.getElementById("slug");
+    const descriptionInput = document.getElementById("description");
+    const descriptionCounter = document.getElementById(
+      "description-counter"
+    );
+    const directorSelect = document.getElementById("director");
+    const areaSelect = document.getElementById("area");
+    const roleNotice = document.getElementById("role-notice");
+
+    let currentUser = null;
 
     function createSlug(value) {
       return value
@@ -298,8 +284,84 @@ const areas = [
         .replace(/^-+|-+$/g, "");
     }
 
+    function applyUserRestrictions(user) {
+      currentUser = user;
+
+      if (
+        !(directorSelect instanceof HTMLSelectElement) ||
+        !(areaSelect instanceof HTMLSelectElement)
+      ) {
+        return;
+      }
+
+      directorSelect.disabled = false;
+      areaSelect.disabled = false;
+      roleNotice?.classList.add("hidden");
+
+      if (user.role === "admin") {
+        return;
+      }
+
+      if (user.role === "director-ia") {
+        directorSelect.value = "Gonzalo García";
+        directorSelect.disabled = true;
+
+        areaSelect.value = "Inteligencia Artificial";
+        areaSelect.disabled = true;
+
+        if (roleNotice) {
+          roleNotice.textContent =
+            "El servicio se publicará como Gonzalo García dentro de Inteligencia Artificial.";
+          roleNotice.classList.remove("hidden");
+        }
+      }
+
+      if (user.role === "director-psychology") {
+        directorSelect.value = "Tania Pérez";
+        directorSelect.disabled = true;
+
+        areaSelect.value = "Psicología Criminal";
+        areaSelect.disabled = true;
+
+        if (roleNotice) {
+          roleNotice.textContent =
+            "El servicio se publicará como Tania Pérez dentro de Psicología Criminal.";
+          roleNotice.classList.remove("hidden");
+        }
+      }
+    }
+
+    try {
+      const storedUser = JSON.parse(
+        sessionStorage.getItem("forenseia_user") || "null"
+      );
+
+      if (storedUser) {
+        applyUserRestrictions(storedUser);
+      }
+    } catch {
+      sessionStorage.removeItem("forenseia_user");
+    }
+
+    document.addEventListener(
+      "forenseia:user-ready",
+      (event) => {
+        applyUserRestrictions(event.detail);
+      }
+    );
+
+    descriptionInput?.addEventListener("input", () => {
+      if (descriptionCounter) {
+        descriptionCounter.textContent =
+          `${descriptionInput.value.length} / 220`;
+      }
+    });
+
     titleInput?.addEventListener("input", () => {
-      if (!slugInput || slugInput.dataset.edited === "true") {
+      if (
+        !slugInput ||
+        slugInput.dataset.edited === "true"
+      ) {
         return;
       }
 
@@ -307,7 +369,8 @@ const areas = [
     });
 
     slugInput?.addEventListener("input", () => {
-      slugInput.dataset.edited = slugInput.value ? "true" : "false";
+      slugInput.dataset.edited =
+        slugInput.value ? "true" : "false";
     });
 
     form?.addEventListener("submit", async (event) => {
@@ -320,8 +383,26 @@ const areas = [
       const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries());
 
-      payload.contentType = form.dataset.contentType;
+      payload.contentType = "service";
       payload.featured = formData.has("featured");
+
+      if (directorSelect instanceof HTMLSelectElement) {
+        payload.director = directorSelect.value;
+      }
+
+      if (areaSelect instanceof HTMLSelectElement) {
+        payload.area = areaSelect.value;
+      }
+
+      if (currentUser?.role === "director-ia") {
+        payload.director = "Gonzalo García";
+        payload.area = "Inteligencia Artificial";
+      }
+
+      if (currentUser?.role === "director-psychology") {
+        payload.director = "Tania Pérez";
+        payload.area = "Psicología Criminal";
+      }
 
       button.disabled = true;
       button.textContent = "Guardando...";
@@ -340,17 +421,7 @@ const areas = [
           }
         );
 
-        const text = await response.text();
-
-        let data = {};
-
-        try {
-          data = JSON.parse(text);
-        } catch {
-          throw new Error(
-            text || "La función devolvió una respuesta inválida"
-          );
-        }
+        const data = await response.json();
 
         if (!response.ok) {
           throw new Error(
@@ -368,7 +439,7 @@ const areas = [
         message.textContent =
           error instanceof Error
             ? `Error: ${error.message}`
-            : "No se pudo guardar el servicio.";
+            : "No se pudo crear el servicio.";
 
         button.disabled = false;
         button.textContent = "Guardar servicio";

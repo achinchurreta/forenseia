@@ -18,23 +18,26 @@ const areas = [
 
 <DashboardLayout title="Nuevo curso | ForenseIA">
   <div class="max-w-5xl">
-    <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
-      Formación
-    </p>
+    <div class="mb-10">
+      <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+        Formación
+      </p>
 
-    <h1 class="mt-5 text-4xl font-semibold">
-      Nuevo curso
-    </h1>
+      <h1 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-5xl">
+        Nuevo curso
+      </h1>
 
-    <p class="mt-4 text-white/45">
-      Publica un nuevo programa formativo en el catálogo de ForenseIA.
-    </p>
+      <p class="mt-4 max-w-2xl leading-relaxed text-white/45">
+        Publica un programa formativo dentro de tu dirección.
+      </p>
 
-    <form
-      id="content-form"
-      data-content-type="course"
-      class="mt-10 space-y-6"
-    >
+      <div
+        id="role-notice"
+        class="mt-6 hidden border border-[#C8A96B]/20 bg-[#C8A96B]/5 p-4 text-sm text-white/55"
+      ></div>
+    </div>
+
+    <form id="content-form" class="space-y-6">
       <div class="grid gap-6 md:grid-cols-2">
         <div>
           <label for="title" class="mb-2 block text-sm text-white/50">
@@ -45,6 +48,7 @@ const areas = [
             id="title"
             name="title"
             required
+            placeholder="Ej. IA aplicada al gobierno"
             class="input"
           />
         </div>
@@ -72,9 +76,16 @@ const areas = [
           id="description"
           name="description"
           required
-          rows="3"
+          rows="4"
+          maxlength="220"
+          placeholder="Describe brevemente el objetivo del curso."
           class="input"
         ></textarea>
+
+        <div class="mt-2 flex justify-between text-xs text-white/30">
+          <span>Esta descripción aparecerá en el catálogo público.</span>
+          <span id="description-counter">0 / 220</span>
+        </div>
       </div>
 
       <div class="grid gap-6 md:grid-cols-3">
@@ -85,7 +96,9 @@ const areas = [
 
           <select id="area" name="area" required class="input">
             {areas.map((area) => (
-              <option value={area}>{area}</option>
+              <option value={area}>
+                {area}
+              </option>
             ))}
           </select>
         </div>
@@ -95,9 +108,16 @@ const areas = [
             Director o instructor
           </label>
 
-          <select id="instructor" name="instructor" required class="input">
+          <select
+            id="instructor"
+            name="instructor"
+            required
+            class="input"
+          >
             {instructors.map((instructor) => (
-              <option value={instructor}>{instructor}</option>
+              <option value={instructor}>
+                {instructor}
+              </option>
             ))}
           </select>
         </div>
@@ -160,14 +180,14 @@ const areas = [
 
       <div>
         <label for="audience" class="mb-2 block text-sm text-white/50">
-          Dirigido a
+          Público objetivo
         </label>
 
         <input
           id="audience"
           name="audience"
           required
-          placeholder="Fiscalías, instituciones, profesionales..."
+          placeholder="Instituciones, profesionales, universidades..."
           class="input"
         />
       </div>
@@ -199,8 +219,14 @@ const areas = [
         </div>
       </div>
 
-      <label class="flex items-center gap-3 text-sm text-white/55">
-        <input name="featured" type="checkbox" value="true" />
+      <label class="flex w-fit items-center gap-3 border border-white/10 bg-white/[0.02] px-4 py-4 text-sm text-white/55">
+        <input
+          name="featured"
+          type="checkbox"
+          value="true"
+          class="h-4 w-4 accent-[#C8A96B]"
+        />
+
         Mostrar como curso destacado
       </label>
 
@@ -213,19 +239,34 @@ const areas = [
           id="content"
           name="content"
           required
-          rows="20"
-          placeholder="# Objetivo&#10;&#10;# Temario&#10;&#10;# Requisitos"
-          class="input min-h-[500px] font-mono"
+          rows="24"
+          placeholder="# Objetivo
+
+## Temario
+
+## Requisitos
+
+## Resultados esperados"
+          class="input min-h-[600px] font-mono leading-relaxed"
         ></textarea>
       </div>
 
-      <button
-        id="save-button"
-        type="submit"
-        class="bg-[#C8A96B] px-8 py-4 font-medium text-black"
-      >
-        Guardar curso
-      </button>
+      <div class="flex flex-wrap gap-4">
+        <button
+          id="save-button"
+          type="submit"
+          class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:opacity-50"
+        >
+          Guardar curso
+        </button>
+
+        <a
+          href="/dashboard/cursos"
+          class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+        >
+          Cancelar
+        </a>
+      </div>
 
       <p id="message" class="min-h-6 text-sm text-white/50"></p>
     </form>
@@ -244,14 +285,34 @@ const areas = [
     .input:focus {
       border-color: #c8a96b;
     }
+
+    .input:disabled {
+      cursor: not-allowed;
+      border-color: rgb(200 169 107 / 0.25);
+      background: rgb(200 169 107 / 0.04);
+      color: rgb(255 255 255 / 0.55);
+    }
+
+    .input::placeholder {
+      color: rgb(255 255 255 / 0.25);
+    }
   </style>
 
   <script is:inline>
     const form = document.getElementById("content-form");
     const button = document.getElementById("save-button");
     const message = document.getElementById("message");
-    const title = document.getElementById("title");
-    const slug = document.getElementById("slug");
+    const titleInput = document.getElementById("title");
+    const slugInput = document.getElementById("slug");
+    const descriptionInput = document.getElementById("description");
+    const descriptionCounter = document.getElementById(
+      "description-counter"
+    );
+    const instructorSelect = document.getElementById("instructor");
+    const areaSelect = document.getElementById("area");
+    const roleNotice = document.getElementById("role-notice");
+
+    let currentUser = null;
 
     function createSlug(value) {
       return value
@@ -263,26 +324,149 @@ const areas = [
         .replace(/^-+|-+$/g, "");
     }
 
-    title?.addEventListener("input", () => {
-      if (slug && !slug.dataset.edited) {
-        slug.value = createSlug(title.value);
+    function setAllowedOptions(select, allowedValues) {
+      if (!(select instanceof HTMLSelectElement)) {
+        return;
+      }
+
+      Array.from(select.options).forEach((option) => {
+        const allowed = allowedValues.includes(option.value);
+
+        option.hidden = !allowed;
+        option.disabled = !allowed;
+      });
+
+      if (!allowedValues.includes(select.value)) {
+        select.value = allowedValues[0];
+      }
+    }
+
+    function applyUserRestrictions(user) {
+      currentUser = user;
+
+      if (
+        !(instructorSelect instanceof HTMLSelectElement) ||
+        !(areaSelect instanceof HTMLSelectElement)
+      ) {
+        return;
+      }
+
+      instructorSelect.disabled = false;
+
+      Array.from(areaSelect.options).forEach((option) => {
+        option.hidden = false;
+        option.disabled = false;
+      });
+
+      roleNotice?.classList.add("hidden");
+
+      if (user.role === "admin") {
+        return;
+      }
+
+      if (user.role === "director-ia") {
+        instructorSelect.value = "Gonzalo García";
+        instructorSelect.disabled = true;
+
+        setAllowedOptions(areaSelect, [
+          "Inteligencia Artificial",
+        ]);
+
+        if (roleNotice) {
+          roleNotice.textContent =
+            "El curso se publicará como Gonzalo García dentro del área de Inteligencia Artificial.";
+          roleNotice.classList.remove("hidden");
+        }
+      }
+
+      if (user.role === "director-psychology") {
+        instructorSelect.value = "Tania Pérez";
+        instructorSelect.disabled = true;
+
+        setAllowedOptions(areaSelect, [
+          "Psicología Criminal",
+          "Psicología Educativa",
+        ]);
+
+        if (roleNotice) {
+          roleNotice.textContent =
+            "El curso se publicará como Tania Pérez dentro del área de Psicología.";
+          roleNotice.classList.remove("hidden");
+        }
+      }
+    }
+
+    try {
+      const storedUser = JSON.parse(
+        sessionStorage.getItem("forenseia_user") || "null"
+      );
+
+      if (storedUser) {
+        applyUserRestrictions(storedUser);
+      }
+    } catch {
+      sessionStorage.removeItem("forenseia_user");
+    }
+
+    document.addEventListener(
+      "forenseia:user-ready",
+      (event) => {
+        applyUserRestrictions(event.detail);
+      }
+    );
+
+    descriptionInput?.addEventListener("input", () => {
+      if (descriptionCounter) {
+        descriptionCounter.textContent =
+          `${descriptionInput.value.length} / 220`;
       }
     });
 
-    slug?.addEventListener("input", () => {
-      slug.dataset.edited = slug.value ? "true" : "";
+    titleInput?.addEventListener("input", () => {
+      if (
+        !slugInput ||
+        slugInput.dataset.edited === "true"
+      ) {
+        return;
+      }
+
+      slugInput.value = createSlug(titleInput.value);
+    });
+
+    slugInput?.addEventListener("input", () => {
+      slugInput.dataset.edited =
+        slugInput.value ? "true" : "false";
     });
 
     form?.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      if (!form || !button || !message) return;
+      if (!form || !button || !message) {
+        return;
+      }
 
       const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries());
 
-      payload.contentType = form.dataset.contentType;
+      payload.contentType = "course";
       payload.featured = formData.has("featured");
+
+      if (instructorSelect instanceof HTMLSelectElement) {
+        payload.instructor = instructorSelect.value;
+      }
+
+      if (areaSelect instanceof HTMLSelectElement) {
+        payload.area = areaSelect.value;
+      }
+
+      if (currentUser?.role === "director-ia") {
+        payload.instructor = "Gonzalo García";
+        payload.area = "Inteligencia Artificial";
+      }
+
+      if (currentUser?.role === "director-psychology") {
+        payload.instructor = "Tania Pérez";
+      }
 
       button.disabled = true;
       button.textContent = "Guardando...";
@@ -304,7 +488,9 @@ const areas = [
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.error || "No se pudo crear el curso");
+          throw new Error(
+            data.error || "No se pudo crear el curso"
+          );
         }
 
         message.textContent =
@@ -314,7 +500,11 @@ const areas = [
           window.location.href = "/dashboard/cursos";
         }, 1400);
       } catch (error) {
-        message.textContent = `Error: ${error.message}`;
+        message.textContent =
+          error instanceof Error
+            ? `Error: ${error.message}`
+            : "No se pudo crear el curso.";
+
         button.disabled = false;
         button.textContent = "Guardar curso";
       }

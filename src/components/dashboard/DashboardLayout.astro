@@ -15,46 +15,55 @@ const navigation = [
     label: "Inicio",
     href: "/dashboard",
     icon: "01",
+    permission: null,
   },
   {
     label: "Artículos",
     href: "/dashboard/posts",
     icon: "02",
+    permission: "posts",
   },
   {
     label: "Cursos",
     href: "/dashboard/cursos",
     icon: "03",
+    permission: "courses",
   },
   {
     label: "Servicios",
     href: "/dashboard/servicios",
     icon: "04",
+    permission: "services",
   },
   {
     label: "Recursos",
     href: "/dashboard/recursos",
     icon: "05",
+    permission: "resources",
   },
   {
     label: "Casos de estudio",
     href: "/dashboard/casos",
     icon: "06",
+    permission: "cases",
   },
   {
     label: "Contenido social",
     href: "/dashboard/contenido",
     icon: "07",
+    permission: "social",
   },
   {
     label: "Autores",
     href: "/dashboard/autores",
     icon: "08",
+    permission: "admin",
   },
   {
     label: "Configuración",
     href: "/dashboard/configuracion",
     icon: "09",
+    permission: "admin",
   },
 ];
 
@@ -68,7 +77,7 @@ function isActive(href: string) {
 ---
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-auth-state="loading">
   <head>
     <meta charset="UTF-8" />
 
@@ -83,6 +92,32 @@ function isActive(href: string) {
     />
 
     <title>{title}</title>
+
+    <style is:global>
+      html[data-auth-state="loading"] body {
+        visibility: hidden;
+      }
+
+      html[data-auth-state="ready"] body {
+        visibility: visible;
+      }
+
+      [data-role-only="admin"] {
+        display: none;
+      }
+
+      html[data-user-role="admin"] [data-role-only="admin"] {
+        display: flex;
+      }
+
+      [data-permission-item] {
+        display: none;
+      }
+
+      html[data-user-role="admin"] [data-permission-item] {
+        display: flex;
+      }
+    </style>
   </head>
 
   <body class="bg-black text-white antialiased">
@@ -118,6 +153,7 @@ function isActive(href: string) {
             <a
               href="/"
               target="_blank"
+              rel="noopener noreferrer"
               class="border border-white/10 px-3 py-2 text-xs text-white/45 transition hover:border-[#C8A96B]/50 hover:text-[#C8A96B] lg:hidden"
             >
               Sitio
@@ -134,6 +170,8 @@ function isActive(href: string) {
                 <a
                   href={item.href}
                   aria-current={isActive(item.href) ? "page" : undefined}
+                  data-permission={item.permission || undefined}
+                  data-permission-item={item.permission ? true : undefined}
                   class:list={[
                     "group flex items-center gap-4 px-3 py-3 text-sm transition",
                     isActive(item.href)
@@ -157,13 +195,43 @@ function isActive(href: string) {
                   </span>
                 </a>
               ))}
+
+              <a
+                href="/dashboard"
+                class:list={[
+                  "group flex items-center gap-4 px-3 py-3 text-sm transition",
+                  isActive("/dashboard")
+                    ? "bg-[#C8A96B] text-black"
+                    : "text-white/50 hover:bg-white/[0.04] hover:text-white",
+                ]}
+                style="display:none"
+              >
+                Inicio
+              </a>
             </nav>
           </div>
 
           <div class="mt-auto hidden border-t border-white/10 pt-6 lg:block">
+            <div class="mb-5 px-3">
+              <p
+                id="sidebar-user-name"
+                class="text-sm font-medium text-white"
+              >
+                Cargando usuario...
+              </p>
+
+              <p
+                id="sidebar-user-area"
+                class="mt-1 text-xs leading-relaxed text-white/30"
+              >
+                Verificando sesión
+              </p>
+            </div>
+
             <a
               href="/"
               target="_blank"
+              rel="noopener noreferrer"
               class="block px-3 py-3 text-sm text-white/45 transition hover:text-[#C8A96B]"
             >
               Ver sitio público →
@@ -193,9 +261,26 @@ function isActive(href: string) {
               </p>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-4">
+              <div class="hidden text-right md:block">
+                <p
+                  id="dashboard-user-name"
+                  class="text-sm font-medium text-white"
+                >
+                  Cargando usuario...
+                </p>
+
+                <p
+                  id="dashboard-user-role"
+                  class="mt-1 text-xs text-white/35"
+                >
+                  Verificando sesión
+                </p>
+              </div>
+
               <a
                 href="/dashboard/posts/new"
+                data-header-new-post
                 class="hidden bg-[#C8A96B] px-4 py-3 text-sm font-medium text-black transition hover:opacity-90 sm:inline-flex"
               >
                 Nuevo artículo
@@ -219,6 +304,118 @@ function isActive(href: string) {
     </div>
 
     <script is:inline>
+      function hasPermission(user, permission) {
+        if (!permission) {
+          return true;
+        }
+
+        const permissions = Array.isArray(user.permissions)
+          ? user.permissions
+          : [];
+
+        if (permissions.includes("*")) {
+          return true;
+        }
+
+        if (permission === "admin") {
+          return user.role === "admin";
+        }
+
+        return permissions.includes(permission);
+      }
+
+      function getRoleLabel(user) {
+        const roleLabels = {
+          admin: "Administrador general",
+          "director-ia": "Dirección de Inteligencia Artificial",
+          "director-psychology": "Dirección de Psicología Criminal",
+        };
+
+        return (
+          roleLabels[user.role] ||
+          user.area ||
+          user.role ||
+          "Usuario"
+        );
+      }
+
+      function renderDashboardUser(user) {
+        document.documentElement.dataset.userRole =
+          user.role || "unknown";
+
+        const nameElements = [
+          document.getElementById("dashboard-user-name"),
+          document.getElementById("sidebar-user-name"),
+        ];
+
+        const roleElement = document.getElementById(
+          "dashboard-user-role"
+        );
+
+        const areaElement = document.getElementById(
+          "sidebar-user-area"
+        );
+
+        nameElements.forEach((element) => {
+          if (element) {
+            element.textContent =
+              user.name || user.email || "Usuario";
+          }
+        });
+
+        if (roleElement) {
+          roleElement.textContent = getRoleLabel(user);
+        }
+
+        if (areaElement) {
+          areaElement.textContent =
+            user.area || getRoleLabel(user);
+        }
+
+        document
+          .querySelectorAll("[data-permission-item]")
+          .forEach((item) => {
+            const permission =
+              item.getAttribute("data-permission");
+
+            item.style.display = hasPermission(user, permission)
+              ? "flex"
+              : "none";
+          });
+
+        const newPostButton = document.querySelector(
+          "[data-header-new-post]"
+        );
+
+        if (newPostButton instanceof HTMLElement) {
+          newPostButton.style.display = hasPermission(
+            user,
+            "posts"
+          )
+            ? ""
+            : "none";
+        }
+      }
+
+      document.addEventListener(
+        "forenseia:user-ready",
+        (event) => {
+          renderDashboardUser(event.detail);
+        }
+      );
+
+      try {
+        const storedUser = JSON.parse(
+          sessionStorage.getItem("forenseia_user") || "null"
+        );
+
+        if (storedUser) {
+          renderDashboardUser(storedUser);
+        }
+      } catch {
+        sessionStorage.removeItem("forenseia_user");
+      }
+
       const logoutButtons = [
         document.getElementById("logout-button"),
         document.getElementById("mobile-logout-button"),
@@ -234,7 +431,10 @@ function isActive(href: string) {
               method: "POST",
               credentials: "include",
             });
+          } catch (error) {
+            console.error("Logout error:", error);
           } finally {
+            sessionStorage.removeItem("forenseia_user");
             window.location.href = "/login";
           }
         });
