@@ -1,18 +1,39 @@
 <script is:inline>
-  async function checkDashboardAccess() {
+  async function verifyDashboardSession() {
     try {
-      const response = await fetch("/.netlify/functions/auth-check", {
-        method: "GET",
-        credentials: "include",
-      });
+      const response = await fetch(
+        "/.netlify/functions/auth-check",
+        {
+          method: "GET",
+          credentials: "include",
+          cache: "no-store",
+        }
+      );
 
       if (!response.ok) {
-        window.location.href = "/login";
+        window.location.replace("/login");
+        return;
       }
+
+      const data = await response.json();
+
+      if (!data.authenticated || !data.user) {
+        window.location.replace("/login");
+        return;
+      }
+
+      window.forenseiaUser = data.user;
+
+      document.dispatchEvent(
+        new CustomEvent("forenseia:user-ready", {
+          detail: data.user,
+        })
+      );
     } catch (error) {
-      window.location.href = "/login";
+      console.error("Dashboard session error:", error);
+      window.location.replace("/login");
     }
   }
 
-  checkDashboardAccess();
+  verifyDashboardSession();
 </script>
