@@ -1,5 +1,6 @@
 ---
 import DashboardLayout from "../../../../components/dashboard/DashboardLayout.astro";
+
 import {
   getCollection,
   type CollectionEntry,
@@ -47,7 +48,12 @@ const formattedDate = new Date(service.data.date)
 ---
 
 <DashboardLayout title={`Editar ${service.data.title} | ForenseIA`}>
-  <div class="max-w-5xl">
+  <div
+    id="edit-page"
+    data-current-owner={service.data.director}
+    data-current-area={service.data.area}
+    class="max-w-5xl"
+  >
     <div class="mb-10">
       <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
         Servicios / Editar
@@ -58,13 +64,38 @@ const formattedDate = new Date(service.data.date)
       </h1>
 
       <p class="mt-4 max-w-2xl leading-relaxed text-white/45">
-        Modifica la información, dirección responsable y estado del servicio.
+        Actualiza la información, dirección responsable, estado y contenido
+        completo del servicio.
       </p>
+
+      <div
+        id="role-notice"
+        class="mt-6 hidden border border-[#C8A96B]/20 bg-[#C8A96B]/5 p-4 text-sm leading-relaxed text-white/55"
+      ></div>
+
+      <div
+        id="access-denied"
+        class="mt-6 hidden border border-red-400/20 bg-red-500/5 p-5"
+      >
+        <p class="font-medium text-red-300">
+          No tienes permiso para editar este servicio.
+        </p>
+
+        <p class="mt-2 text-sm leading-relaxed text-white/45">
+          Este servicio pertenece a otra dirección especializada.
+        </p>
+
+        <a
+          href="/dashboard/servicios"
+          class="mt-5 inline-flex border border-red-400/30 px-5 py-3 text-sm text-red-200 transition hover:bg-red-500/10"
+        >
+          Volver a servicios
+        </a>
+      </div>
     </div>
 
     <form
       id="content-form"
-      data-content-type="service"
       class="space-y-6"
     >
       <input
@@ -73,9 +104,18 @@ const formattedDate = new Date(service.data.date)
         value={service.id}
       />
 
+      <input
+        type="hidden"
+        name="contentType"
+        value="service"
+      />
+
       <div class="grid gap-6 md:grid-cols-2">
         <div>
-          <label for="title" class="mb-2 block text-sm text-white/50">
+          <label
+            for="title"
+            class="mb-2 block text-sm text-white/50"
+          >
             Título del servicio
           </label>
 
@@ -89,7 +129,10 @@ const formattedDate = new Date(service.data.date)
         </div>
 
         <div>
-          <label for="slug" class="mb-2 block text-sm text-white/50">
+          <label
+            for="slug"
+            class="mb-2 block text-sm text-white/50"
+          >
             Slug
           </label>
 
@@ -108,8 +151,11 @@ const formattedDate = new Date(service.data.date)
       </div>
 
       <div>
-        <label for="description" class="mb-2 block text-sm text-white/50">
-          Descripción
+        <label
+          for="description"
+          class="mb-2 block text-sm text-white/50"
+        >
+          Descripción breve
         </label>
 
         <textarea
@@ -117,17 +163,45 @@ const formattedDate = new Date(service.data.date)
           name="description"
           required
           rows="4"
+          maxlength="220"
           class="input"
         >{service.data.description}</textarea>
+
+        <div class="mt-2 flex justify-between gap-4 text-xs text-white/30">
+          <span>
+            Esta descripción aparecerá en el catálogo público.
+          </span>
+
+          <span id="description-counter">
+            {service.data.description.length} / 220
+          </span>
+        </div>
       </div>
 
       <div class="grid gap-6 md:grid-cols-2">
         <div>
-          <label for="area" class="mb-2 block text-sm text-white/50">
+          <label
+            for="area"
+            class="mb-2 block text-sm text-white/50"
+          >
             Área
           </label>
 
-          <select id="area" name="area" required class="input">
+          <select
+            id="area"
+            name="area"
+            required
+            class="input"
+          >
+            {!areas.includes(service.data.area) && (
+              <option
+                value={service.data.area}
+                selected
+              >
+                {service.data.area}
+              </option>
+            )}
+
             {areas.map((area) => (
               <option
                 value={area}
@@ -140,11 +214,28 @@ const formattedDate = new Date(service.data.date)
         </div>
 
         <div>
-          <label for="director" class="mb-2 block text-sm text-white/50">
+          <label
+            for="director"
+            class="mb-2 block text-sm text-white/50"
+          >
             Director responsable
           </label>
 
-          <select id="director" name="director" required class="input">
+          <select
+            id="director"
+            name="director"
+            required
+            class="input"
+          >
+            {!directors.includes(service.data.director) && (
+              <option
+                value={service.data.director}
+                selected
+              >
+                {service.data.director}
+              </option>
+            )}
+
             {directors.map((director) => (
               <option
                 value={director}
@@ -158,7 +249,10 @@ const formattedDate = new Date(service.data.date)
       </div>
 
       <div>
-        <label for="audience" class="mb-2 block text-sm text-white/50">
+        <label
+          for="audience"
+          class="mb-2 block text-sm text-white/50"
+        >
           Público objetivo
         </label>
 
@@ -173,7 +267,10 @@ const formattedDate = new Date(service.data.date)
 
       <div class="grid gap-6 md:grid-cols-4">
         <div>
-          <label for="order" class="mb-2 block text-sm text-white/50">
+          <label
+            for="order"
+            class="mb-2 block text-sm text-white/50"
+          >
             Orden
           </label>
 
@@ -185,14 +282,26 @@ const formattedDate = new Date(service.data.date)
             value={service.data.order}
             class="input"
           />
+
+          <p class="mt-2 text-xs text-white/30">
+            Los valores menores aparecen primero.
+          </p>
         </div>
 
         <div>
-          <label for="status" class="mb-2 block text-sm text-white/50">
+          <label
+            for="status"
+            class="mb-2 block text-sm text-white/50"
+          >
             Estado
           </label>
 
-          <select id="status" name="status" required class="input">
+          <select
+            id="status"
+            name="status"
+            required
+            class="input"
+          >
             <option
               value="published"
               selected={service.data.status === "published"}
@@ -210,7 +319,10 @@ const formattedDate = new Date(service.data.date)
         </div>
 
         <div>
-          <label for="date" class="mb-2 block text-sm text-white/50">
+          <label
+            for="date"
+            class="mb-2 block text-sm text-white/50"
+          >
             Fecha
           </label>
 
@@ -225,7 +337,10 @@ const formattedDate = new Date(service.data.date)
         </div>
 
         <div>
-          <label for="cover" class="mb-2 block text-sm text-white/50">
+          <label
+            for="cover"
+            class="mb-2 block text-sm text-white/50"
+          >
             URL de portada
           </label>
 
@@ -234,6 +349,7 @@ const formattedDate = new Date(service.data.date)
             name="cover"
             type="url"
             value={service.data.cover ?? ""}
+            placeholder="https://..."
             class="input"
           />
         </div>
@@ -241,6 +357,7 @@ const formattedDate = new Date(service.data.date)
 
       <label class="flex w-fit items-center gap-3 border border-white/10 bg-white/[0.02] px-4 py-4 text-sm text-white/55">
         <input
+          id="featured"
           name="featured"
           type="checkbox"
           value="true"
@@ -252,7 +369,10 @@ const formattedDate = new Date(service.data.date)
       </label>
 
       <div>
-        <label for="content" class="mb-2 block text-sm text-white/50">
+        <label
+          for="content"
+          class="mb-2 block text-sm text-white/50"
+        >
           Información completa
         </label>
 
@@ -265,11 +385,11 @@ const formattedDate = new Date(service.data.date)
         >{content}</textarea>
       </div>
 
-      <div class="flex flex-wrap gap-4">
+      <div class="flex flex-wrap items-center gap-4">
         <button
           id="save-button"
           type="submit"
-          class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:opacity-50"
+          class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Guardar cambios
         </button>
@@ -285,6 +405,7 @@ const formattedDate = new Date(service.data.date)
           <a
             href={`/servicios/${service.id}`}
             target="_blank"
+            rel="noopener noreferrer"
             class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
           >
             Ver servicio
@@ -292,7 +413,10 @@ const formattedDate = new Date(service.data.date)
         )}
       </div>
 
-      <p id="message" class="min-h-6 text-sm text-white/50"></p>
+      <p
+        id="message"
+        class="min-h-6 text-sm text-white/50"
+      ></p>
     </form>
   </div>
 
@@ -304,11 +428,23 @@ const formattedDate = new Date(service.data.date)
       padding: 1rem;
       color: #fff;
       outline: none;
-      transition: border-color 180ms ease;
+      transition:
+        border-color 180ms ease,
+        background-color 180ms ease,
+        opacity 180ms ease;
     }
 
     .input:focus {
       border-color: #c8a96b;
+      background: rgb(255 255 255 / 0.015);
+    }
+
+    .input:disabled {
+      cursor: not-allowed;
+      border-color: rgb(200 169 107 / 0.25);
+      background: rgb(200 169 107 / 0.04);
+      color: rgb(255 255 255 / 0.55);
+      opacity: 1;
     }
 
     .input::placeholder {
@@ -317,23 +453,272 @@ const formattedDate = new Date(service.data.date)
   </style>
 
   <script is:inline>
+    const editPage = document.getElementById("edit-page");
     const form = document.getElementById("content-form");
-    const button = document.getElementById("save-button");
+    const saveButton = document.getElementById("save-button");
     const message = document.getElementById("message");
+    const roleNotice = document.getElementById("role-notice");
+    const accessDenied = document.getElementById("access-denied");
+
+    const titleInput = document.getElementById("title");
+    const slugInput = document.getElementById("slug");
+    const descriptionInput = document.getElementById("description");
+    const descriptionCounter = document.getElementById(
+      "description-counter"
+    );
+
+    const directorSelect = document.getElementById("director");
+    const areaSelect = document.getElementById("area");
+    const featuredInput = document.getElementById("featured");
+
+    const currentOwner =
+      editPage?.dataset.currentOwner || "";
+
+    let currentUser = null;
+    let accessAllowed = false;
+
+    const ROLE_RULES = {
+      "director-ia": {
+        owner: "Gonzalo García",
+        areas: [
+          "Inteligencia Artificial",
+        ],
+        notice:
+          "Estás editando un servicio de la Dirección de Inteligencia Artificial. El director permanecerá como Gonzalo García.",
+      },
+
+      "director-psychology": {
+        owner: "Tania Pérez",
+        areas: [
+          "Psicología Criminal",
+        ],
+        notice:
+          "Estás editando un servicio de la Dirección de Psicología Criminal. La directora permanecerá como Tania Pérez.",
+      },
+    };
+
+    function createSlug(value) {
+      return String(value)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function updateDescriptionCounter() {
+      if (
+        !(descriptionInput instanceof HTMLTextAreaElement) ||
+        !descriptionCounter
+      ) {
+        return;
+      }
+
+      descriptionCounter.textContent =
+        `${descriptionInput.value.length} / 220`;
+    }
+
+    function resetAreaOptions() {
+      if (!(areaSelect instanceof HTMLSelectElement)) {
+        return;
+      }
+
+      Array.from(areaSelect.options).forEach((option) => {
+        option.hidden = false;
+        option.disabled = false;
+      });
+    }
+
+    function restrictAreaOptions(allowedAreas) {
+      if (!(areaSelect instanceof HTMLSelectElement)) {
+        return;
+      }
+
+      Array.from(areaSelect.options).forEach((option) => {
+        const allowed = allowedAreas.includes(option.value);
+
+        option.hidden = !allowed;
+        option.disabled = !allowed;
+      });
+
+      if (!allowedAreas.includes(areaSelect.value)) {
+        areaSelect.value = allowedAreas[0];
+      }
+    }
+
+    function disableForm() {
+      form?.querySelectorAll(
+        "input, textarea, select, button"
+      ).forEach((element) => {
+        element.disabled = true;
+      });
+
+      form?.classList.add("hidden");
+      accessDenied?.classList.remove("hidden");
+    }
+
+    function enableForm() {
+      form?.classList.remove("hidden");
+      accessDenied?.classList.add("hidden");
+    }
+
+    function applyUserRestrictions(user) {
+      currentUser = user;
+      accessAllowed = false;
+
+      if (
+        !(directorSelect instanceof HTMLSelectElement) ||
+        !(areaSelect instanceof HTMLSelectElement)
+      ) {
+        disableForm();
+        return;
+      }
+
+      directorSelect.disabled = false;
+      areaSelect.disabled = false;
+
+      resetAreaOptions();
+
+      roleNotice?.classList.add("hidden");
+
+      if (roleNotice) {
+        roleNotice.textContent = "";
+      }
+
+      if (user.role === "admin") {
+        accessAllowed = true;
+        enableForm();
+        return;
+      }
+
+      const rules = ROLE_RULES[user.role];
+
+      if (!rules || currentOwner !== rules.owner) {
+        disableForm();
+        return;
+      }
+
+      accessAllowed = true;
+      enableForm();
+
+      directorSelect.value = rules.owner;
+      directorSelect.disabled = true;
+
+      restrictAreaOptions(rules.areas);
+
+      if (roleNotice) {
+        roleNotice.textContent = rules.notice;
+        roleNotice.classList.remove("hidden");
+      }
+    }
+
+    function loadStoredUser() {
+      try {
+        const storedUser = JSON.parse(
+          sessionStorage.getItem("forenseia_user") || "null"
+        );
+
+        if (storedUser) {
+          applyUserRestrictions(storedUser);
+        }
+      } catch (error) {
+        console.error(
+          "No se pudo leer el usuario almacenado:",
+          error
+        );
+
+        sessionStorage.removeItem("forenseia_user");
+      }
+    }
+
+    loadStoredUser();
+    updateDescriptionCounter();
+
+    document.addEventListener(
+      "forenseia:user-ready",
+      (event) => {
+        applyUserRestrictions(event.detail);
+      }
+    );
+
+    descriptionInput?.addEventListener(
+      "input",
+      updateDescriptionCounter
+    );
+
+    titleInput?.addEventListener("input", () => {
+      if (
+        !(titleInput instanceof HTMLInputElement) ||
+        !(slugInput instanceof HTMLInputElement) ||
+        slugInput.dataset.edited === "true"
+      ) {
+        return;
+      }
+
+      slugInput.value = createSlug(titleInput.value);
+    });
+
+    slugInput?.addEventListener("input", () => {
+      if (!(slugInput instanceof HTMLInputElement)) {
+        return;
+      }
+
+      slugInput.dataset.edited =
+        slugInput.value.length > 0
+          ? "true"
+          : "false";
+    });
 
     form?.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      if (!form || !button || !message) return;
+      if (
+        !accessAllowed ||
+        !currentUser ||
+        !form ||
+        !saveButton ||
+        !message
+      ) {
+        if (message) {
+          message.textContent =
+            "No tienes permiso para editar este servicio.";
+        }
+
+        return;
+      }
 
       const formData = new FormData(form);
-      const payload = Object.fromEntries(formData.entries());
+      const payload = Object.fromEntries(
+        formData.entries()
+      );
 
       payload.contentType = "service";
-      payload.featured = formData.has("featured");
+      payload.featured =
+        featuredInput instanceof HTMLInputElement
+          ? featuredInput.checked
+          : false;
 
-      button.disabled = true;
-      button.textContent = "Guardando...";
+      if (directorSelect instanceof HTMLSelectElement) {
+        payload.director = directorSelect.value;
+      }
+
+      if (areaSelect instanceof HTMLSelectElement) {
+        payload.area = areaSelect.value;
+      }
+
+      if (currentUser.role === "director-ia") {
+        payload.director = "Gonzalo García";
+        payload.area = "Inteligencia Artificial";
+      }
+
+      if (currentUser.role === "director-psychology") {
+        payload.director = "Tania Pérez";
+        payload.area = "Psicología Criminal";
+      }
+
+      saveButton.disabled = true;
+      saveButton.textContent = "Guardando...";
       message.textContent = "Actualizando servicio...";
 
       try {
@@ -349,10 +734,24 @@ const formattedDate = new Date(service.data.date)
           }
         );
 
-        const data = await response.json();
+        const text = await response.text();
+
+        let data = {};
+
+        try {
+          data = text ? JSON.parse(text) : {};
+        } catch {
+          throw new Error(
+            text ||
+              "La función devolvió una respuesta inválida"
+          );
+        }
 
         if (!response.ok) {
-          throw new Error(data.error || "No se pudo actualizar el servicio");
+          throw new Error(
+            data.error ||
+              "No se pudo actualizar el servicio"
+          );
         }
 
         message.textContent =
@@ -367,8 +766,8 @@ const formattedDate = new Date(service.data.date)
             ? `Error: ${error.message}`
             : "No se pudo actualizar el servicio.";
 
-        button.disabled = false;
-        button.textContent = "Guardar cambios";
+        saveButton.disabled = false;
+        saveButton.textContent = "Guardar cambios";
       }
     });
   </script>
