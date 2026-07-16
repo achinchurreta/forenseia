@@ -2,7 +2,16 @@
 import DashboardLayout from "../../../components/dashboard/DashboardLayout.astro";
 import { getCollection } from "astro:content";
 
-const services = await getCollection("services");
+const services = (await getCollection("services")).sort((a, b) => {
+  if (a.data.order !== b.data.order) {
+    return a.data.order - b.data.order;
+  }
+
+  return (
+    new Date(b.data.date).getTime() -
+    new Date(a.data.date).getTime()
+  );
+});
 
 const publishedServices = services.filter(
   (service) => service.data.status === "published"
@@ -26,7 +35,8 @@ const draftServices = services.filter(
         </h1>
 
         <p class="mt-5 max-w-2xl leading-relaxed text-white/45">
-          Crea, organiza y publica los servicios de cada dirección especializada.
+          Crea, organiza, edita y publica los servicios de cada dirección
+          especializada de ForenseIA.
         </p>
       </div>
 
@@ -46,7 +56,7 @@ const draftServices = services.filter(
       </p>
 
       <p class="mt-4 text-white/45">
-        Total
+        Total de servicios
       </p>
     </article>
 
@@ -71,57 +81,197 @@ const draftServices = services.filter(
     </article>
   </section>
 
-  <section class="mt-12 space-y-4">
+  <section class="mt-12">
     {services.length === 0 ? (
       <div class="border border-white/10 bg-white/[0.02] p-8">
         <p class="text-white/45">
           Todavía no hay servicios creados.
         </p>
+
+        <a
+          href="/dashboard/servicios/new"
+          class="mt-6 inline-flex bg-[#C8A96B] px-5 py-3 text-sm font-medium text-black"
+        >
+          Crear primer servicio
+        </a>
       </div>
     ) : (
-      services
-        .sort((a, b) => a.data.order - b.data.order)
-        .map((service) => (
-          <article class="flex flex-col justify-between gap-6 border border-white/10 bg-white/[0.02] p-6 lg:flex-row lg:items-center">
-            <div>
-              <div class="flex flex-wrap gap-3 text-xs">
-                <span class="text-[#C8A96B]">
+      <div class="space-y-4">
+        {services.map((service) => (
+          <article class="flex flex-col justify-between gap-7 border border-white/10 bg-white/[0.02] p-6 transition hover:border-[#C8A96B]/40 xl:flex-row xl:items-center">
+            <div class="max-w-3xl">
+              <div class="flex flex-wrap items-center gap-3 text-xs">
+                <span class="uppercase tracking-[0.22em] text-[#C8A96B]">
                   {service.data.area}
                 </span>
 
-                <span class="text-white/30">
-                  {service.data.status}
+                <span
+                  class:list={[
+                    "border px-3 py-1",
+                    service.data.status === "published"
+                      ? "border-emerald-400/20 text-emerald-300"
+                      : "border-amber-400/20 text-amber-300",
+                  ]}
+                >
+                  {service.data.status === "published"
+                    ? "Publicado"
+                    : "Borrador"}
                 </span>
 
                 {service.data.featured && (
-                  <span class="text-white/30">
+                  <span class="border border-[#C8A96B]/20 px-3 py-1 text-[#C8A96B]">
                     Destacado
                   </span>
                 )}
+
+                <span class="text-white/25">
+                  Orden: {service.data.order}
+                </span>
               </div>
 
               <h2 class="mt-4 text-2xl font-semibold">
                 {service.data.title}
               </h2>
 
-              <p class="mt-3 max-w-3xl text-white/45">
+              <p class="mt-3 leading-relaxed text-white/45">
                 {service.data.description}
               </p>
 
-              <p class="mt-4 text-sm text-white/30">
-                Dirección: {service.data.director}
-              </p>
+              <div class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/30">
+                <span>
+                  Director: {service.data.director}
+                </span>
+
+                <span>
+                  Dirigido a: {service.data.audience}
+                </span>
+              </div>
             </div>
 
-            <a
-              href={`/servicios/${service.id}`}
-              target="_blank"
-              class="w-fit border border-white/10 px-5 py-3 text-sm text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
-            >
-              Ver servicio
-            </a>
+            <div class="flex flex-wrap gap-3">
+              {service.data.status === "published" && (
+                <a
+                  href={`/servicios/${service.id}`}
+                  target="_blank"
+                  class="border border-white/10 px-5 py-3 text-sm text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+                >
+                  Ver
+                </a>
+              )}
+
+              <a
+                href={`/dashboard/servicios/edit/${service.id}`}
+                class="border border-white/10 px-5 py-3 text-sm text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+              >
+                Editar
+              </a>
+
+              <button
+                type="button"
+                data-delete-content
+                data-content-type="service"
+                data-slug={service.id}
+                data-title={service.data.title}
+                class="border border-red-400/20 px-5 py-3 text-sm text-red-300/70 transition hover:bg-red-500/10 hover:text-red-300"
+              >
+                Eliminar
+              </button>
+            </div>
           </article>
-        ))
+        ))}
+      </div>
     )}
   </section>
+
+  <p
+    id="delete-message"
+    class="mt-6 min-h-6 text-sm text-white/45"
+  ></p>
+
+  <script is:inline>
+    const deleteButtons = document.querySelectorAll(
+      "[data-delete-content]"
+    );
+
+    const message = document.getElementById("delete-message");
+
+    deleteButtons.forEach((button) => {
+      button.addEventListener("click", async () => {
+        const slug = button.dataset.slug;
+        const title = button.dataset.title;
+        const contentType = button.dataset.contentType;
+
+        if (!slug || !contentType) {
+          return;
+        }
+
+        const confirmed = window.confirm(
+          `¿Seguro que deseas eliminar el servicio "${title}"?`
+        );
+
+        if (!confirmed) {
+          return;
+        }
+
+        button.disabled = true;
+        button.textContent = "Eliminando...";
+
+        if (message) {
+          message.textContent = "Eliminando servicio...";
+        }
+
+        try {
+          const response = await fetch(
+            "/.netlify/functions/delete-content",
+            {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                slug,
+                contentType,
+              }),
+            }
+          );
+
+          const text = await response.text();
+
+          let data = {};
+
+          try {
+            data = JSON.parse(text);
+          } catch {
+            throw new Error(
+              text || "La función devolvió una respuesta inválida"
+            );
+          }
+
+          if (!response.ok) {
+            throw new Error(
+              data.error || "No se pudo eliminar el servicio"
+            );
+          }
+
+          button.closest("article")?.remove();
+
+          if (message) {
+            message.textContent =
+              "Servicio eliminado. Netlify iniciará un nuevo despliegue.";
+          }
+        } catch (error) {
+          if (message) {
+            message.textContent =
+              error instanceof Error
+                ? `Error: ${error.message}`
+                : "No se pudo eliminar el servicio.";
+          }
+
+          button.disabled = false;
+          button.textContent = "Eliminar";
+        }
+      });
+    });
+  </script>
 </DashboardLayout>

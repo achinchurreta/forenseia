@@ -1,0 +1,375 @@
+---
+import DashboardLayout from "../../../../components/dashboard/DashboardLayout.astro";
+import {
+  getCollection,
+  type CollectionEntry,
+} from "astro:content";
+
+export async function getStaticPaths() {
+  const services = await getCollection("services");
+
+  return services.map((service) => ({
+    params: {
+      slug: String(service.id),
+    },
+    props: {
+      service,
+    },
+  }));
+}
+
+interface Props {
+  service: CollectionEntry<"services">;
+}
+
+const { service } = Astro.props as Props;
+
+const content =
+  "body" in service && typeof service.body === "string"
+    ? service.body
+    : "";
+
+const directors = [
+  "Gonzalo García",
+  "Augusto Chinchurreta",
+  "Tania Pérez",
+];
+
+const areas = [
+  "Inteligencia Artificial",
+  "Investigación Digital y Ciberseguridad",
+  "Psicología Criminal",
+];
+
+const formattedDate = new Date(service.data.date)
+  .toISOString()
+  .split("T")[0];
+---
+
+<DashboardLayout title={`Editar ${service.data.title} | ForenseIA`}>
+  <div class="max-w-5xl">
+    <div class="mb-10">
+      <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+        Servicios / Editar
+      </p>
+
+      <h1 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-5xl">
+        Editar servicio
+      </h1>
+
+      <p class="mt-4 max-w-2xl leading-relaxed text-white/45">
+        Modifica la información, dirección responsable y estado del servicio.
+      </p>
+    </div>
+
+    <form
+      id="content-form"
+      data-content-type="service"
+      class="space-y-6"
+    >
+      <input
+        type="hidden"
+        name="currentSlug"
+        value={service.id}
+      />
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label for="title" class="mb-2 block text-sm text-white/50">
+            Título del servicio
+          </label>
+
+          <input
+            id="title"
+            name="title"
+            required
+            value={service.data.title}
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="slug" class="mb-2 block text-sm text-white/50">
+            Slug
+          </label>
+
+          <input
+            id="slug"
+            name="slug"
+            required
+            value={service.id}
+            class="input"
+          />
+
+          <p class="mt-2 text-xs text-white/30">
+            Cambiarlo modificará la URL pública del servicio.
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <label for="description" class="mb-2 block text-sm text-white/50">
+          Descripción
+        </label>
+
+        <textarea
+          id="description"
+          name="description"
+          required
+          rows="4"
+          class="input"
+        >{service.data.description}</textarea>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label for="area" class="mb-2 block text-sm text-white/50">
+            Área
+          </label>
+
+          <select id="area" name="area" required class="input">
+            {areas.map((area) => (
+              <option
+                value={area}
+                selected={service.data.area === area}
+              >
+                {area}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="director" class="mb-2 block text-sm text-white/50">
+            Director responsable
+          </label>
+
+          <select id="director" name="director" required class="input">
+            {directors.map((director) => (
+              <option
+                value={director}
+                selected={service.data.director === director}
+              >
+                {director}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label for="audience" class="mb-2 block text-sm text-white/50">
+          Público objetivo
+        </label>
+
+        <input
+          id="audience"
+          name="audience"
+          required
+          value={service.data.audience}
+          class="input"
+        />
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-4">
+        <div>
+          <label for="order" class="mb-2 block text-sm text-white/50">
+            Orden
+          </label>
+
+          <input
+            id="order"
+            name="order"
+            type="number"
+            min="0"
+            value={service.data.order}
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="status" class="mb-2 block text-sm text-white/50">
+            Estado
+          </label>
+
+          <select id="status" name="status" required class="input">
+            <option
+              value="published"
+              selected={service.data.status === "published"}
+            >
+              Publicado
+            </option>
+
+            <option
+              value="draft"
+              selected={service.data.status === "draft"}
+            >
+              Borrador
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label for="date" class="mb-2 block text-sm text-white/50">
+            Fecha
+          </label>
+
+          <input
+            id="date"
+            name="date"
+            type="date"
+            required
+            value={formattedDate}
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="cover" class="mb-2 block text-sm text-white/50">
+            URL de portada
+          </label>
+
+          <input
+            id="cover"
+            name="cover"
+            type="url"
+            value={service.data.cover ?? ""}
+            class="input"
+          />
+        </div>
+      </div>
+
+      <label class="flex w-fit items-center gap-3 border border-white/10 bg-white/[0.02] px-4 py-4 text-sm text-white/55">
+        <input
+          name="featured"
+          type="checkbox"
+          value="true"
+          checked={service.data.featured}
+          class="h-4 w-4 accent-[#C8A96B]"
+        />
+
+        Mostrar como servicio destacado
+      </label>
+
+      <div>
+        <label for="content" class="mb-2 block text-sm text-white/50">
+          Información completa
+        </label>
+
+        <textarea
+          id="content"
+          name="content"
+          required
+          rows="24"
+          class="input min-h-[600px] font-mono leading-relaxed"
+        >{content}</textarea>
+      </div>
+
+      <div class="flex flex-wrap gap-4">
+        <button
+          id="save-button"
+          type="submit"
+          class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:opacity-50"
+        >
+          Guardar cambios
+        </button>
+
+        <a
+          href="/dashboard/servicios"
+          class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+        >
+          Cancelar
+        </a>
+
+        {service.data.status === "published" && (
+          <a
+            href={`/servicios/${service.id}`}
+            target="_blank"
+            class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+          >
+            Ver servicio
+          </a>
+        )}
+      </div>
+
+      <p id="message" class="min-h-6 text-sm text-white/50"></p>
+    </form>
+  </div>
+
+  <style>
+    .input {
+      width: 100%;
+      border: 1px solid rgb(255 255 255 / 0.1);
+      background: #000;
+      padding: 1rem;
+      color: #fff;
+      outline: none;
+      transition: border-color 180ms ease;
+    }
+
+    .input:focus {
+      border-color: #c8a96b;
+    }
+
+    .input::placeholder {
+      color: rgb(255 255 255 / 0.25);
+    }
+  </style>
+
+  <script is:inline>
+    const form = document.getElementById("content-form");
+    const button = document.getElementById("save-button");
+    const message = document.getElementById("message");
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!form || !button || !message) return;
+
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+
+      payload.contentType = "service";
+      payload.featured = formData.has("featured");
+
+      button.disabled = true;
+      button.textContent = "Guardando...";
+      message.textContent = "Actualizando servicio...";
+
+      try {
+        const response = await fetch(
+          "/.netlify/functions/update-content",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "No se pudo actualizar el servicio");
+        }
+
+        message.textContent =
+          "Servicio actualizado. Netlify iniciará un nuevo despliegue.";
+
+        setTimeout(() => {
+          window.location.href = "/dashboard/servicios";
+        }, 1400);
+      } catch (error) {
+        message.textContent =
+          error instanceof Error
+            ? `Error: ${error.message}`
+            : "No se pudo actualizar el servicio.";
+
+        button.disabled = false;
+        button.textContent = "Guardar cambios";
+      }
+    });
+  </script>
+</DashboardLayout>
