@@ -5,14 +5,18 @@ const categories = [
   "Inteligencia Artificial",
   "Gobierno Digital",
   "Automatización",
+  "Agentes Inteligentes",
+  "Análisis Documental",
   "OSINT",
   "Investigación Digital",
   "Ciberseguridad",
   "Inteligencia Patrimonial",
   "Auditoría Forense",
   "Psicología Criminal",
+  "Psicología Educativa",
   "Análisis Conductual",
   "Prevención",
+  "Factores de Riesgo",
 ];
 
 const authors = [
@@ -24,179 +28,229 @@ const authors = [
 ---
 
 <DashboardLayout title="Nuevo artículo | ForenseIA">
-  <div class="mb-10">
-    <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
-      Biblioteca
-    </p>
+  <div class="max-w-5xl">
+    <div class="mb-10">
+      <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+        Biblioteca
+      </p>
 
-    <h1 class="mt-4 text-4xl font-semibold">
-      Nuevo artículo
-    </h1>
+      <h1 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-5xl">
+        Nuevo artículo
+      </h1>
 
-    <p class="mt-4 text-white/50">
-      Crea contenido para el blog y define el autor responsable.
-    </p>
+      <p class="mt-4 max-w-2xl leading-relaxed text-white/45">
+        Publica contenido especializado y asígnalo a la dirección responsable.
+      </p>
+    </div>
+
+    <form id="post-form" class="space-y-6">
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label for="title" class="mb-2 block text-sm text-white/50">
+            Título
+          </label>
+
+          <input
+            id="title"
+            name="title"
+            required
+            placeholder="Título del artículo"
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="slug" class="mb-2 block text-sm text-white/50">
+            Slug
+          </label>
+
+          <input
+            id="slug"
+            name="slug"
+            placeholder="se-genera-automaticamente"
+            class="input"
+          />
+
+          <p class="mt-2 text-xs text-white/30">
+            Será utilizado en la dirección pública del artículo.
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <label for="description" class="mb-2 block text-sm text-white/50">
+          Descripción SEO
+        </label>
+
+        <textarea
+          id="description"
+          name="description"
+          required
+          rows="4"
+          maxlength="180"
+          placeholder="Resumen breve del artículo."
+          class="input"
+        ></textarea>
+
+        <div class="mt-2 flex justify-between gap-4 text-xs text-white/30">
+          <span>Máximo recomendado: 160–180 caracteres.</span>
+          <span id="description-counter">0 / 180</span>
+        </div>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label for="category" class="mb-2 block text-sm text-white/50">
+            Categoría
+          </label>
+
+          <select
+            id="category"
+            name="category"
+            required
+            class="input"
+          >
+            {categories.map((category) => (
+              <option value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="author" class="mb-2 block text-sm text-white/50">
+            Autor
+          </label>
+
+          <select
+            id="author"
+            name="author"
+            required
+            class="input"
+          >
+            {authors.map((author) => (
+              <option value={author}>
+                {author}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="status" class="mb-2 block text-sm text-white/50">
+            Estado
+          </label>
+
+          <select
+            id="status"
+            name="status"
+            required
+            class="input"
+          >
+            <option value="published">Publicado</option>
+            <option value="draft">Borrador</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label for="cover" class="mb-2 block text-sm text-white/50">
+            URL de portada
+          </label>
+
+          <input
+            id="cover"
+            name="cover"
+            type="url"
+            placeholder="https://..."
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="tags" class="mb-2 block text-sm text-white/50">
+            Etiquetas
+          </label>
+
+          <input
+            id="tags"
+            name="tags"
+            placeholder="osint, fiscalías, investigación"
+            class="input"
+          />
+
+          <p class="mt-2 text-xs text-white/30">
+            Separa cada etiqueta con una coma.
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <label for="content" class="mb-2 block text-sm text-white/50">
+          Contenido en Markdown
+        </label>
+
+        <textarea
+          id="content"
+          name="content"
+          required
+          rows="24"
+          placeholder="# Introducción
+
+Escribe aquí el contenido del artículo.
+
+## Desarrollo
+
+## Conclusiones"
+          class="input min-h-[600px] font-mono leading-relaxed"
+        ></textarea>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <button
+          id="publish-button"
+          type="submit"
+          class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Guardar artículo
+        </button>
+
+        <a
+          href="/dashboard/posts"
+          class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+        >
+          Cancelar
+        </a>
+      </div>
+
+      <p id="message" class="min-h-6 text-sm text-white/50"></p>
+    </form>
   </div>
 
-  <form id="post-form" class="max-w-5xl space-y-6">
-    <div class="grid gap-6 md:grid-cols-2">
-      <div>
-        <label for="title" class="mb-2 block text-sm text-white/55">
-          Título
-        </label>
+  <style>
+    .input {
+      width: 100%;
+      border: 1px solid rgb(255 255 255 / 0.1);
+      background: #000;
+      padding: 1rem;
+      color: #fff;
+      outline: none;
+      transition:
+        border-color 180ms ease,
+        background-color 180ms ease;
+    }
 
-        <input
-          id="title"
-          name="title"
-          required
-          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
-        />
-      </div>
+    .input:focus {
+      border-color: #c8a96b;
+      background: rgb(255 255 255 / 0.015);
+    }
 
-      <div>
-        <label for="slug" class="mb-2 block text-sm text-white/55">
-          Slug
-        </label>
-
-        <input
-          id="slug"
-          name="slug"
-          placeholder="se-genera-del-titulo"
-          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
-        />
-      </div>
-    </div>
-
-    <div>
-      <label for="description" class="mb-2 block text-sm text-white/55">
-        Descripción SEO
-      </label>
-
-      <textarea
-        id="description"
-        name="description"
-        required
-        rows="3"
-        maxlength="180"
-        class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
-      ></textarea>
-    </div>
-
-    <div class="grid gap-6 md:grid-cols-3">
-      <div>
-        <label for="category" class="mb-2 block text-sm text-white/55">
-          Categoría
-        </label>
-
-        <select
-          id="category"
-          name="category"
-          required
-          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
-        >
-          {categories.map((category) => (
-            <option value={category}>{category}</option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label for="author" class="mb-2 block text-sm text-white/55">
-          Autor
-        </label>
-
-        <select
-          id="author"
-          name="author"
-          required
-          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
-        >
-          {authors.map((author) => (
-            <option value={author}>{author}</option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label for="status" class="mb-2 block text-sm text-white/55">
-          Estado
-        </label>
-
-        <select
-          id="status"
-          name="status"
-          required
-          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
-        >
-          <option value="published">Publicado</option>
-          <option value="draft">Borrador</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="grid gap-6 md:grid-cols-2">
-      <div>
-        <label for="cover" class="mb-2 block text-sm text-white/55">
-          URL de portada
-        </label>
-
-        <input
-          id="cover"
-          name="cover"
-          type="url"
-          placeholder="https://..."
-          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
-        />
-      </div>
-
-      <div>
-        <label for="tags" class="mb-2 block text-sm text-white/55">
-          Etiquetas
-        </label>
-
-        <input
-          id="tags"
-          name="tags"
-          placeholder="osint, fiscalías, investigación"
-          class="w-full border border-white/10 bg-black px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
-        />
-      </div>
-    </div>
-
-    <div>
-      <label for="content" class="mb-2 block text-sm text-white/55">
-        Contenido en Markdown
-      </label>
-
-      <textarea
-        id="content"
-        name="content"
-        required
-        rows="20"
-        placeholder="# Introducción"
-        class="min-h-[500px] w-full border border-white/10 bg-black px-4 py-4 font-mono text-white outline-none focus:border-[#C8A96B]"
-      ></textarea>
-    </div>
-
-    <div class="flex flex-wrap items-center gap-4">
-      <button
-        id="publish-button"
-        type="submit"
-        class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        Guardar artículo
-      </button>
-
-      <a
-        href="/dashboard/posts"
-        class="border border-white/10 px-8 py-4 text-white/60 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
-      >
-        Cancelar
-      </a>
-    </div>
-
-    <p id="message" class="min-h-6 text-sm text-white/55"></p>
-  </form>
+    .input::placeholder {
+      color: rgb(255 255 255 / 0.25);
+    }
+  </style>
 
   <script is:inline>
     const form = document.getElementById("post-form");
@@ -204,6 +258,10 @@ const authors = [
     const message = document.getElementById("message");
     const titleInput = document.getElementById("title");
     const slugInput = document.getElementById("slug");
+    const descriptionInput = document.getElementById("description");
+    const descriptionCounter = document.getElementById(
+      "description-counter"
+    );
 
     function createSlug(value) {
       return value
@@ -215,20 +273,59 @@ const authors = [
         .replace(/^-+|-+$/g, "");
     }
 
-    titleInput?.addEventListener("input", () => {
-      if (slugInput && !slugInput.dataset.edited) {
-        slugInput.value = createSlug(titleInput.value);
+    function fillFieldsFromQuery() {
+      const searchParams = new URLSearchParams(window.location.search);
+
+      for (const [field, value] of searchParams.entries()) {
+        const element = document.querySelector(`[name="${field}"]`);
+
+        if (
+          element instanceof HTMLInputElement ||
+          element instanceof HTMLTextAreaElement ||
+          element instanceof HTMLSelectElement
+        ) {
+          element.value = value;
+          element.dispatchEvent(new Event("change"));
+        }
       }
+    }
+
+    function updateDescriptionCounter() {
+      if (!descriptionInput || !descriptionCounter) {
+        return;
+      }
+
+      descriptionCounter.textContent =
+        `${descriptionInput.value.length} / 180`;
+    }
+
+    fillFieldsFromQuery();
+    updateDescriptionCounter();
+
+    descriptionInput?.addEventListener(
+      "input",
+      updateDescriptionCounter
+    );
+
+    titleInput?.addEventListener("input", () => {
+      if (!slugInput || slugInput.dataset.edited === "true") {
+        return;
+      }
+
+      slugInput.value = createSlug(titleInput.value);
     });
 
     slugInput?.addEventListener("input", () => {
-      slugInput.dataset.edited = slugInput.value ? "true" : "";
+      slugInput.dataset.edited =
+        slugInput.value.length > 0 ? "true" : "false";
     });
 
     form?.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      if (!form || !button || !message) return;
+      if (!form || !button || !message) {
+        return;
+      }
 
       const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries());
@@ -238,26 +335,34 @@ const authors = [
       message.textContent = "Creando artículo...";
 
       try {
-        const response = await fetch("/.netlify/functions/create-post", {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
+        const response = await fetch(
+          "/.netlify/functions/create-post",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
 
         const text = await response.text();
+
         let data = {};
 
         try {
           data = JSON.parse(text);
         } catch {
-          throw new Error(text || "La función devolvió una respuesta inválida");
+          throw new Error(
+            text || "La función devolvió una respuesta inválida"
+          );
         }
 
         if (!response.ok) {
-          throw new Error(data.error || "No se pudo crear el artículo");
+          throw new Error(
+            data.error || "No se pudo crear el artículo"
+          );
         }
 
         message.textContent =
@@ -265,12 +370,12 @@ const authors = [
 
         setTimeout(() => {
           window.location.href = "/dashboard/posts";
-        }, 1500);
+        }, 1400);
       } catch (error) {
         message.textContent =
           error instanceof Error
             ? `Error: ${error.message}`
-            : "No se pudo guardar el artículo";
+            : "No se pudo crear el artículo.";
 
         button.disabled = false;
         button.textContent = "Guardar artículo";
