@@ -1,0 +1,13 @@
+---
+import { MessageCircle } from "lucide-astro";
+import { CONTACT } from "../../constants/contact";
+---
+
+<a
+  href={CONTACT.whatsapp}
+  target="_blank"
+  aria-label="Contactar por WhatsApp"
+  class="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-[#C6A15B]/50 bg-black/80 text-[#C6A15B] shadow-2xl backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-[#C6A15B] hover:text-black"
+>
+  <MessageCircle size={24} strokeWidth={1.8} />
+</a>

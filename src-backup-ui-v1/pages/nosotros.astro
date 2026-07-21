@@ -1,0 +1,169 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import Container from "../components/ui/Container.astro";
+import Button from "../components/ui/Button.astro";
+
+const team = [
+  {
+    name: "Gonzalo García",
+    role: "Director de Inteligencia Artificial Aplicada",
+    area: "Gobierno e Inteligencia Artificial",
+    description:
+      "Especialista en inteligencia artificial, automatización institucional y transformación digital aplicada a gobierno, instituciones públicas y organizaciones.",
+    accent: "IA",
+  },
+  {
+    name: "Augusto Chinchurreta",
+    role: "Director de Investigación Digital y Ciberseguridad",
+    area: "Agencias de Investigación y Fiscalías",
+    description:
+      "Especialista en OSINT, investigación digital, ciberseguridad e inteligencia patrimonial para fiscalías, agencias de inteligencia y grupos especializados de investigación.",
+    accent: "OSINT",
+  },
+  {
+    name: "Tania Pérez",
+    role: "Directora de Psicología Criminal",
+    area: "Psicología Criminal",
+    description:
+      "Especialista en psicología criminal, análisis conductual, factores de riesgo, prevención y capacitación para instituciones, organizaciones y equipos multidisciplinarios.",
+    accent: "PSI",
+  },
+];
+
+const principles = [
+  {
+    title: "Enfoque institucional",
+    description:
+      "Soluciones diseñadas para organismos públicos, fiscalías, agencias y organizaciones.",
+  },
+  {
+    title: "Especialización",
+    description:
+      "Conocimiento técnico y profesional aplicado a escenarios reales.",
+  },
+  {
+    title: "Confidencialidad",
+    description:
+      "Manejo responsable de la información con seguridad, ética y discreción.",
+  },
+  {
+    title: "Trabajo coordinado",
+    description:
+      "Integramos tecnología, investigación y análisis del comportamiento.",
+  },
+];
+---
+
+<BaseLayout
+  title="Nosotros | ForenseIA"
+  description="Conoce al equipo directivo de ForenseIA y sus áreas de especialización."
+>
+  <PageHeader
+    eyebrow="Equipo"
+    title="Equipo ForenseIA."
+    description="Tres agentes especializados. Un objetivo común: aplicar conocimiento, tecnología e investigación para resolver problemas complejos."
+  />
+
+  <section class="py-20">
+    <Container>
+      <div class="grid xl:grid-cols-3 gap-6 items-stretch">
+        {team.map((member, index) => (
+          <article
+            class="group relative flex h-full min-h-[520px] flex-col overflow-hidden border border-white/10 bg-white/[0.02] p-8 text-center transition duration-300 hover:-translate-y-1 hover:border-[#C8A96B]/60"
+          >
+            <div class="absolute inset-0 bg-gradient-to-b from-[#C8A96B]/0 to-[#C8A96B]/[0.025] opacity-0 transition duration-300 group-hover:opacity-100"></div>
+
+            <div class="relative z-10 flex h-full flex-col items-center">
+              <span class="text-xs uppercase tracking-[0.35em] text-[#C8A96B]">
+                Agente 0{index + 1}
+              </span>
+
+              <div class="mt-10 flex h-24 w-24 items-center justify-center rounded-full border border-[#C8A96B]/50 bg-[#C8A96B]/5 text-xl font-semibold text-[#C8A96B]">
+                {member.accent}
+              </div>
+
+              <h2 class="mt-8 text-3xl font-semibold leading-tight">
+                {member.name}
+              </h2>
+
+              <p class="mt-4 min-h-[56px] font-medium text-[#C8A96B]">
+                {member.role}
+              </p>
+
+              <p class="mx-auto mt-6 max-w-sm min-h-[120px] leading-relaxed text-white/55">
+                {member.description}
+              </p>
+
+              <div class="mt-8 w-full border-t border-white/10 pt-8">
+                <p class="text-xs uppercase tracking-[0.25em] text-white/35">
+                  Área de especialización
+                </p>
+
+                <p class="mx-auto mt-4 max-w-xs text-lg font-semibold text-white">
+                  {member.area}
+                </p>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-t border-white/10 bg-white/[0.02] py-20">
+    <Container>
+      <div class="mx-auto mb-12 max-w-2xl text-center">
+        <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+          Nuestra forma de trabajo
+        </p>
+
+        <h2 class="mt-5 text-4xl md:text-5xl font-semibold">
+          Profesional, técnica y coordinada.
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
+        {principles.map((principle, index) => (
+          <article class="border border-white/10 bg-black/30 p-6 text-center">
+            <p class="text-sm text-[#C8A96B]">
+              0{index + 1}
+            </p>
+
+            <h3 class="mt-5 text-xl font-semibold">
+              {principle.title}
+            </h3>
+
+            <p class="mt-4 text-sm leading-relaxed text-white/45">
+              {principle.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-t border-white/10 py-24">
+    <Container>
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+          Contacto
+        </p>
+
+        <h2 class="mt-5 text-4xl md:text-6xl font-semibold tracking-[-0.04em]">
+          Conecta con el área adecuada.
+        </h2>
+
+        <p class="mx-auto mt-6 max-w-xl leading-relaxed text-white/50">
+          Cuéntanos tu necesidad y te canalizamos con la dirección responsable.
+        </p>
+
+        <div class="mt-10">
+          <Button href="/contacto">
+            Contactar al equipo
+          </Button>
+        </div>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

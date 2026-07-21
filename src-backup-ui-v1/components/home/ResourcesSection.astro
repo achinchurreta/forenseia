@@ -1,0 +1,63 @@
+---
+import Container from "../ui/Container.astro";
+import SectionTitle from "../ui/SectionTitle.astro";
+import Reveal from "../ui/Reveal.astro";
+
+const resources = [
+  {
+    title: "Gaceta ForenseIA",
+    description: "Artículos y análisis sobre IA, auditoría, OSINT, fiscalización y riesgos.",
+  },
+  {
+    title: "Cursos y masterclass",
+    description: "Formación ejecutiva para profesionales, instituciones y equipos técnicos.",
+  },
+  {
+    title: "Plantillas y guías",
+    description: "Materiales descargables para organizar evidencia, riesgos y procesos.",
+  },
+  {
+    title: "Podcast y video",
+    description: "Contenido educativo para explicar casos, métodos y tendencias tecnológicas.",
+  },
+];
+---
+
+<section class="border-t border-white/10 py-28">
+  <Container>
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
+      <Reveal>
+        <SectionTitle
+          eyebrow="Contenido"
+          title="Un centro de recursos para aprender y aplicar inteligencia estratégica."
+          description="Publicaciones, cursos, guías y materiales diseñados para convertir conocimiento técnico en herramientas útiles."
+        />
+      </Reveal>
+
+      <Reveal delay={120}>
+        <a
+          href="/blog"
+          class="text-[#C8A96B] hover:opacity-80 transition"
+        >
+          Explorar contenido →
+        </a>
+      </Reveal>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {resources.map((item, index) => (
+        <Reveal delay={index * 100}>
+          <div class="h-full border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-8 hover:border-[#C8A96B]/60 transition">
+            <h3 class="text-2xl font-semibold">
+              {item.title}
+            </h3>
+
+            <p class="mt-5 text-white/55 leading-relaxed">
+              {item.description}
+            </p>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  </Container>
+</section>

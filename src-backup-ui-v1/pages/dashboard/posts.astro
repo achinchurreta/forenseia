@@ -1,0 +1,484 @@
+---
+import DashboardLayout from "../../components/dashboard/DashboardLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) =>
+    new Date(b.data.date).getTime() -
+    new Date(a.data.date).getTime()
+);
+
+const publishedPosts = posts.filter(
+  (post) => post.data.status === "published"
+);
+
+const draftPosts = posts.filter(
+  (post) => post.data.status === "draft"
+);
+
+function formatDate(date: Date | string) {
+  return new Intl.DateTimeFormat("es-MX", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(date));
+}
+---
+
+<DashboardLayout title="Artículos | ForenseIA">
+  <section>
+    <div class="flex flex-col justify-between gap-8 xl:flex-row xl:items-end">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+          Biblioteca
+        </p>
+
+        <h1 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-6xl">
+          Artículos
+        </h1>
+
+        <p class="mt-5 max-w-2xl leading-relaxed text-white/45">
+          Crea, revisa y administra las publicaciones correspondientes a tu
+          dirección.
+        </p>
+
+        <p
+          id="content-filter-notice"
+          class="mt-5 hidden text-sm text-[#C8A96B]"
+        ></p>
+      </div>
+
+      <a
+        href="/dashboard/posts/new"
+        class="inline-flex w-fit bg-[#C8A96B] px-6 py-4 font-medium text-black transition hover:opacity-90"
+      >
+        Nuevo artículo
+      </a>
+    </div>
+  </section>
+
+  <section class="mt-12 grid gap-4 sm:grid-cols-3">
+    <article class="border border-white/10 bg-white/[0.02] p-6">
+      <p
+        id="visible-posts-count"
+        class="text-4xl font-semibold text-[#C8A96B]"
+      >
+        {posts.length}
+      </p>
+
+      <p class="mt-4 text-white/45">
+        Artículos visibles
+      </p>
+    </article>
+
+    <article class="border border-white/10 bg-white/[0.02] p-6">
+      <p
+        id="visible-published-count"
+        class="text-4xl font-semibold text-[#C8A96B]"
+      >
+        {publishedPosts.length}
+      </p>
+
+      <p class="mt-4 text-white/45">
+        Publicados
+      </p>
+    </article>
+
+    <article class="border border-white/10 bg-white/[0.02] p-6">
+      <p
+        id="visible-drafts-count"
+        class="text-4xl font-semibold text-[#C8A96B]"
+      >
+        {draftPosts.length}
+      </p>
+
+      <p class="mt-4 text-white/45">
+        Borradores
+      </p>
+    </article>
+  </section>
+
+  <section class="mt-12">
+    {posts.length === 0 ? (
+      <div class="border border-white/10 bg-white/[0.02] p-8">
+        <p class="text-white/45">
+          Todavía no hay artículos creados.
+        </p>
+
+        <a
+          href="/dashboard/posts/new"
+          class="mt-6 inline-flex bg-[#C8A96B] px-5 py-3 text-sm font-medium text-black"
+        >
+          Crear primer artículo
+        </a>
+      </div>
+    ) : (
+      <>
+        <div id="posts-list" class="space-y-4">
+          {posts.map((post) => (
+            <article
+              data-content-card
+              data-content-owner={post.data.author}
+              data-content-status={post.data.status}
+              class="flex flex-col justify-between gap-7 border border-white/10 bg-white/[0.02] p-6 transition hover:border-[#C8A96B]/40 xl:flex-row xl:items-center"
+            >
+              <div class="max-w-3xl">
+                <div class="flex flex-wrap items-center gap-3 text-xs">
+                  <span class="uppercase tracking-[0.22em] text-[#C8A96B]">
+                    {post.data.category}
+                  </span>
+
+                  <span
+                    class:list={[
+                      "border px-3 py-1",
+                      post.data.status === "published"
+                        ? "border-emerald-400/20 text-emerald-300"
+                        : "border-amber-400/20 text-amber-300",
+                    ]}
+                  >
+                    {post.data.status === "published"
+                      ? "Publicado"
+                      : "Borrador"}
+                  </span>
+                </div>
+
+                <h2 class="mt-4 text-2xl font-semibold">
+                  {post.data.title}
+                </h2>
+
+                <p class="mt-3 leading-relaxed text-white/45">
+                  {post.data.description}
+                </p>
+
+                <div class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/30">
+                  <span>
+                    Autor: {post.data.author}
+                  </span>
+
+                  <span>
+                    {formatDate(post.data.date)}
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap gap-3">
+                {post.data.status === "published" && (
+                  <a
+                    href={`/blog/${post.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="border border-white/10 px-5 py-3 text-sm text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+                  >
+                    Ver
+                  </a>
+                )}
+
+                <a
+                  href={`/dashboard/posts/edit/${post.id}`}
+                  data-edit-link
+                  class="border border-white/10 px-5 py-3 text-sm text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+                >
+                  Editar
+                </a>
+
+                <button
+                  type="button"
+                  data-delete-post
+                  data-slug={post.id}
+                  data-title={post.data.title}
+                  data-owner={post.data.author}
+                  class="border border-red-400/20 px-5 py-3 text-sm text-red-300/70 transition hover:bg-red-500/10 hover:text-red-300"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div
+          id="no-visible-content"
+          class="hidden border border-white/10 bg-white/[0.02] p-8"
+        >
+          <p class="text-white/45">
+            Todavía no tienes artículos creados dentro de tu dirección.
+          </p>
+
+          <a
+            href="/dashboard/posts/new"
+            class="mt-6 inline-flex bg-[#C8A96B] px-5 py-3 text-sm font-medium text-black"
+          >
+            Crear artículo
+          </a>
+        </div>
+      </>
+    )}
+  </section>
+
+  <p
+    id="delete-message"
+    class="mt-6 min-h-6 text-sm text-white/45"
+  ></p>
+
+  <script is:inline>
+    const contentCards = Array.from(
+      document.querySelectorAll("[data-content-card]")
+    );
+
+    const deleteButtons = document.querySelectorAll(
+      "[data-delete-post]"
+    );
+
+    const message = document.getElementById("delete-message");
+    const filterNotice = document.getElementById(
+      "content-filter-notice"
+    );
+    const noVisibleContent = document.getElementById(
+      "no-visible-content"
+    );
+
+    const visiblePostsCount = document.getElementById(
+      "visible-posts-count"
+    );
+    const visiblePublishedCount = document.getElementById(
+      "visible-published-count"
+    );
+    const visibleDraftsCount = document.getElementById(
+      "visible-drafts-count"
+    );
+
+    let currentUser = null;
+
+    function getAllowedOwner(user) {
+      if (user.role === "director-ia") {
+        return "Gonzalo García";
+      }
+
+      if (user.role === "director-psychology") {
+        return "Tania Pérez";
+      }
+
+      return null;
+    }
+
+    function canManageOwner(user, owner) {
+      if (!user) {
+        return false;
+      }
+
+      if (user.role === "admin") {
+        return true;
+      }
+
+      return getAllowedOwner(user) === owner;
+    }
+
+    function updateCounters(visibleCards) {
+      const published = visibleCards.filter(
+        (card) =>
+          card.dataset.contentStatus === "published"
+      );
+
+      const drafts = visibleCards.filter(
+        (card) =>
+          card.dataset.contentStatus === "draft"
+      );
+
+      if (visiblePostsCount) {
+        visiblePostsCount.textContent = String(
+          visibleCards.length
+        );
+      }
+
+      if (visiblePublishedCount) {
+        visiblePublishedCount.textContent = String(
+          published.length
+        );
+      }
+
+      if (visibleDraftsCount) {
+        visibleDraftsCount.textContent = String(
+          drafts.length
+        );
+      }
+
+      if (noVisibleContent) {
+        noVisibleContent.classList.toggle(
+          "hidden",
+          visibleCards.length > 0
+        );
+      }
+    }
+
+    function applyContentFilter(user) {
+      currentUser = user;
+
+      const allowedOwner = getAllowedOwner(user);
+      const visibleCards = [];
+
+      contentCards.forEach((card) => {
+        const owner = card.dataset.contentOwner || "";
+
+        const visible =
+          user.role === "admin" ||
+          owner === allowedOwner;
+
+        card.classList.toggle("hidden", !visible);
+
+        if (visible) {
+          visibleCards.push(card);
+        }
+
+        card
+          .querySelectorAll(
+            "[data-edit-link], [data-delete-post]"
+          )
+          .forEach((control) => {
+            const canManage = canManageOwner(
+              user,
+              owner
+            );
+
+            control.classList.toggle(
+              "hidden",
+              !canManage
+            );
+          });
+      });
+
+      updateCounters(visibleCards);
+
+      if (filterNotice) {
+        if (user.role === "admin") {
+          filterNotice.classList.add("hidden");
+          filterNotice.textContent = "";
+        } else {
+          filterNotice.textContent =
+            `Mostrando únicamente publicaciones de ${allowedOwner}.`;
+
+          filterNotice.classList.remove("hidden");
+        }
+      }
+    }
+
+    try {
+      const storedUser = JSON.parse(
+        sessionStorage.getItem("forenseia_user") ||
+          "null"
+      );
+
+      if (storedUser) {
+        applyContentFilter(storedUser);
+      }
+    } catch {
+      sessionStorage.removeItem("forenseia_user");
+    }
+
+    document.addEventListener(
+      "forenseia:user-ready",
+      (event) => {
+        applyContentFilter(event.detail);
+      }
+    );
+
+    deleteButtons.forEach((button) => {
+      button.addEventListener("click", async () => {
+        const slug = button.dataset.slug;
+        const title = button.dataset.title;
+        const owner = button.dataset.owner;
+
+        if (!slug || !currentUser) {
+          return;
+        }
+
+        if (!canManageOwner(currentUser, owner)) {
+          if (message) {
+            message.textContent =
+              "No tienes permiso para eliminar este artículo.";
+          }
+
+          return;
+        }
+
+        const confirmed = window.confirm(
+          `¿Seguro que deseas eliminar "${title}"?`
+        );
+
+        if (!confirmed) {
+          return;
+        }
+
+        button.disabled = true;
+        button.textContent = "Eliminando...";
+
+        if (message) {
+          message.textContent =
+            "Eliminando artículo...";
+        }
+
+        try {
+          const response = await fetch(
+            "/.netlify/functions/delete-post",
+            {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ slug }),
+            }
+          );
+
+          const text = await response.text();
+
+          let data = {};
+
+          try {
+            data = JSON.parse(text);
+          } catch {
+            throw new Error(
+              text ||
+                "La función devolvió una respuesta inválida"
+            );
+          }
+
+          if (!response.ok) {
+            throw new Error(
+              data.error ||
+                "No se pudo eliminar el artículo"
+            );
+          }
+
+          const card = button.closest(
+            "[data-content-card]"
+          );
+
+          card?.remove();
+
+          const remainingVisibleCards = Array.from(
+            document.querySelectorAll(
+              "[data-content-card]:not(.hidden)"
+            )
+          );
+
+          updateCounters(remainingVisibleCards);
+
+          if (message) {
+            message.textContent =
+              "Artículo eliminado. Netlify iniciará un nuevo despliegue.";
+          }
+        } catch (error) {
+          if (message) {
+            message.textContent =
+              error instanceof Error
+                ? `Error: ${error.message}`
+                : "No se pudo eliminar el artículo.";
+          }
+
+          button.disabled = false;
+          button.textContent = "Eliminar";
+        }
+      });
+    });
+  </script>
+</DashboardLayout>

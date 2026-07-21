@@ -1,0 +1,93 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Container from "../../components/ui/Container.astro";
+import Button from "../../components/ui/Button.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const courses = await getCollection("courses");
+
+  return courses
+    .filter((course) => course.data.status === "published")
+    .map((course) => ({
+      params: {
+        slug: String(course.id),
+      },
+      props: {
+        course,
+      },
+    }));
+}
+
+const { course } = Astro.props;
+const { Content } = await render(course);
+---
+
+<BaseLayout
+  title={`${course.data.title} | ForenseIA`}
+  description={course.data.description}
+>
+  <article>
+    <header class="border-b border-white/10 pb-20 pt-40">
+      <Container>
+        <div class="grid gap-12 lg:grid-cols-[1fr_360px]">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+              {course.data.area}
+            </p>
+
+            <h1 class="mt-6 text-4xl font-semibold leading-tight tracking-[-0.04em] md:text-6xl">
+              {course.data.title}
+            </h1>
+
+            <p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/55">
+              {course.data.description}
+            </p>
+          </div>
+
+          <aside class="h-fit border border-white/10 bg-white/[0.02] p-7">
+            <p class="text-sm text-white/35">Instructor</p>
+            <p class="mt-2">{course.data.instructor}</p>
+
+            <p class="mt-6 text-sm text-white/35">Duración</p>
+            <p class="mt-2">{course.data.duration}</p>
+
+            <p class="mt-6 text-sm text-white/35">Modalidad</p>
+            <p class="mt-2">{course.data.modality}</p>
+
+            <p class="mt-6 text-sm text-white/35">Nivel</p>
+            <p class="mt-2">{course.data.level}</p>
+
+            <p class="mt-6 text-sm text-white/35">Dirigido a</p>
+            <p class="mt-2 leading-relaxed text-white/55">
+              {course.data.audience}
+            </p>
+
+            {course.data.price && (
+              <>
+                <p class="mt-6 text-sm text-white/35">Precio</p>
+                <p class="mt-2">{course.data.price}</p>
+              </>
+            )}
+
+            <div class="mt-8">
+              <Button href="/contacto">
+                Solicitar información
+              </Button>
+            </div>
+          </aside>
+        </div>
+      </Container>
+    </header>
+
+    <section class="py-20">
+      <Container>
+        <div class="mx-auto max-w-3xl">
+          <div class="prose prose-invert prose-lg max-w-none">
+            <Content />
+          </div>
+        </div>
+      </Container>
+    </section>
+  </article>
+</BaseLayout>

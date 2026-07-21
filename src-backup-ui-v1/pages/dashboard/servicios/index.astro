@@ -1,0 +1,541 @@
+---
+import DashboardLayout from "../../../components/dashboard/DashboardLayout.astro";
+import { getCollection } from "astro:content";
+
+const services = (await getCollection("services")).sort((a, b) => {
+  if (a.data.order !== b.data.order) {
+    return a.data.order - b.data.order;
+  }
+
+  return (
+    new Date(b.data.date).getTime() -
+    new Date(a.data.date).getTime()
+  );
+});
+
+const publishedServices = services.filter(
+  (service) => service.data.status === "published"
+);
+
+const draftServices = services.filter(
+  (service) => service.data.status === "draft"
+);
+---
+
+<DashboardLayout title="Servicios | ForenseIA">
+  <section>
+    <div class="flex flex-col justify-between gap-8 xl:flex-row xl:items-end">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+          Servicios
+        </p>
+
+        <h1 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-6xl">
+          Catálogo de servicios
+        </h1>
+
+        <p class="mt-5 max-w-2xl leading-relaxed text-white/45">
+          Crea, organiza, edita y administra los servicios correspondientes a
+          tu dirección especializada.
+        </p>
+
+        <p
+          id="content-filter-notice"
+          class="mt-5 hidden text-sm text-[#C8A96B]"
+        ></p>
+      </div>
+
+      <a
+        href="/dashboard/servicios/new"
+        class="inline-flex w-fit bg-[#C8A96B] px-6 py-4 font-medium text-black transition hover:opacity-90"
+      >
+        Nuevo servicio
+      </a>
+    </div>
+  </section>
+
+  <section class="mt-12 grid gap-4 sm:grid-cols-3">
+    <article class="border border-white/10 bg-white/[0.02] p-6">
+      <p
+        id="visible-content-count"
+        class="text-4xl font-semibold text-[#C8A96B]"
+      >
+        {services.length}
+      </p>
+
+      <p class="mt-4 text-white/45">
+        Servicios visibles
+      </p>
+    </article>
+
+    <article class="border border-white/10 bg-white/[0.02] p-6">
+      <p
+        id="visible-published-count"
+        class="text-4xl font-semibold text-[#C8A96B]"
+      >
+        {publishedServices.length}
+      </p>
+
+      <p class="mt-4 text-white/45">
+        Publicados
+      </p>
+    </article>
+
+    <article class="border border-white/10 bg-white/[0.02] p-6">
+      <p
+        id="visible-drafts-count"
+        class="text-4xl font-semibold text-[#C8A96B]"
+      >
+        {draftServices.length}
+      </p>
+
+      <p class="mt-4 text-white/45">
+        Borradores
+      </p>
+    </article>
+  </section>
+
+  <section class="mt-12">
+    {services.length === 0 ? (
+      <div class="border border-white/10 bg-white/[0.02] p-8">
+        <p class="text-white/45">
+          Todavía no hay servicios creados.
+        </p>
+
+        <a
+          href="/dashboard/servicios/new"
+          class="mt-6 inline-flex bg-[#C8A96B] px-5 py-3 text-sm font-medium text-black transition hover:opacity-90"
+        >
+          Crear primer servicio
+        </a>
+      </div>
+    ) : (
+      <>
+        <div id="content-list" class="space-y-4">
+          {services.map((service) => (
+            <article
+              data-content-card
+              data-content-owner={service.data.director}
+              data-content-status={service.data.status}
+              class="flex flex-col justify-between gap-7 border border-white/10 bg-white/[0.02] p-6 transition duration-300 hover:border-[#C8A96B]/40 xl:flex-row xl:items-center"
+            >
+              <div class="max-w-3xl">
+                <div class="flex flex-wrap items-center gap-3 text-xs">
+                  <span class="uppercase tracking-[0.22em] text-[#C8A96B]">
+                    {service.data.area}
+                  </span>
+
+                  <span
+                    class:list={[
+                      "border px-3 py-1",
+                      service.data.status === "published"
+                        ? "border-emerald-400/20 text-emerald-300"
+                        : "border-amber-400/20 text-amber-300",
+                    ]}
+                  >
+                    {service.data.status === "published"
+                      ? "Publicado"
+                      : "Borrador"}
+                  </span>
+
+                  {service.data.featured && (
+                    <span class="border border-[#C8A96B]/20 px-3 py-1 text-[#C8A96B]">
+                      Destacado
+                    </span>
+                  )}
+
+                  <span class="text-white/25">
+                    Orden: {service.data.order}
+                  </span>
+                </div>
+
+                <h2 class="mt-4 text-2xl font-semibold">
+                  {service.data.title}
+                </h2>
+
+                <p class="mt-3 leading-relaxed text-white/45">
+                  {service.data.description}
+                </p>
+
+                <div class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/30">
+                  <span>
+                    Director: {service.data.director}
+                  </span>
+
+                  <span>
+                    Dirigido a: {service.data.audience}
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap gap-3">
+                {service.data.status === "published" && (
+                  <a
+                    href={`/servicios/${service.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="border border-white/10 px-5 py-3 text-sm text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+                  >
+                    Ver
+                  </a>
+                )}
+
+                <a
+                  href={`/dashboard/servicios/edit/${service.id}`}
+                  data-edit-link
+                  class="border border-white/10 px-5 py-3 text-sm text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+                >
+                  Editar
+                </a>
+
+                <button
+                  type="button"
+                  data-delete-content
+                  data-content-type="service"
+                  data-slug={service.id}
+                  data-title={service.data.title}
+                  data-owner={service.data.director}
+                  class="border border-red-400/20 px-5 py-3 text-sm text-red-300/70 transition hover:bg-red-500/10 hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div
+          id="no-visible-content"
+          class="hidden border border-white/10 bg-white/[0.02] p-8"
+        >
+          <p class="text-white/45">
+            Todavía no tienes servicios creados dentro de tu dirección.
+          </p>
+
+          <a
+            href="/dashboard/servicios/new"
+            class="mt-6 inline-flex bg-[#C8A96B] px-5 py-3 text-sm font-medium text-black transition hover:opacity-90"
+          >
+            Crear servicio
+          </a>
+        </div>
+      </>
+    )}
+  </section>
+
+  <p
+    id="delete-message"
+    class="mt-6 min-h-6 text-sm text-white/45"
+  ></p>
+
+  <script is:inline>
+    const contentCards = Array.from(
+      document.querySelectorAll("[data-content-card]")
+    );
+
+    const deleteButtons = document.querySelectorAll(
+      "[data-delete-content]"
+    );
+
+    const message = document.getElementById(
+      "delete-message"
+    );
+
+    const filterNotice = document.getElementById(
+      "content-filter-notice"
+    );
+
+    const noVisibleContent = document.getElementById(
+      "no-visible-content"
+    );
+
+    const visibleCount = document.getElementById(
+      "visible-content-count"
+    );
+
+    const visiblePublishedCount = document.getElementById(
+      "visible-published-count"
+    );
+
+    const visibleDraftsCount = document.getElementById(
+      "visible-drafts-count"
+    );
+
+    let currentUser = null;
+
+    function getAllowedOwner(user) {
+      if (user.role === "director-ia") {
+        return "Gonzalo García";
+      }
+
+      if (user.role === "director-psychology") {
+        return "Tania Pérez";
+      }
+
+      return null;
+    }
+
+    function canManageOwner(user, owner) {
+      if (!user) {
+        return false;
+      }
+
+      if (user.role === "admin") {
+        return true;
+      }
+
+      return getAllowedOwner(user) === owner;
+    }
+
+    function getVisibleCards() {
+      return Array.from(
+        document.querySelectorAll(
+          "[data-content-card]:not(.hidden)"
+        )
+      );
+    }
+
+    function updateCounters(visibleCards) {
+      const published = visibleCards.filter(
+        (card) =>
+          card.dataset.contentStatus === "published"
+      );
+
+      const drafts = visibleCards.filter(
+        (card) =>
+          card.dataset.contentStatus === "draft"
+      );
+
+      if (visibleCount) {
+        visibleCount.textContent = String(
+          visibleCards.length
+        );
+      }
+
+      if (visiblePublishedCount) {
+        visiblePublishedCount.textContent = String(
+          published.length
+        );
+      }
+
+      if (visibleDraftsCount) {
+        visibleDraftsCount.textContent = String(
+          drafts.length
+        );
+      }
+
+      if (noVisibleContent) {
+        noVisibleContent.classList.toggle(
+          "hidden",
+          visibleCards.length > 0
+        );
+      }
+    }
+
+    function applyContentFilter(user) {
+      currentUser = user;
+
+      const allowedOwner = getAllowedOwner(user);
+      const visibleCards = [];
+
+      contentCards.forEach((card) => {
+        const owner =
+          card.dataset.contentOwner || "";
+
+        const visible =
+          user.role === "admin" ||
+          owner === allowedOwner;
+
+        card.classList.toggle(
+          "hidden",
+          !visible
+        );
+
+        if (visible) {
+          visibleCards.push(card);
+        }
+
+        card
+          .querySelectorAll(
+            "[data-edit-link], [data-delete-content]"
+          )
+          .forEach((control) => {
+            const canManage = canManageOwner(
+              user,
+              owner
+            );
+
+            control.classList.toggle(
+              "hidden",
+              !canManage
+            );
+          });
+      });
+
+      updateCounters(visibleCards);
+
+      if (!filterNotice) {
+        return;
+      }
+
+      if (user.role === "admin") {
+        filterNotice.textContent = "";
+        filterNotice.classList.add("hidden");
+        return;
+      }
+
+      filterNotice.textContent =
+        `Mostrando únicamente servicios de ${allowedOwner}.`;
+
+      filterNotice.classList.remove("hidden");
+    }
+
+    try {
+      const storedUser = JSON.parse(
+        sessionStorage.getItem(
+          "forenseia_user"
+        ) || "null"
+      );
+
+      if (storedUser) {
+        applyContentFilter(storedUser);
+      }
+    } catch (error) {
+      console.error(
+        "No se pudo leer el usuario almacenado:",
+        error
+      );
+
+      sessionStorage.removeItem(
+        "forenseia_user"
+      );
+    }
+
+    document.addEventListener(
+      "forenseia:user-ready",
+      (event) => {
+        applyContentFilter(event.detail);
+      }
+    );
+
+    deleteButtons.forEach((button) => {
+      button.addEventListener(
+        "click",
+        async () => {
+          const slug = button.dataset.slug;
+          const title = button.dataset.title;
+          const owner = button.dataset.owner;
+          const contentType =
+            button.dataset.contentType;
+
+          if (
+            !slug ||
+            !contentType ||
+            !currentUser
+          ) {
+            return;
+          }
+
+          if (
+            !canManageOwner(
+              currentUser,
+              owner
+            )
+          ) {
+            if (message) {
+              message.textContent =
+                "No tienes permiso para eliminar este servicio.";
+            }
+
+            return;
+          }
+
+          const confirmed =
+            window.confirm(
+              `¿Seguro que deseas eliminar el servicio "${title}"?`
+            );
+
+          if (!confirmed) {
+            return;
+          }
+
+          button.disabled = true;
+          button.textContent =
+            "Eliminando...";
+
+          if (message) {
+            message.textContent =
+              "Eliminando servicio...";
+          }
+
+          try {
+            const response = await fetch(
+              "/.netlify/functions/delete-content",
+              {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                  "Content-Type":
+                    "application/json",
+                },
+                body: JSON.stringify({
+                  slug,
+                  contentType,
+                }),
+              }
+            );
+
+            const text =
+              await response.text();
+
+            let data = {};
+
+            try {
+              data = text
+                ? JSON.parse(text)
+                : {};
+            } catch {
+              throw new Error(
+                text ||
+                  "La función devolvió una respuesta inválida"
+              );
+            }
+
+            if (!response.ok) {
+              throw new Error(
+                data.error ||
+                  "No se pudo eliminar el servicio"
+              );
+            }
+
+            const card = button.closest(
+              "[data-content-card]"
+            );
+
+            card?.remove();
+
+            updateCounters(
+              getVisibleCards()
+            );
+
+            if (message) {
+              message.textContent =
+                "Servicio eliminado. Netlify iniciará un nuevo despliegue.";
+            }
+          } catch (error) {
+            if (message) {
+              message.textContent =
+                error instanceof Error
+                  ? `Error: ${error.message}`
+                  : "No se pudo eliminar el servicio.";
+            }
+
+            button.disabled = false;
+            button.textContent =
+              "Eliminar";
+          }
+        }
+      );
+    });
+  </script>
+</DashboardLayout>
