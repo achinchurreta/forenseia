@@ -20,7 +20,6 @@ export async function getStaticPaths() {
     params: {
       slug: String(resource.id),
     },
-
     props: {
       resource,
     },
@@ -32,7 +31,6 @@ interface Props {
 }
 
 const { resource } = Astro.props as Props;
-
 const { Content } = await render(resource);
 
 const allResources = await getCollection(
@@ -44,10 +42,8 @@ const relatedResources = allResources
   .filter(
     (entry) =>
       entry.id !== resource.id &&
-      (
-        entry.data.area === resource.data.area ||
-        entry.data.type === resource.data.type
-      )
+      (entry.data.area === resource.data.area ||
+        entry.data.type === resource.data.type)
   )
   .sort((a, b) => {
     if (a.data.featured !== b.data.featured) {
@@ -549,7 +545,11 @@ const hasRelatedContent =
                 </p>
 
                 <a
-                  href={`/contacto?area=${encodeURIComponent(resource.data.area)}&recurso=${encodeURIComponent(resource.data.title)}`}
+                  href={`/contacto?area=${encodeURIComponent(
+                    resource.data.area
+                  )}&recurso=${encodeURIComponent(
+                    resource.data.title
+                  )}`}
                   class="mt-6 inline-flex text-sm font-medium text-[#C8A96B]"
                 >
                   Contactar al equipo →
@@ -812,9 +812,11 @@ const hasRelatedContent =
 
   <script is:inline>
     const leadForm = document.getElementById("lead-form");
+
     const leadButton = document.getElementById(
       "lead-submit-button"
     );
+
     const leadMessage = document.getElementById(
       "lead-message"
     );
@@ -914,9 +916,13 @@ const hasRelatedContent =
         campaign:
           leadForm.dataset.campaign || "",
 
-        source: "resource-download",
+        source:
+          "resource-download",
 
-        pageUrl: window.location.href,
+        pageUrl:
+          window.location.href,
+
+        downloadUrl,
       };
 
       if (
@@ -933,6 +939,7 @@ const hasRelatedContent =
 
       leadButton.disabled = true;
       leadButton.textContent = "Procesando...";
+
       leadMessage.textContent =
         "Registrando tu solicitud...";
 
@@ -941,9 +948,12 @@ const hasRelatedContent =
           "/.netlify/functions/capture-lead",
           {
             method: "POST",
+
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type":
+                "application/json",
             },
+
             body: JSON.stringify(payload),
           }
         );
@@ -953,7 +963,9 @@ const hasRelatedContent =
         let data = {};
 
         try {
-          data = text ? JSON.parse(text) : {};
+          data = text
+            ? JSON.parse(text)
+            : {};
         } catch {
           throw new Error(
             text ||
@@ -974,7 +986,14 @@ const hasRelatedContent =
         leadForm.reset();
 
         setTimeout(() => {
-          openDownload(downloadUrl);
+          try {
+            openDownload(downloadUrl);
+          } catch (downloadError) {
+            leadMessage.textContent =
+              downloadError instanceof Error
+                ? downloadError.message
+                : "No fue posible iniciar la descarga.";
+          }
         }, 500);
       } catch (error) {
         leadMessage.textContent =
@@ -983,7 +1002,8 @@ const hasRelatedContent =
             : "No fue posible procesar la descarga.";
 
         leadButton.disabled = false;
-        leadButton.textContent = "Obtener recurso";
+        leadButton.textContent =
+          "Obtener recurso";
       }
     });
   </script>
