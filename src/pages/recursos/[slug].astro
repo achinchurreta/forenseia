@@ -1,0 +1,990 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Container from "../../components/ui/Container.astro";
+import Button from "../../components/ui/Button.astro";
+import Reveal from "../../components/ui/Reveal.astro";
+
+import {
+  getCollection,
+  render,
+  type CollectionEntry,
+} from "astro:content";
+
+export async function getStaticPaths() {
+  const resources = await getCollection(
+    "resources",
+    ({ data }) => data.status === "published"
+  );
+
+  return resources.map((resource) => ({
+    params: {
+      slug: String(resource.id),
+    },
+
+    props: {
+      resource,
+    },
+  }));
+}
+
+interface Props {
+  resource: CollectionEntry<"resources">;
+}
+
+const { resource } = Astro.props as Props;
+
+const { Content } = await render(resource);
+
+const allResources = await getCollection(
+  "resources",
+  ({ data }) => data.status === "published"
+);
+
+const relatedResources = allResources
+  .filter(
+    (entry) =>
+      entry.id !== resource.id &&
+      (
+        entry.data.area === resource.data.area ||
+        entry.data.type === resource.data.type
+      )
+  )
+  .sort((a, b) => {
+    if (a.data.featured !== b.data.featured) {
+      return Number(b.data.featured) - Number(a.data.featured);
+    }
+
+    return (
+      new Date(b.data.date).getTime() -
+      new Date(a.data.date).getTime()
+    );
+  })
+  .slice(0, 3);
+
+function formatDate(date: Date | string) {
+  return new Intl.DateTimeFormat("es-MX", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(date));
+}
+
+const resourceUrl = `/recursos/${resource.id}`;
+
+const leadCampaign =
+  resource.data.campaign ||
+  `recurso-${resource.id}`;
+
+const hasRelatedContent =
+  Boolean(resource.data.relatedPost) ||
+  Boolean(resource.data.relatedCourse) ||
+  Boolean(resource.data.relatedService);
+---
+
+<BaseLayout
+  title={`${resource.data.title} | ForenseIA`}
+  description={resource.data.description}
+>
+  <main>
+    <section class="border-b border-white/10 pb-16 pt-20 md:pb-24 md:pt-28">
+      <Container>
+        <Reveal>
+          <div class="mx-auto max-w-5xl text-center">
+            <div class="flex flex-wrap justify-center gap-3 text-xs">
+              <span class="uppercase tracking-[0.25em] text-[#C8A96B]">
+                {resource.data.type}
+              </span>
+
+              <span class="text-white/30">
+                {resource.data.area}
+              </span>
+
+              {resource.data.requiresLead && (
+                <span class="border border-sky-400/20 px-3 py-1 text-sky-300">
+                  Recurso gratuito
+                </span>
+              )}
+
+              {resource.data.featured && (
+                <span class="border border-[#C8A96B]/20 px-3 py-1 text-[#C8A96B]">
+                  Destacado
+                </span>
+              )}
+            </div>
+
+            <h1 class="mx-auto mt-7 max-w-5xl text-4xl font-semibold leading-[1.05] tracking-[-0.05em] md:text-6xl lg:text-7xl">
+              {resource.data.title}
+            </h1>
+
+            <p class="mx-auto mt-7 max-w-3xl text-lg leading-relaxed text-white/50">
+              {resource.data.description}
+            </p>
+
+            <div class="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-white/30">
+              <span>
+                Por {resource.data.author}
+              </span>
+
+              <span>
+                {formatDate(resource.data.date)}
+              </span>
+
+              {resource.data.fileFormat && (
+                <span>
+                  Formato: {resource.data.fileFormat}
+                </span>
+              )}
+
+              {resource.data.fileSize && (
+                <span>
+                  Tamaño: {resource.data.fileSize}
+                </span>
+              )}
+            </div>
+          </div>
+        </Reveal>
+      </Container>
+    </section>
+
+    {resource.data.cover && (
+      <section class="border-b border-white/10 py-10 md:py-14">
+        <Container>
+          <Reveal>
+            <div class="mx-auto max-w-6xl overflow-hidden border border-white/10 bg-white/[0.02]">
+              <img
+                src={resource.data.cover}
+                alt={resource.data.title}
+                class="aspect-[16/7] w-full object-cover"
+              />
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+    )}
+
+    <section class="py-16 md:py-24">
+      <Container>
+        <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
+          <Reveal>
+            <article class="min-w-0">
+              <div class="mb-10 border border-white/10 bg-white/[0.02] p-6 md:p-8">
+                <p class="text-xs uppercase tracking-[0.25em] text-[#C8A96B]">
+                  Acerca del material
+                </p>
+
+                <div class="mt-6 grid gap-6 sm:grid-cols-2">
+                  <div>
+                    <p class="text-xs uppercase tracking-[0.2em] text-white/25">
+                      Público objetivo
+                    </p>
+
+                    <p class="mt-3 leading-relaxed text-white/55">
+                      {resource.data.audience}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p class="text-xs uppercase tracking-[0.2em] text-white/25">
+                      Área responsable
+                    </p>
+
+                    <p class="mt-3 leading-relaxed text-white/55">
+                      {resource.data.area}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="resource-content">
+                <Content />
+              </div>
+
+              {hasRelatedContent && (
+                <section class="mt-14 border-t border-white/10 pt-10">
+                  <p class="text-xs uppercase tracking-[0.25em] text-[#C8A96B]">
+                    Continúa aprendiendo
+                  </p>
+
+                  <h2 class="mt-4 text-3xl font-semibold">
+                    Contenido relacionado
+                  </h2>
+
+                  <div class="mt-7 grid gap-4">
+                    {resource.data.relatedPost && (
+                      <a
+                        href={resource.data.relatedPost}
+                        class="group flex items-center justify-between gap-6 border border-white/10 bg-white/[0.02] p-5 transition hover:border-[#C8A96B]/50"
+                      >
+                        <div>
+                          <p class="text-xs uppercase tracking-[0.2em] text-white/25">
+                            Artículo
+                          </p>
+
+                          <p class="mt-2 text-white/65">
+                            Consultar artículo relacionado
+                          </p>
+                        </div>
+
+                        <span class="text-[#C8A96B] transition group-hover:translate-x-1">
+                          →
+                        </span>
+                      </a>
+                    )}
+
+                    {resource.data.relatedCourse && (
+                      <a
+                        href={resource.data.relatedCourse}
+                        class="group flex items-center justify-between gap-6 border border-white/10 bg-white/[0.02] p-5 transition hover:border-[#C8A96B]/50"
+                      >
+                        <div>
+                          <p class="text-xs uppercase tracking-[0.2em] text-white/25">
+                            Curso
+                          </p>
+
+                          <p class="mt-2 text-white/65">
+                            Conocer programa formativo
+                          </p>
+                        </div>
+
+                        <span class="text-[#C8A96B] transition group-hover:translate-x-1">
+                          →
+                        </span>
+                      </a>
+                    )}
+
+                    {resource.data.relatedService && (
+                      <a
+                        href={resource.data.relatedService}
+                        class="group flex items-center justify-between gap-6 border border-white/10 bg-white/[0.02] p-5 transition hover:border-[#C8A96B]/50"
+                      >
+                        <div>
+                          <p class="text-xs uppercase tracking-[0.2em] text-white/25">
+                            Servicio
+                          </p>
+
+                          <p class="mt-2 text-white/65">
+                            Solicitar apoyo especializado
+                          </p>
+                        </div>
+
+                        <span class="text-[#C8A96B] transition group-hover:translate-x-1">
+                          →
+                        </span>
+                      </a>
+                    )}
+                  </div>
+                </section>
+              )}
+            </article>
+          </Reveal>
+
+          <Reveal delay={100}>
+            <aside class="lg:sticky lg:top-28">
+              <div class="border border-[#C8A96B]/25 bg-white/[0.025] p-6 md:p-7">
+                <p class="text-xs uppercase tracking-[0.25em] text-[#C8A96B]">
+                  Descargar recurso
+                </p>
+
+                <h2 class="mt-4 text-2xl font-semibold">
+                  Obtén el material completo
+                </h2>
+
+                <p class="mt-4 text-sm leading-relaxed text-white/40">
+                  {resource.data.requiresLead
+                    ? "Completa tus datos para acceder al recurso y recibir información relacionada con esta área."
+                    : "Este material está disponible para descarga directa."}
+                </p>
+
+                <div class="mt-6 border-y border-white/10 py-5">
+                  <div class="flex items-center justify-between gap-5 text-sm">
+                    <span class="text-white/35">
+                      Tipo
+                    </span>
+
+                    <span class="text-right text-white/65">
+                      {resource.data.type}
+                    </span>
+                  </div>
+
+                  {resource.data.fileFormat && (
+                    <div class="mt-4 flex items-center justify-between gap-5 text-sm">
+                      <span class="text-white/35">
+                        Formato
+                      </span>
+
+                      <span class="text-right text-white/65">
+                        {resource.data.fileFormat}
+                      </span>
+                    </div>
+                  )}
+
+                  {resource.data.fileSize && (
+                    <div class="mt-4 flex items-center justify-between gap-5 text-sm">
+                      <span class="text-white/35">
+                        Tamaño
+                      </span>
+
+                      <span class="text-right text-white/65">
+                        {resource.data.fileSize}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {resource.data.requiresLead ? (
+                  <form
+                    id="lead-form"
+                    class="mt-7 space-y-4"
+                    data-download-url={resource.data.downloadUrl}
+                    data-resource-slug={resource.id}
+                    data-resource-title={resource.data.title}
+                    data-resource-author={resource.data.author}
+                    data-resource-area={resource.data.area}
+                    data-resource-type={resource.data.type}
+                    data-campaign={leadCampaign}
+                    data-resource-url={resourceUrl}
+                  >
+                    <div>
+                      <label
+                        for="lead-name"
+                        class="mb-2 block text-xs uppercase tracking-[0.18em] text-white/35"
+                      >
+                        Nombre completo
+                      </label>
+
+                      <input
+                        id="lead-name"
+                        name="name"
+                        type="text"
+                        required
+                        autocomplete="name"
+                        placeholder="Tu nombre"
+                        class="lead-input"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        for="lead-email"
+                        class="mb-2 block text-xs uppercase tracking-[0.18em] text-white/35"
+                      >
+                        Correo electrónico
+                      </label>
+
+                      <input
+                        id="lead-email"
+                        name="email"
+                        type="email"
+                        required
+                        autocomplete="email"
+                        placeholder="correo@institucion.com"
+                        class="lead-input"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        for="lead-phone"
+                        class="mb-2 block text-xs uppercase tracking-[0.18em] text-white/35"
+                      >
+                        Teléfono
+                      </label>
+
+                      <input
+                        id="lead-phone"
+                        name="phone"
+                        type="tel"
+                        autocomplete="tel"
+                        placeholder="Número con lada"
+                        class="lead-input"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        for="lead-institution"
+                        class="mb-2 block text-xs uppercase tracking-[0.18em] text-white/35"
+                      >
+                        Institución u organización
+                      </label>
+
+                      <input
+                        id="lead-institution"
+                        name="institution"
+                        type="text"
+                        autocomplete="organization"
+                        placeholder="Nombre de la institución"
+                        class="lead-input"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        for="lead-position"
+                        class="mb-2 block text-xs uppercase tracking-[0.18em] text-white/35"
+                      >
+                        Cargo o actividad
+                      </label>
+
+                      <input
+                        id="lead-position"
+                        name="position"
+                        type="text"
+                        autocomplete="organization-title"
+                        placeholder="Cargo, profesión o actividad"
+                        class="lead-input"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        for="lead-interest"
+                        class="mb-2 block text-xs uppercase tracking-[0.18em] text-white/35"
+                      >
+                        Interés principal
+                      </label>
+
+                      <select
+                        id="lead-interest"
+                        name="interest"
+                        required
+                        class="lead-input"
+                      >
+                        <option value={resource.data.area}>
+                          {resource.data.area}
+                        </option>
+
+                        <option value="Curso o capacitación">
+                          Curso o capacitación
+                        </option>
+
+                        <option value="Servicio especializado">
+                          Servicio especializado
+                        </option>
+
+                        <option value="Consultoría institucional">
+                          Consultoría institucional
+                        </option>
+
+                        <option value="Otro">
+                          Otro
+                        </option>
+                      </select>
+                    </div>
+
+                    <label class="flex items-start gap-3 border border-white/10 bg-black p-4">
+                      <input
+                        id="lead-consent"
+                        name="consent"
+                        type="checkbox"
+                        required
+                        value="true"
+                        class="mt-1 h-4 w-4 shrink-0 accent-[#C8A96B]"
+                      />
+
+                      <span class="text-xs leading-relaxed text-white/40">
+                        Acepto que ForenseIA utilice estos datos para enviarme
+                        el recurso solicitado e información relacionada.
+                      </span>
+                    </label>
+
+                    <input
+                      type="text"
+                      name="website"
+                      tabindex="-1"
+                      autocomplete="off"
+                      class="hidden"
+                      aria-hidden="true"
+                    />
+
+                    <button
+                      id="lead-submit-button"
+                      type="submit"
+                      class="w-full bg-[#C8A96B] px-6 py-4 text-sm font-medium text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      Obtener recurso
+                    </button>
+
+                    <p
+                      id="lead-message"
+                      class="min-h-6 text-sm leading-relaxed text-white/45"
+                      aria-live="polite"
+                    ></p>
+                  </form>
+                ) : (
+                  <div class="mt-7">
+                    <a
+                      href={resource.data.downloadUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                      class="flex w-full items-center justify-center bg-[#C8A96B] px-6 py-4 text-sm font-medium text-black transition hover:opacity-90"
+                    >
+                      Descargar ahora
+                    </a>
+                  </div>
+                )}
+
+                <div class="mt-6 border-t border-white/10 pt-5">
+                  <p class="text-xs leading-relaxed text-white/25">
+                    El contenido está destinado a fines educativos e
+                    informativos. Su aplicación debe considerar el contexto,
+                    normativa y atribuciones de cada institución.
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-5 border border-white/10 bg-white/[0.02] p-6">
+                <p class="text-xs uppercase tracking-[0.22em] text-white/25">
+                  ¿Necesitas apoyo?
+                </p>
+
+                <h3 class="mt-4 text-xl font-semibold">
+                  Solicita un diagnóstico
+                </h3>
+
+                <p class="mt-3 text-sm leading-relaxed text-white/40">
+                  Podemos adaptar este material o desarrollar una solución para
+                  tu institución.
+                </p>
+
+                <a
+                  href={`/contacto?area=${encodeURIComponent(resource.data.area)}&recurso=${encodeURIComponent(resource.data.title)}`}
+                  class="mt-6 inline-flex text-sm font-medium text-[#C8A96B]"
+                >
+                  Contactar al equipo →
+                </a>
+              </div>
+            </aside>
+          </Reveal>
+        </div>
+      </Container>
+    </section>
+
+    {relatedResources.length > 0 && (
+      <section class="border-t border-white/10 bg-white/[0.02] py-20">
+        <Container>
+          <Reveal>
+            <div class="max-w-3xl">
+              <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+                Biblioteca relacionada
+              </p>
+
+              <h2 class="mt-5 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">
+                Continúa explorando.
+              </h2>
+            </div>
+          </Reveal>
+
+          <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {relatedResources.map((entry, index) => (
+              <Reveal delay={index * 80}>
+                <article class="group flex h-full flex-col border border-white/10 bg-black p-6 transition hover:-translate-y-1 hover:border-[#C8A96B]/50">
+                  <div class="flex flex-wrap items-center gap-3 text-xs">
+                    <span class="uppercase tracking-[0.22em] text-[#C8A96B]">
+                      {entry.data.type}
+                    </span>
+
+                    <span class="text-white/25">
+                      {entry.data.area}
+                    </span>
+                  </div>
+
+                  <h3 class="mt-5 text-2xl font-semibold leading-tight">
+                    <a
+                      href={`/recursos/${entry.id}`}
+                      class="transition hover:text-[#C8A96B]"
+                    >
+                      {entry.data.title}
+                    </a>
+                  </h3>
+
+                  <p class="mt-4 leading-relaxed text-white/40">
+                    {entry.data.description}
+                  </p>
+
+                  <div class="mt-auto pt-8">
+                    <a
+                      href={`/recursos/${entry.id}`}
+                      class="text-sm font-medium text-[#C8A96B]"
+                    >
+                      Consultar recurso →
+                    </a>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+    )}
+
+    <section class="border-t border-white/10 py-24">
+      <Container>
+        <Reveal>
+          <div class="mx-auto max-w-3xl text-center">
+            <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+              ForenseIA
+            </p>
+
+            <h2 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-5xl">
+              Del conocimiento a la aplicación.
+            </h2>
+
+            <p class="mx-auto mt-6 max-w-2xl leading-relaxed text-white/45">
+              Conoce nuestros servicios y programas formativos para convertir
+              metodologías, herramientas y conocimiento en capacidades
+              institucionales.
+            </p>
+
+            <div class="mt-9 flex flex-wrap justify-center gap-4">
+              <Button href="/servicios">
+                Ver servicios
+              </Button>
+
+              <Button href="/cursos" variant="secondary">
+                Ver cursos
+              </Button>
+            </div>
+          </div>
+        </Reveal>
+      </Container>
+    </section>
+  </main>
+
+  <style is:global>
+    .resource-content {
+      color: rgb(255 255 255 / 0.58);
+      font-size: 1.05rem;
+      line-height: 1.85;
+    }
+
+    .resource-content h1,
+    .resource-content h2,
+    .resource-content h3,
+    .resource-content h4 {
+      color: #fff;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+    }
+
+    .resource-content h1 {
+      margin-top: 3rem;
+      font-size: clamp(2rem, 5vw, 3rem);
+    }
+
+    .resource-content h2 {
+      margin-top: 3rem;
+      font-size: clamp(1.75rem, 4vw, 2.35rem);
+    }
+
+    .resource-content h3 {
+      margin-top: 2.25rem;
+      font-size: 1.55rem;
+    }
+
+    .resource-content h4 {
+      margin-top: 1.75rem;
+      font-size: 1.2rem;
+    }
+
+    .resource-content p {
+      margin-top: 1.25rem;
+    }
+
+    .resource-content ul,
+    .resource-content ol {
+      margin-top: 1.25rem;
+      padding-left: 1.5rem;
+    }
+
+    .resource-content ul {
+      list-style: disc;
+    }
+
+    .resource-content ol {
+      list-style: decimal;
+    }
+
+    .resource-content li {
+      margin-top: 0.65rem;
+      padding-left: 0.35rem;
+    }
+
+    .resource-content strong {
+      color: rgb(255 255 255 / 0.9);
+      font-weight: 600;
+    }
+
+    .resource-content a {
+      color: #c8a96b;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .resource-content blockquote {
+      margin-top: 2rem;
+      border-left: 2px solid #c8a96b;
+      background: rgb(255 255 255 / 0.02);
+      padding: 1.25rem 1.5rem;
+      color: rgb(255 255 255 / 0.48);
+    }
+
+    .resource-content code {
+      border: 1px solid rgb(255 255 255 / 0.1);
+      background: #050505;
+      padding: 0.2rem 0.4rem;
+      color: #c8a96b;
+      font-size: 0.9em;
+    }
+
+    .resource-content pre {
+      margin-top: 1.5rem;
+      overflow-x: auto;
+      border: 1px solid rgb(255 255 255 / 0.1);
+      background: #050505;
+      padding: 1.25rem;
+    }
+
+    .resource-content pre code {
+      border: 0;
+      background: transparent;
+      padding: 0;
+    }
+
+    .resource-content hr {
+      margin: 3rem 0;
+      border-color: rgb(255 255 255 / 0.1);
+    }
+
+    .resource-content img {
+      margin-top: 2rem;
+      width: 100%;
+      border: 1px solid rgb(255 255 255 / 0.1);
+    }
+
+    .resource-content table {
+      margin-top: 2rem;
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    .resource-content th,
+    .resource-content td {
+      border: 1px solid rgb(255 255 255 / 0.1);
+      padding: 0.9rem;
+      text-align: left;
+    }
+
+    .resource-content th {
+      color: #fff;
+      background: rgb(255 255 255 / 0.03);
+    }
+
+    .lead-input {
+      width: 100%;
+      border: 1px solid rgb(255 255 255 / 0.1);
+      background: #000;
+      padding: 0.9rem 1rem;
+      color: #fff;
+      outline: none;
+      transition:
+        border-color 180ms ease,
+        background-color 180ms ease;
+    }
+
+    .lead-input:focus {
+      border-color: #c8a96b;
+      background: rgb(255 255 255 / 0.015);
+    }
+
+    .lead-input::placeholder {
+      color: rgb(255 255 255 / 0.22);
+    }
+
+    .lead-input option {
+      background: #000;
+      color: #fff;
+    }
+  </style>
+
+  <script is:inline>
+    const leadForm = document.getElementById("lead-form");
+    const leadButton = document.getElementById(
+      "lead-submit-button"
+    );
+    const leadMessage = document.getElementById(
+      "lead-message"
+    );
+
+    function openDownload(downloadUrl) {
+      if (!downloadUrl) {
+        throw new Error(
+          "Este recurso no tiene una ruta de descarga válida."
+        );
+      }
+
+      const downloadLink = document.createElement("a");
+
+      downloadLink.href = downloadUrl;
+      downloadLink.target = "_blank";
+      downloadLink.rel = "noopener noreferrer";
+      downloadLink.download = "";
+
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      downloadLink.remove();
+    }
+
+    leadForm?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (
+        !(leadForm instanceof HTMLFormElement) ||
+        !(leadButton instanceof HTMLButtonElement) ||
+        !leadMessage
+      ) {
+        return;
+      }
+
+      const formData = new FormData(leadForm);
+
+      const honeypot = String(
+        formData.get("website") || ""
+      ).trim();
+
+      if (honeypot) {
+        leadMessage.textContent =
+          "No fue posible procesar la solicitud.";
+
+        return;
+      }
+
+      const downloadUrl =
+        leadForm.dataset.downloadUrl || "";
+
+      const payload = {
+        name: String(
+          formData.get("name") || ""
+        ).trim(),
+
+        email: String(
+          formData.get("email") || ""
+        ).trim(),
+
+        phone: String(
+          formData.get("phone") || ""
+        ).trim(),
+
+        institution: String(
+          formData.get("institution") || ""
+        ).trim(),
+
+        position: String(
+          formData.get("position") || ""
+        ).trim(),
+
+        interest: String(
+          formData.get("interest") || ""
+        ).trim(),
+
+        consent:
+          formData.get("consent") === "true",
+
+        resourceSlug:
+          leadForm.dataset.resourceSlug || "",
+
+        resourceTitle:
+          leadForm.dataset.resourceTitle || "",
+
+        resourceAuthor:
+          leadForm.dataset.resourceAuthor || "",
+
+        resourceArea:
+          leadForm.dataset.resourceArea || "",
+
+        resourceType:
+          leadForm.dataset.resourceType || "",
+
+        resourceUrl:
+          leadForm.dataset.resourceUrl || "",
+
+        campaign:
+          leadForm.dataset.campaign || "",
+
+        source: "resource-download",
+
+        pageUrl: window.location.href,
+      };
+
+      if (
+        !payload.name ||
+        !payload.email ||
+        !payload.interest ||
+        !payload.consent
+      ) {
+        leadMessage.textContent =
+          "Completa los campos obligatorios y acepta el uso de datos.";
+
+        return;
+      }
+
+      leadButton.disabled = true;
+      leadButton.textContent = "Procesando...";
+      leadMessage.textContent =
+        "Registrando tu solicitud...";
+
+      try {
+        const response = await fetch(
+          "/.netlify/functions/capture-lead",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+
+        const text = await response.text();
+
+        let data = {};
+
+        try {
+          data = text ? JSON.parse(text) : {};
+        } catch {
+          throw new Error(
+            text ||
+              "La función devolvió una respuesta inválida."
+          );
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data.error ||
+              "No fue posible registrar la solicitud."
+          );
+        }
+
+        leadMessage.textContent =
+          "Registro completado. Tu descarga comenzará ahora.";
+
+        leadForm.reset();
+
+        setTimeout(() => {
+          openDownload(downloadUrl);
+        }, 500);
+      } catch (error) {
+        leadMessage.textContent =
+          error instanceof Error
+            ? `Error: ${error.message}`
+            : "No fue posible procesar la descarga.";
+
+        leadButton.disabled = false;
+        leadButton.textContent = "Obtener recurso";
+      }
+    });
+  </script>
+</BaseLayout>
