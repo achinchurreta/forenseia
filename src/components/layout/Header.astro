@@ -1,115 +1,53 @@
 ---
 import { navigation } from "../../data/navigation";
 ---
-
-<header id="site-header" class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl">
-  <div class="mx-auto max-w-[1440px] px-5 sm:px-7 lg:px-10">
-    <div class="flex h-[68px] items-center justify-between lg:h-[76px]">
-      <a href="/" class="group flex min-w-0 items-center gap-3" aria-label="ForenseIA, inicio">
-        <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden border border-[#C8A96B]/35 bg-[#C8A96B]/[0.04] lg:h-11 lg:w-11">
-          <img src="/logo.png" alt="" class="h-8 w-8 object-contain lg:h-9 lg:w-9" />
+<header class="sticky top-0 z-50 border-b border-white/10 bg-[#050505]/92 backdrop-blur-xl">
+  <div class="mx-auto w-full max-w-[1440px] px-5 sm:px-7 lg:px-10">
+    <div class="flex h-[78px] items-center justify-between gap-6">
+      <a href="/" class="flex min-w-0 items-center gap-3.5" aria-label="Ir al inicio de ForenseIA">
+        <span class="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden border border-[#C8A96B]/35 bg-black">
+          <img src="/logo.png" alt="" width="44" height="44" class="h-full w-full object-contain p-1" />
         </span>
-
         <span class="min-w-0 leading-none">
-          <span class="block truncate text-sm font-semibold tracking-[0.16em] text-white lg:text-[15px]">
-            FORENSEIA
-          </span>
-          <span class="mt-1.5 block truncate text-[8px] font-medium uppercase tracking-[0.27em] text-[#C8A96B] sm:text-[9px]">
-            Inteligencia estratégica
-          </span>
+          <span class="block truncate text-sm font-bold tracking-[0.16em] text-white">FORENSEIA</span>
+          <span class="mt-2 block truncate text-[8px] font-semibold uppercase tracking-[0.28em] text-[#C8A96B]">Inteligencia estratégica</span>
         </span>
       </a>
 
-      <nav class="hidden items-center gap-1 lg:flex" aria-label="Navegación principal">
+      <nav class="hidden items-center gap-7 xl:flex" aria-label="Navegación principal">
         {navigation.map((item) => (
-          <a
-            href={item.href}
-            class="px-3 py-2 text-[13px] font-medium text-white/58 transition hover:text-white xl:px-4"
-          >
-            {item.label}
-          </a>
+          <a href={item.href} class="text-[13px] font-medium text-white/62 transition hover:text-white">{item.label}</a>
         ))}
       </nav>
 
       <div class="flex items-center gap-3">
-        <a
-          href="/contacto"
-          class="hidden min-h-10 items-center border border-[#C8A96B]/45 px-4 text-xs font-semibold text-[#DFC58C] transition hover:border-[#C8A96B] hover:bg-[#C8A96B] hover:text-black md:inline-flex xl:px-5"
-        >
+        <a href="/contacto" class="hidden min-h-11 items-center border border-[#C8A96B]/55 px-5 text-xs font-semibold text-[#E4CB96] transition hover:bg-[#C8A96B] hover:text-black md:inline-flex">
           Solicitar diagnóstico
         </a>
-
-        <button
-          id="menu-button"
-          type="button"
-          class="relative inline-flex h-10 w-10 items-center justify-center border border-white/12 bg-white/[0.025] lg:hidden"
-          aria-label="Abrir menú"
-          aria-expanded="false"
-          aria-controls="mobile-menu"
-        >
-          <span class="menu-line absolute h-px w-4 bg-white transition duration-300 -translate-y-[4px]"></span>
-          <span class="menu-line absolute h-px w-4 bg-white transition duration-300 translate-y-[4px]"></span>
+        <button id="menu-button" type="button" class="inline-flex h-11 w-11 items-center justify-center border border-white/12 text-xl text-white xl:hidden" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
+          <span aria-hidden="true">☰</span>
         </button>
       </div>
     </div>
   </div>
 
-  <div id="mobile-menu" class="hidden border-t border-white/10 bg-[#050505] lg:hidden">
+  <div id="mobile-menu" class="hidden border-t border-white/10 bg-[#050505] xl:hidden">
     <div class="mx-auto max-w-[1440px] px-5 py-6 sm:px-7">
       <nav class="grid gap-1" aria-label="Navegación móvil">
         {navigation.map((item) => (
-          <a href={item.href} class="border-b border-white/8 py-4 text-base text-white/72 transition hover:text-[#DFC58C]">
-            {item.label}
-          </a>
+          <a href={item.href} class="border-b border-white/8 py-3 text-sm text-white/70 transition hover:text-[#C8A96B]">{item.label}</a>
         ))}
-
-        <a href="/contacto" class="mt-5 flex min-h-12 items-center justify-center bg-[#C8A96B] px-5 text-sm font-semibold text-black">
-          Solicitar diagnóstico
-        </a>
+        <a href="/contacto" class="mt-4 flex min-h-12 items-center justify-center border border-[#C8A96B]/60 text-sm font-semibold text-[#E4CB96]">Solicitar diagnóstico</a>
       </nav>
     </div>
   </div>
 </header>
-
-<div class="h-[68px] lg:h-[76px]"></div>
-
 <script>
   const button = document.getElementById("menu-button");
   const menu = document.getElementById("mobile-menu");
-  const lines = button?.querySelectorAll(".menu-line");
-
-  const closeMenu = () => {
-    menu?.classList.add("hidden");
-    document.body.classList.remove("menu-open");
-    button?.setAttribute("aria-expanded", "false");
-    button?.setAttribute("aria-label", "Abrir menú");
-    lines?.[0]?.classList.remove("rotate-45", "translate-y-0");
-    lines?.[1]?.classList.remove("-rotate-45", "translate-y-0");
-    lines?.[0]?.classList.add("-translate-y-[4px]");
-    lines?.[1]?.classList.add("translate-y-[4px]");
-  };
-
   button?.addEventListener("click", () => {
-    const isOpen = button.getAttribute("aria-expanded") === "true";
-
-    if (isOpen) {
-      closeMenu();
-      return;
-    }
-
-    menu?.classList.remove("hidden");
-    document.body.classList.add("menu-open");
-    button.setAttribute("aria-expanded", "true");
-    button.setAttribute("aria-label", "Cerrar menú");
-    lines?.[0]?.classList.remove("-translate-y-[4px]");
-    lines?.[1]?.classList.remove("translate-y-[4px]");
-    lines?.[0]?.classList.add("rotate-45", "translate-y-0");
-    lines?.[1]?.classList.add("-rotate-45", "translate-y-0");
-  });
-
-  menu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
-
-  window.addEventListener("resize", () => {
-    if (window.innerWidth >= 1024) closeMenu();
+    const isOpen = !menu?.classList.contains("hidden");
+    menu?.classList.toggle("hidden");
+    button.setAttribute("aria-expanded", String(!isOpen));
   });
 </script>

@@ -1,33 +1,16 @@
 ---
 interface Props {
   href: string;
-  variant?: "primary" | "secondary" | "text";
+  variant?: "primary" | "secondary" | "ghost";
   class?: string;
-  target?: string;
-  rel?: string;
 }
-
-const {
-  href,
-  variant = "primary",
-  class: className = "",
-  target,
-  rel,
-} = Astro.props;
-
+const { href, variant = "primary", class: className = "" } = Astro.props;
 const styles = {
-  primary: "border border-[#C8A96B] bg-[#C8A96B] text-black hover:bg-[#DFC58C] hover:border-[#DFC58C]",
-  secondary: "border border-white/15 bg-white/[0.025] text-white hover:border-[#C8A96B]/70 hover:text-[#DFC58C]",
-  text: "border border-transparent px-0 text-[#C8A96B] hover:text-[#DFC58C]",
+  primary: "border border-[#C8A96B] bg-[#C8A96B] text-black hover:bg-[#ddc183]",
+  secondary: "border border-white/15 bg-white/[0.025] text-white hover:border-[#C8A96B]/70 hover:text-[#E4CB96]",
+  ghost: "border border-transparent text-white/65 hover:text-white",
 };
 ---
-
-<a
-  href={href}
-  target={target}
-  rel={rel}
-  class={`group inline-flex min-h-12 items-center justify-center gap-3 px-6 py-3 text-sm font-semibold tracking-[0.01em] transition duration-300 ${styles[variant]} ${className}`}
->
+<a href={href} class={`inline-flex min-h-12 items-center justify-center gap-2 px-6 py-3 text-sm font-semibold transition duration-300 ${styles[variant]} ${className}`}>
   <slot />
-  <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1">→</span>
 </a>
