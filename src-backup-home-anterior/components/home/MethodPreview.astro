@@ -1,0 +1,49 @@
+---
+const steps = [
+  "Diagnóstico",
+  "Recolección",
+  "Validación",
+  "Análisis",
+  "Informe",
+  "Acompañamiento",
+];
+---
+
+<section class="py-24 border-t border-white/10">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-14 items-start">
+      <div>
+        <span class="text-[#C8A96B] uppercase tracking-[0.35em] text-xs">
+          Método ForenseIA
+        </span>
+
+        <h2 class="text-3xl md:text-5xl font-semibold leading-tight mt-4">
+          Un proceso claro para convertir evidencia en inteligencia.
+        </h2>
+
+        <p class="text-white/55 text-lg leading-relaxed mt-6">
+          Analizamos información documental, financiera, digital y patrimonial
+          para generar hallazgos claros, trazables y accionables.
+        </p>
+
+        <a href="/metodologia" class="inline-flex mt-8 text-[#C8A96B]">
+          Ver metodología →
+        </a>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        {steps.map((step, index) => (
+          <div class="border border-white/10 bg-white/[0.02] p-6">
+            <p class="text-[#C8A96B] text-sm">
+              0{index + 1}
+            </p>
+
+            <h3 class="text-xl font-semibold mt-4">
+              {step}
+            </h3>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,869 @@
+---
+import DashboardLayout from "../../../components/dashboard/DashboardLayout.astro";
+
+const authors = [
+  "Gonzalo García",
+  "Augusto Chinchurreta",
+  "Tania Pérez",
+  "ForenseIA",
+];
+
+const types = [
+  "Guía",
+  "Checklist",
+  "Plantilla",
+  "Ebook",
+  "Infografía",
+  "Presentación",
+  "Manual",
+  "Matriz",
+  "Otro",
+];
+
+const areas = [
+  "Inteligencia Artificial",
+  "Gobierno Digital",
+  "Automatización",
+  "Investigación Digital",
+  "Ciberseguridad",
+  "OSINT",
+  "Inteligencia Patrimonial",
+  "Psicología Criminal",
+  "Psicología Educativa",
+  "Análisis Conductual",
+];
+---
+
+<DashboardLayout title="Nuevo recurso | ForenseIA">
+  <div class="max-w-5xl">
+    <header class="mb-10">
+      <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+        Recursos
+      </p>
+
+      <h1 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-5xl">
+        Nuevo recurso descargable
+      </h1>
+
+      <p class="mt-4 max-w-2xl leading-relaxed text-white/45">
+        Publica una guía, plantilla, checklist u otro material para aportar
+        valor y captar prospectos interesados en los servicios de ForenseIA.
+      </p>
+
+      <div
+        id="role-notice"
+        class="mt-6 hidden border border-[#C8A96B]/20 bg-[#C8A96B]/5 p-4 text-sm leading-relaxed text-white/55"
+      ></div>
+    </header>
+
+    <form id="resource-form" class="space-y-6">
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label for="title" class="mb-2 block text-sm text-white/50">
+            Título del recurso
+          </label>
+
+          <input
+            id="title"
+            name="title"
+            required
+            placeholder="Ej. Checklist para implementar IA institucional"
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="slug" class="mb-2 block text-sm text-white/50">
+            Slug
+          </label>
+
+          <input
+            id="slug"
+            name="slug"
+            placeholder="se-genera-automaticamente"
+            class="input"
+          />
+
+          <p class="mt-2 text-xs text-white/30">
+            Se utilizará en la URL pública del recurso.
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <label for="description" class="mb-2 block text-sm text-white/50">
+          Descripción
+        </label>
+
+        <textarea
+          id="description"
+          name="description"
+          required
+          rows="4"
+          maxlength="300"
+          placeholder="Explica brevemente qué contiene el recurso y qué problema ayuda a resolver."
+          class="input"
+        ></textarea>
+
+        <div class="mt-2 flex justify-between gap-4 text-xs text-white/30">
+          <span>
+            Esta descripción aparecerá en el catálogo público.
+          </span>
+
+          <span id="description-counter">
+            0 / 300
+          </span>
+        </div>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label for="type" class="mb-2 block text-sm text-white/50">
+            Tipo de recurso
+          </label>
+
+          <select
+            id="type"
+            name="type"
+            required
+            class="input"
+          >
+            {types.map((type) => (
+              <option value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="area" class="mb-2 block text-sm text-white/50">
+            Área
+          </label>
+
+          <select
+            id="area"
+            name="area"
+            required
+            class="input"
+          >
+            {areas.map((area) => (
+              <option value={area}>
+                {area}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="author" class="mb-2 block text-sm text-white/50">
+            Autor
+          </label>
+
+          <select
+            id="author"
+            name="author"
+            required
+            class="input"
+          >
+            {authors.map((author) => (
+              <option value={author}>
+                {author}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label for="audience" class="mb-2 block text-sm text-white/50">
+          Público objetivo
+        </label>
+
+        <input
+          id="audience"
+          name="audience"
+          required
+          placeholder="Ej. Dependencias públicas, fiscalías, universidades o equipos profesionales"
+          class="input"
+        />
+      </div>
+
+      <section class="border border-white/10 bg-white/[0.02] p-6">
+        <div>
+          <p class="text-xs uppercase tracking-[0.28em] text-[#C8A96B]">
+            Archivo descargable
+          </p>
+
+          <h2 class="mt-3 text-xl font-semibold">
+            Datos del recurso
+          </h2>
+
+          <p class="mt-3 max-w-2xl text-sm leading-relaxed text-white/40">
+            Puedes enlazar un archivo guardado dentro de la carpeta pública del
+            proyecto o utilizar una URL externa.
+          </p>
+        </div>
+
+        <div class="mt-6">
+          <label for="downloadUrl" class="mb-2 block text-sm text-white/50">
+            Ruta o URL de descarga
+          </label>
+
+          <input
+            id="downloadUrl"
+            name="downloadUrl"
+            required
+            placeholder="/downloads/guia-ia.pdf o https://..."
+            class="input"
+          />
+
+          <p class="mt-2 text-xs leading-relaxed text-white/30">
+            Para archivos locales, guárdalos en
+            <code class="text-[#C8A96B]">public/downloads</code>
+            y usa una ruta como
+            <code class="text-[#C8A96B]">/downloads/archivo.pdf</code>.
+          </p>
+        </div>
+
+        <div class="mt-6 grid gap-6 md:grid-cols-2">
+          <div>
+            <label for="fileFormat" class="mb-2 block text-sm text-white/50">
+              Formato del archivo
+            </label>
+
+            <input
+              id="fileFormat"
+              name="fileFormat"
+              placeholder="PDF, XLSX, DOCX, PPTX..."
+              class="input"
+            />
+          </div>
+
+          <div>
+            <label for="fileSize" class="mb-2 block text-sm text-white/50">
+              Tamaño aproximado
+            </label>
+
+            <input
+              id="fileSize"
+              name="fileSize"
+              placeholder="Ej. 2.4 MB"
+              class="input"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="border border-white/10 bg-white/[0.02] p-6">
+        <div>
+          <p class="text-xs uppercase tracking-[0.28em] text-[#C8A96B]">
+            Embudo comercial
+          </p>
+
+          <h2 class="mt-3 text-xl font-semibold">
+            Captación y contenido relacionado
+          </h2>
+
+          <p class="mt-3 max-w-2xl text-sm leading-relaxed text-white/40">
+            Relaciona el recurso con artículos, cursos o servicios para guiar al
+            visitante hacia el siguiente paso.
+          </p>
+        </div>
+
+        <div class="mt-6">
+          <label class="flex w-fit items-center gap-3 border border-white/10 bg-black px-4 py-4 text-sm text-white/55">
+            <input
+              id="requiresLead"
+              name="requiresLead"
+              type="checkbox"
+              value="true"
+              checked
+              class="h-4 w-4 accent-[#C8A96B]"
+            />
+
+            Solicitar datos del prospecto antes de descargar
+          </label>
+
+          <p class="mt-2 text-xs leading-relaxed text-white/30">
+            El formulario de captación se conectará posteriormente con el
+            módulo de prospectos y automatización.
+          </p>
+        </div>
+
+        <div class="mt-6">
+          <label for="campaign" class="mb-2 block text-sm text-white/50">
+            Nombre de campaña
+          </label>
+
+          <input
+            id="campaign"
+            name="campaign"
+            placeholder="Ej. campaña-ia-gobierno-2026"
+            class="input"
+          />
+
+          <p class="mt-2 text-xs text-white/30">
+            Ayudará a identificar de qué recurso proviene cada prospecto.
+          </p>
+        </div>
+
+        <div class="mt-6 grid gap-6">
+          <div>
+            <label for="relatedPost" class="mb-2 block text-sm text-white/50">
+              Artículo relacionado
+            </label>
+
+            <input
+              id="relatedPost"
+              name="relatedPost"
+              placeholder="/blog/nombre-del-articulo"
+              class="input"
+            />
+          </div>
+
+          <div>
+            <label for="relatedCourse" class="mb-2 block text-sm text-white/50">
+              Curso relacionado
+            </label>
+
+            <input
+              id="relatedCourse"
+              name="relatedCourse"
+              placeholder="/cursos/nombre-del-curso"
+              class="input"
+            />
+          </div>
+
+          <div>
+            <label
+              for="relatedService"
+              class="mb-2 block text-sm text-white/50"
+            >
+              Servicio relacionado
+            </label>
+
+            <input
+              id="relatedService"
+              name="relatedService"
+              placeholder="/servicios/nombre-del-servicio"
+              class="input"
+            />
+          </div>
+        </div>
+      </section>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label for="status" class="mb-2 block text-sm text-white/50">
+            Estado
+          </label>
+
+          <select
+            id="status"
+            name="status"
+            required
+            class="input"
+          >
+            <option value="published">
+              Publicado
+            </option>
+
+            <option value="draft">
+              Borrador
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label for="order" class="mb-2 block text-sm text-white/50">
+            Orden
+          </label>
+
+          <input
+            id="order"
+            name="order"
+            type="number"
+            min="0"
+            value="0"
+            class="input"
+          />
+
+          <p class="mt-2 text-xs text-white/30">
+            Los números menores aparecerán primero.
+          </p>
+        </div>
+
+        <div>
+          <label for="cover" class="mb-2 block text-sm text-white/50">
+            URL de portada
+          </label>
+
+          <input
+            id="cover"
+            name="cover"
+            placeholder="/images/recurso.jpg o https://..."
+            class="input"
+          />
+        </div>
+      </div>
+
+      <label class="flex w-fit items-center gap-3 border border-white/10 bg-white/[0.02] px-4 py-4 text-sm text-white/55">
+        <input
+          id="featured"
+          name="featured"
+          type="checkbox"
+          value="true"
+          class="h-4 w-4 accent-[#C8A96B]"
+        />
+
+        Mostrar como recurso destacado
+      </label>
+
+      <div>
+        <label for="content" class="mb-2 block text-sm text-white/50">
+          Información completa
+        </label>
+
+        <textarea
+          id="content"
+          name="content"
+          required
+          rows="24"
+          placeholder="# Acerca de este recurso
+
+Explica qué contiene el material y por qué es útil.
+
+## Qué aprenderás
+
+- Punto uno
+- Punto dos
+- Punto tres
+
+## Dirigido a
+
+Describe al público objetivo.
+
+## Cómo utilizarlo
+
+Explica brevemente cómo aprovechar el recurso.
+
+## Siguiente paso
+
+Invita al visitante a conocer un curso, servicio o solicitar un diagnóstico."
+          class="input min-h-[600px] font-mono leading-relaxed"
+        ></textarea>
+
+        <p class="mt-2 text-xs leading-relaxed text-white/30">
+          Puedes utilizar Markdown para encabezados, listas, enlaces y texto
+          destacado.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <button
+          id="save-button"
+          type="submit"
+          class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Guardar recurso
+        </button>
+
+        <a
+          href="/dashboard/recursos"
+          class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+        >
+          Cancelar
+        </a>
+      </div>
+
+      <p
+        id="message"
+        class="min-h-6 text-sm text-white/50"
+      ></p>
+    </form>
+  </div>
+
+  <style>
+    .input {
+      width: 100%;
+      border: 1px solid rgb(255 255 255 / 0.1);
+      background: #000;
+      padding: 1rem;
+      color: #fff;
+      outline: none;
+      transition:
+        border-color 180ms ease,
+        background-color 180ms ease,
+        opacity 180ms ease;
+    }
+
+    .input:focus {
+      border-color: #c8a96b;
+      background: rgb(255 255 255 / 0.015);
+    }
+
+    .input:disabled {
+      cursor: not-allowed;
+      border-color: rgb(200 169 107 / 0.25);
+      background: rgb(200 169 107 / 0.04);
+      color: rgb(255 255 255 / 0.55);
+      opacity: 1;
+    }
+
+    .input::placeholder {
+      color: rgb(255 255 255 / 0.25);
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", monospace;
+    }
+  </style>
+
+  <script is:inline>
+    const form = document.getElementById("resource-form");
+    const saveButton = document.getElementById("save-button");
+    const message = document.getElementById("message");
+    const roleNotice = document.getElementById("role-notice");
+
+    const titleInput = document.getElementById("title");
+    const slugInput = document.getElementById("slug");
+    const descriptionInput = document.getElementById("description");
+    const descriptionCounter = document.getElementById(
+      "description-counter"
+    );
+
+    const authorSelect = document.getElementById("author");
+    const areaSelect = document.getElementById("area");
+    const featuredInput = document.getElementById("featured");
+    const requiresLeadInput = document.getElementById("requiresLead");
+
+    let currentUser = null;
+    let accessAllowed = false;
+
+    const ROLE_RULES = {
+      "director-ia": {
+        author: "Gonzalo García",
+
+        areas: [
+          "Inteligencia Artificial",
+          "Gobierno Digital",
+          "Automatización",
+        ],
+
+        notice:
+          "El recurso se publicará como Gonzalo García dentro de la Dirección de Inteligencia Artificial.",
+      },
+
+      "director-psychology": {
+        author: "Tania Pérez",
+
+        areas: [
+          "Psicología Criminal",
+          "Psicología Educativa",
+          "Análisis Conductual",
+        ],
+
+        notice:
+          "El recurso se publicará como Tania Pérez dentro de la Dirección de Psicología Criminal.",
+      },
+    };
+
+    function createSlug(value) {
+      return String(value)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function updateDescriptionCounter() {
+      if (
+        !(descriptionInput instanceof HTMLTextAreaElement) ||
+        !descriptionCounter
+      ) {
+        return;
+      }
+
+      descriptionCounter.textContent =
+        `${descriptionInput.value.length} / 300`;
+    }
+
+    function resetAreaOptions() {
+      if (!(areaSelect instanceof HTMLSelectElement)) {
+        return;
+      }
+
+      Array.from(areaSelect.options).forEach((option) => {
+        option.hidden = false;
+        option.disabled = false;
+      });
+    }
+
+    function restrictAreaOptions(allowedAreas) {
+      if (!(areaSelect instanceof HTMLSelectElement)) {
+        return;
+      }
+
+      Array.from(areaSelect.options).forEach((option) => {
+        const allowed = allowedAreas.includes(option.value);
+
+        option.hidden = !allowed;
+        option.disabled = !allowed;
+      });
+
+      if (!allowedAreas.includes(areaSelect.value)) {
+        areaSelect.value = allowedAreas[0];
+      }
+    }
+
+    function applyUserRestrictions(user) {
+      currentUser = user;
+      accessAllowed = false;
+
+      if (
+        !(authorSelect instanceof HTMLSelectElement) ||
+        !(areaSelect instanceof HTMLSelectElement)
+      ) {
+        if (message) {
+          message.textContent =
+            "No fue posible configurar los permisos del formulario.";
+        }
+
+        return;
+      }
+
+      authorSelect.disabled = false;
+      areaSelect.disabled = false;
+
+      resetAreaOptions();
+
+      roleNotice?.classList.add("hidden");
+
+      if (roleNotice) {
+        roleNotice.textContent = "";
+      }
+
+      if (user.role === "admin") {
+        accessAllowed = true;
+        return;
+      }
+
+      const rules = ROLE_RULES[user.role];
+
+      if (!rules) {
+        if (form instanceof HTMLFormElement) {
+          form.querySelectorAll(
+            "input, textarea, select, button"
+          ).forEach((element) => {
+            element.disabled = true;
+          });
+        }
+
+        if (message) {
+          message.textContent =
+            "Tu cuenta no tiene permiso para crear recursos.";
+        }
+
+        return;
+      }
+
+      accessAllowed = true;
+
+      authorSelect.value = rules.author;
+      authorSelect.disabled = true;
+
+      restrictAreaOptions(rules.areas);
+
+      if (roleNotice) {
+        roleNotice.textContent = rules.notice;
+        roleNotice.classList.remove("hidden");
+      }
+    }
+
+    function fillFieldsFromQuery() {
+      const searchParams = new URLSearchParams(
+        window.location.search
+      );
+
+      for (const [field, value] of searchParams.entries()) {
+        const element = document.querySelector(
+          `[name="${field}"]`
+        );
+
+        if (
+          element instanceof HTMLInputElement ||
+          element instanceof HTMLTextAreaElement ||
+          element instanceof HTMLSelectElement
+        ) {
+          element.value = value;
+        }
+      }
+    }
+
+    function loadStoredUser() {
+      try {
+        const storedUser = JSON.parse(
+          sessionStorage.getItem("forenseia_user") || "null"
+        );
+
+        if (storedUser) {
+          applyUserRestrictions(storedUser);
+        }
+      } catch (error) {
+        console.error(
+          "No se pudo leer el usuario almacenado:",
+          error
+        );
+
+        sessionStorage.removeItem("forenseia_user");
+      }
+    }
+
+    fillFieldsFromQuery();
+    loadStoredUser();
+    updateDescriptionCounter();
+
+    document.addEventListener(
+      "forenseia:user-ready",
+      (event) => {
+        applyUserRestrictions(event.detail);
+      }
+    );
+
+    descriptionInput?.addEventListener(
+      "input",
+      updateDescriptionCounter
+    );
+
+    titleInput?.addEventListener("input", () => {
+      if (
+        !(titleInput instanceof HTMLInputElement) ||
+        !(slugInput instanceof HTMLInputElement) ||
+        slugInput.dataset.edited === "true"
+      ) {
+        return;
+      }
+
+      slugInput.value = createSlug(titleInput.value);
+    });
+
+    slugInput?.addEventListener("input", () => {
+      if (!(slugInput instanceof HTMLInputElement)) {
+        return;
+      }
+
+      slugInput.dataset.edited =
+        slugInput.value.length > 0
+          ? "true"
+          : "false";
+    });
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (
+        !accessAllowed ||
+        !currentUser ||
+        !(form instanceof HTMLFormElement) ||
+        !(saveButton instanceof HTMLButtonElement) ||
+        !message
+      ) {
+        if (message) {
+          message.textContent =
+            "No tienes permiso para crear recursos.";
+        }
+
+        return;
+      }
+
+      const formData = new FormData(form);
+
+      const payload = Object.fromEntries(
+        formData.entries()
+      );
+
+      payload.featured =
+        featuredInput instanceof HTMLInputElement
+          ? featuredInput.checked
+          : false;
+
+      payload.requiresLead =
+        requiresLeadInput instanceof HTMLInputElement
+          ? requiresLeadInput.checked
+          : false;
+
+      if (authorSelect instanceof HTMLSelectElement) {
+        payload.author = authorSelect.value;
+      }
+
+      if (areaSelect instanceof HTMLSelectElement) {
+        payload.area = areaSelect.value;
+      }
+
+      if (currentUser.role === "director-ia") {
+        payload.author = "Gonzalo García";
+      }
+
+      if (currentUser.role === "director-psychology") {
+        payload.author = "Tania Pérez";
+      }
+
+      saveButton.disabled = true;
+      saveButton.textContent = "Guardando...";
+      message.textContent = "Creando recurso...";
+
+      try {
+        const response = await fetch(
+          "/.netlify/functions/create-resource",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+
+        const text = await response.text();
+
+        let data = {};
+
+        try {
+          data = text ? JSON.parse(text) : {};
+        } catch {
+          throw new Error(
+            text ||
+              "La función devolvió una respuesta inválida"
+          );
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data.error ||
+              "No se pudo crear el recurso"
+          );
+        }
+
+        message.textContent =
+          "Recurso guardado. Netlify iniciará un nuevo despliegue.";
+
+        setTimeout(() => {
+          window.location.href = "/dashboard/recursos";
+        }, 1400);
+      } catch (error) {
+        message.textContent =
+          error instanceof Error
+            ? `Error: ${error.message}`
+            : "No se pudo crear el recurso.";
+
+        saveButton.disabled = false;
+        saveButton.textContent = "Guardar recurso";
+      }
+    });
+  </script>
+</DashboardLayout>

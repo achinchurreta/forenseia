@@ -1,0 +1,274 @@
+---
+import DashboardLayout from "../../components/dashboard/DashboardLayout.astro";
+
+const authors = [
+  {
+    id: "gonzalo-garcia",
+    number: "01",
+    initials: "GG",
+    name: "Gonzalo García",
+    role: "Director de Inteligencia Artificial Aplicada",
+    area: "Gobierno e Inteligencia Artificial",
+    audience:
+      "Gobierno, dependencias públicas, instituciones y organizaciones.",
+    description:
+      "Responsable de la línea de inteligencia artificial, automatización institucional, análisis documental y transformación digital.",
+    categories: [
+      "Inteligencia Artificial",
+      "Gobierno Digital",
+      "Automatización",
+      "Agentes Inteligentes",
+      "Análisis Documental",
+    ],
+    articleHref:
+      "/dashboard/posts/new?author=Gonzalo%20Garc%C3%ADa&category=Inteligencia%20Artificial",
+    courseHref:
+      "/dashboard/cursos/new?instructor=Gonzalo%20Garc%C3%ADa&area=Inteligencia%20Artificial",
+    serviceHref:
+      "/dashboard/servicios/new?director=Gonzalo%20Garc%C3%ADa&area=Inteligencia%20Artificial",
+  },
+  {
+    id: "augusto-chinchurreta",
+    number: "02",
+    initials: "AC",
+    name: "Augusto Chinchurreta",
+    role: "Director de Investigación Digital y Ciberseguridad",
+    area: "Agencias de Investigación y Fiscalías",
+    audience:
+      "Fiscalías, agencias de inteligencia, instituciones navales, policías de investigación y unidades especializadas.",
+    description:
+      "Responsable de las líneas de OSINT, investigación digital, ciberseguridad, inteligencia patrimonial y apoyo técnico a investigaciones.",
+    categories: [
+      "OSINT",
+      "Investigación Digital",
+      "Ciberseguridad",
+      "Inteligencia Patrimonial",
+      "Auditoría Forense",
+    ],
+    articleHref:
+      "/dashboard/posts/new?author=Augusto%20Chinchurreta&category=Investigaci%C3%B3n%20Digital",
+    courseHref:
+      "/dashboard/cursos/new?instructor=Augusto%20Chinchurreta&area=Investigaci%C3%B3n%20Digital",
+    serviceHref:
+      "/dashboard/servicios/new?director=Augusto%20Chinchurreta&area=Investigaci%C3%B3n%20Digital%20y%20Ciberseguridad",
+  },
+  {
+    id: "tania-perez",
+    number: "03",
+    initials: "TP",
+    name: "Tania Pérez",
+    role: "Directora de Psicología Criminal",
+    area: "Psicología Criminal",
+    audience:
+      "Instituciones, organizaciones, centros educativos y equipos multidisciplinarios.",
+    description:
+      "Responsable de las líneas de psicología criminal, análisis conductual, prevención, factores de riesgo y capacitación especializada.",
+    categories: [
+      "Psicología Criminal",
+      "Análisis Conductual",
+      "Prevención",
+      "Factores de Riesgo",
+      "Psicología Educativa",
+    ],
+    articleHref:
+      "/dashboard/posts/new?author=Tania%20P%C3%A9rez&category=Psicolog%C3%ADa%20Criminal",
+    courseHref:
+      "/dashboard/cursos/new?instructor=Tania%20P%C3%A9rez&area=Psicolog%C3%ADa%20Criminal",
+    serviceHref:
+      "/dashboard/servicios/new?director=Tania%20P%C3%A9rez&area=Psicolog%C3%ADa%20Criminal",
+  },
+];
+
+const editorialRules = [
+  {
+    number: "01",
+    title: "Autor definido",
+    description:
+      "Cada publicación debe estar vinculada con el director responsable de su área.",
+  },
+  {
+    number: "02",
+    title: "Enfoque institucional",
+    description:
+      "El contenido debe responder a necesidades reales de instituciones y organizaciones.",
+  },
+  {
+    number: "03",
+    title: "Lenguaje profesional",
+    description:
+      "Los textos deben ser claros, verificables y evitar afirmaciones sin sustento.",
+  },
+  {
+    number: "04",
+    title: "Reutilización editorial",
+    description:
+      "Cada artículo puede transformarse en carrusel, reel, publicación o material formativo.",
+  },
+];
+---
+
+<DashboardLayout title="Autores | ForenseIA">
+  <section>
+    <div class="max-w-4xl">
+      <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+        Centro editorial
+      </p>
+
+      <h1
+        class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-6xl"
+      >
+        Direcciones especializadas
+      </h1>
+
+      <p class="mt-5 max-w-2xl leading-relaxed text-white/45">
+        Organiza artículos, cursos, servicios y contenido social según el área
+        y la dirección responsable.
+      </p>
+    </div>
+  </section>
+
+  <section class="mt-14">
+    <div class="grid gap-6 xl:grid-cols-3">
+      {authors.map((author) => (
+        <article
+          class="group flex h-full min-h-[610px] flex-col border border-white/10 bg-white/[0.02] p-7 text-center transition duration-300 hover:-translate-y-1 hover:border-[#C8A96B]/50"
+        >
+          <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+            Dirección {author.number}
+          </p>
+
+          <div
+            class="mx-auto mt-8 flex h-20 w-20 items-center justify-center rounded-full border border-[#C8A96B]/40 bg-[#C8A96B]/5 text-lg font-semibold text-[#C8A96B]"
+          >
+            {author.initials}
+          </div>
+
+          <h2 class="mt-7 text-2xl font-semibold">
+            {author.name}
+          </h2>
+
+          <p class="mt-3 min-h-[48px] text-sm leading-relaxed text-[#C8A96B]">
+            {author.role}
+          </p>
+
+          <div class="mt-6 border-t border-white/10 pt-6">
+            <p class="text-xs uppercase tracking-[0.25em] text-white/30">
+              Área principal
+            </p>
+
+            <p class="mt-3 font-medium text-white">
+              {author.area}
+            </p>
+          </div>
+
+          <p class="mt-6 leading-relaxed text-white/45">
+            {author.description}
+          </p>
+
+          <p class="mt-5 text-sm leading-relaxed text-white/30">
+            {author.audience}
+          </p>
+
+          <div class="mt-7 flex flex-wrap justify-center gap-2">
+            {author.categories.map((category) => (
+              <span
+                class="border border-white/10 px-3 py-2 text-xs text-white/40"
+              >
+                {category}
+              </span>
+            ))}
+          </div>
+
+          <div class="mt-auto grid gap-3 pt-8">
+            <a
+              href={author.articleHref}
+              class="bg-[#C8A96B] px-5 py-3 text-sm font-medium text-black transition hover:opacity-90"
+            >
+              Crear artículo
+            </a>
+
+            <div class="grid grid-cols-2 gap-3">
+              <a
+                href={author.courseHref}
+                class="border border-white/10 px-4 py-3 text-sm text-white/50 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+              >
+                Crear curso
+              </a>
+
+              <a
+                href={author.serviceHref}
+                class="border border-white/10 px-4 py-3 text-sm text-white/50 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+              >
+                Crear servicio
+              </a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="mt-16 border-t border-white/10 pt-14">
+    <div class="mb-9 max-w-3xl">
+      <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+        Criterios editoriales
+      </p>
+
+      <h2 class="mt-4 text-3xl font-semibold md:text-4xl">
+        Una sola marca, tres líneas de conocimiento.
+      </h2>
+
+      <p class="mt-4 leading-relaxed text-white/40">
+        La estructura editorial mantiene la identidad de ForenseIA y permite
+        distinguir claramente la responsabilidad técnica de cada dirección.
+      </p>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {editorialRules.map((rule) => (
+        <article class="border border-white/10 bg-white/[0.02] p-6">
+          <p class="text-sm text-[#C8A96B]">
+            {rule.number}
+          </p>
+
+          <h3 class="mt-5 text-xl font-semibold">
+            {rule.title}
+          </h3>
+
+          <p class="mt-4 text-sm leading-relaxed text-white/40">
+            {rule.description}
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="mt-16 border-t border-white/10 pt-14">
+    <div
+      class="flex flex-col justify-between gap-8 border border-white/10 bg-white/[0.02] p-7 lg:flex-row lg:items-center"
+    >
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+          Sitio público
+        </p>
+
+        <h2 class="mt-4 text-2xl font-semibold">
+          Revisa la presentación del equipo
+        </h2>
+
+        <p class="mt-3 max-w-xl leading-relaxed text-white/40">
+          Los nombres, cargos y áreas públicas se presentan únicamente en la
+          página Nosotros.
+        </p>
+      </div>
+
+      <a
+        href="/nosotros"
+        target="_blank"
+        class="inline-flex w-fit border border-[#C8A96B]/60 px-6 py-4 text-sm text-[#C8A96B] transition hover:bg-[#C8A96B] hover:text-black"
+      >
+        Ver equipo público
+      </a>
+    </div>
+  </section>
+</DashboardLayout>

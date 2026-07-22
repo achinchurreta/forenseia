@@ -4,13 +4,21 @@ interface Props {
   variant?: "primary" | "secondary" | "ghost";
   class?: string;
 }
-const { href, variant = "primary", class: className = "" } = Astro.props;
+
+const {
+  href,
+  variant = "primary",
+  class: className = "",
+} = Astro.props;
+
 const styles = {
-  primary: "border border-[#C8A96B] bg-[#C8A96B] text-black hover:bg-[#ddc183]",
-  secondary: "border border-white/15 bg-white/[0.025] text-white hover:border-[#C8A96B]/70 hover:text-[#E4CB96]",
-  ghost: "border border-transparent text-white/65 hover:text-white",
+  primary: "button-primary",
+  secondary: "button-secondary",
+  ghost: "button-ghost",
 };
 ---
-<a href={href} class={`inline-flex min-h-12 items-center justify-center gap-2 px-6 py-3 text-sm font-semibold transition duration-300 ${styles[variant]} ${className}`}>
-  <slot />
+
+<a href={href} class={`site-button ${styles[variant]} ${className}`}>
+  <span><slot /></span>
+  <span aria-hidden="true" class="button-arrow">→</span>
 </a>

@@ -1,0 +1,348 @@
+---
+import DashboardLayout from "../../components/dashboard/DashboardLayout.astro";
+import Container from "../../components/ui/Container.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog");
+
+let courses = [];
+let services = [];
+
+try {
+  courses = await getCollection("courses");
+} catch {
+  courses = [];
+}
+
+try {
+  services = await getCollection("services");
+} catch {
+  services = [];
+}
+
+const publishedPosts = posts.filter(
+  (post) => post.data.status === "published"
+);
+
+const draftPosts = posts.filter(
+  (post) => post.data.status === "draft"
+);
+
+const publishedCourses = courses.filter(
+  (course) => course.data.status === "published"
+);
+
+const draftCourses = courses.filter(
+  (course) => course.data.status === "draft"
+);
+
+const publishedServices = services.filter(
+  (service) => service.data.status === "published"
+);
+
+const draftServices = services.filter(
+  (service) => service.data.status === "draft"
+);
+
+const stats = [
+  {
+    label: "Artículos",
+    value: posts.length,
+    description: `${publishedPosts.length} publicados · ${draftPosts.length} borradores`,
+    href: "/dashboard/posts",
+  },
+  {
+    label: "Cursos",
+    value: courses.length,
+    description: `${publishedCourses.length} publicados · ${draftCourses.length} borradores`,
+    href: "/dashboard/cursos",
+  },
+  {
+    label: "Servicios",
+    value: services.length,
+    description: `${publishedServices.length} publicados · ${draftServices.length} borradores`,
+    href: "/dashboard/servicios",
+  },
+  {
+    label: "Directores",
+    value: 3,
+    description: "Áreas especializadas",
+    href: "/dashboard/autores",
+  },
+];
+
+const modules = [
+  {
+    number: "01",
+    title: "Artículos",
+    description:
+      "Crea, revisa, edita y publica contenido para la Biblioteca ForenseIA.",
+    href: "/dashboard/posts",
+    action: "Administrar artículos",
+  },
+  {
+    number: "02",
+    title: "Cursos",
+    description:
+      "Gestiona programas formativos, instructores, modalidades y niveles.",
+    href: "/dashboard/cursos",
+    action: "Administrar cursos",
+  },
+  {
+    number: "03",
+    title: "Servicios",
+    description:
+      "Publica y organiza los servicios de cada dirección especializada.",
+    href: "/dashboard/servicios",
+    action: "Administrar servicios",
+  },
+  {
+    number: "04",
+    title: "Recursos",
+    description:
+      "Organiza guías, documentos, plantillas y materiales descargables.",
+    href: "/dashboard/recursos",
+    action: "Administrar recursos",
+  },
+  {
+    number: "05",
+    title: "Casos de estudio",
+    description:
+      "Documenta metodologías, escenarios y resultados sin exponer información sensible.",
+    href: "/dashboard/casos",
+    action: "Administrar casos",
+  },
+  {
+    number: "06",
+    title: "Contenido social",
+    description:
+      "Convierte artículos y temas en reels, carruseles, historias y publicaciones.",
+    href: "/dashboard/contenido",
+    action: "Planear contenido",
+  },
+];
+
+const quickActions = [
+  {
+    label: "Nuevo artículo",
+    href: "/dashboard/posts/new",
+  },
+  {
+    label: "Nuevo curso",
+    href: "/dashboard/cursos/new",
+  },
+  {
+    label: "Nuevo servicio",
+    href: "/dashboard/servicios/new",
+  },
+];
+---
+
+<DashboardLayout title="Centro Editorial | ForenseIA">
+  <Container>
+    <section>
+      <div class="flex flex-col justify-between gap-8 xl:flex-row xl:items-end">
+        <div class="max-w-3xl">
+          <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+            Centro editorial
+          </p>
+
+          <h1
+            class="mt-5 text-4xl font-semibold leading-tight tracking-[-0.04em] md:text-6xl"
+          >
+            Gestiona el conocimiento de ForenseIA.
+          </h1>
+
+          <p class="mt-5 max-w-2xl leading-relaxed text-white/45">
+            Administra artículos, cursos, servicios, recursos, casos y contenido
+            para redes sociales desde un mismo panel.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          {quickActions.map((action, index) => (
+            <a
+              href={action.href}
+              class:list={[
+                "inline-flex px-5 py-4 text-sm font-medium transition",
+                index === 0
+                  ? "bg-[#C8A96B] text-black hover:opacity-90"
+                  : "border border-white/10 text-white/55 hover:border-[#C8A96B]/60 hover:text-[#C8A96B]",
+              ]}
+            >
+              {action.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {stats.map((stat) => (
+        <a
+          href={stat.href}
+          class="group border border-white/10 bg-white/[0.02] p-6 transition duration-300 hover:-translate-y-1 hover:border-[#C8A96B]/50"
+        >
+          <p class="text-4xl font-semibold text-[#C8A96B]">
+            {stat.value}
+          </p>
+
+          <h2 class="mt-5 text-lg font-semibold">
+            {stat.label}
+          </h2>
+
+          <p class="mt-2 text-sm leading-relaxed text-white/35">
+            {stat.description}
+          </p>
+        </a>
+      ))}
+    </section>
+
+    <section class="mt-16">
+      <div class="mb-8">
+        <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+          Módulos
+        </p>
+
+        <h2 class="mt-4 text-3xl font-semibold">
+          Operación editorial
+        </h2>
+
+        <p class="mt-4 max-w-2xl leading-relaxed text-white/40">
+          Cada módulo administra una parte específica de la plataforma pública y
+          del flujo de contenidos.
+        </p>
+      </div>
+
+      <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {modules.map((module) => (
+          <a
+            href={module.href}
+            class="group flex min-h-[250px] flex-col border border-white/10 bg-white/[0.02] p-7 transition duration-300 hover:-translate-y-1 hover:border-[#C8A96B]/50"
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+                Módulo {module.number}
+              </span>
+
+              <span
+                class="text-white/20 transition group-hover:text-[#C8A96B]"
+              >
+                ↗
+              </span>
+            </div>
+
+            <h3 class="mt-10 text-2xl font-semibold">
+              {module.title}
+            </h3>
+
+            <p class="mt-4 max-w-lg leading-relaxed text-white/40">
+              {module.description}
+            </p>
+
+            <p class="mt-auto pt-8 text-sm text-[#C8A96B]">
+              {module.action} →
+            </p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-16 border-t border-white/10 pt-12">
+      <div class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <article class="border border-white/10 bg-white/[0.02] p-7">
+          <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+            Estado de la plataforma
+          </p>
+
+          <h2 class="mt-5 text-2xl font-semibold">
+            Contenido disponible
+          </h2>
+
+          <div class="mt-8 space-y-5">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+              <span class="text-white/45">
+                Biblioteca pública
+              </span>
+
+              <span class="text-white">
+                {publishedPosts.length} artículos
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+              <span class="text-white/45">
+                Formación pública
+              </span>
+
+              <span class="text-white">
+                {publishedCourses.length} cursos
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+              <span class="text-white/45">
+                Catálogo público
+              </span>
+
+              <span class="text-white">
+                {publishedServices.length} servicios
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <span class="text-white/45">
+                Contenido pendiente
+              </span>
+
+              <span class="text-[#C8A96B]">
+                {draftPosts.length + draftCourses.length + draftServices.length} borradores
+              </span>
+            </div>
+          </div>
+        </article>
+
+        <article class="border border-white/10 bg-white/[0.02] p-7">
+          <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+            Sitio público
+          </p>
+
+          <h2 class="mt-5 text-2xl font-semibold">
+            Revisa los cambios publicados
+          </h2>
+
+          <p class="mt-4 leading-relaxed text-white/40">
+            Después de guardar contenido, GitHub y Netlify necesitan completar
+            el nuevo despliegue antes de mostrar los cambios.
+          </p>
+
+          <div class="mt-8 grid gap-3">
+            <a
+              href="/blog"
+              target="_blank"
+              class="border border-white/10 px-5 py-4 text-sm text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+            >
+              Ver biblioteca →
+            </a>
+
+            <a
+              href="/cursos"
+              target="_blank"
+              class="border border-white/10 px-5 py-4 text-sm text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+            >
+              Ver cursos →
+            </a>
+
+            <a
+              href="/servicios"
+              target="_blank"
+              class="border border-white/10 px-5 py-4 text-sm text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+            >
+              Ver servicios →
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </Container>
+</DashboardLayout>

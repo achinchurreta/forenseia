@@ -1,0 +1,85 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Container from "../../components/ui/Container.astro";
+import Button from "../../components/ui/Button.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const services = await getCollection("services");
+
+  return services
+    .filter((service) => service.data.status === "published")
+    .map((service) => ({
+      params: {
+        slug: String(service.id),
+      },
+      props: {
+        service,
+      },
+    }));
+}
+
+const { service } = Astro.props;
+const { Content } = await render(service);
+---
+
+<BaseLayout
+  title={`${service.data.title} | ForenseIA`}
+  description={service.data.description}
+>
+  <article>
+    <header class="border-b border-white/10 pb-20 pt-40">
+      <Container>
+        <div class="grid gap-12 lg:grid-cols-[1fr_360px]">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+              {service.data.area}
+            </p>
+
+            <h1 class="mt-6 text-4xl font-semibold leading-tight tracking-[-0.04em] md:text-6xl">
+              {service.data.title}
+            </h1>
+
+            <p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/55">
+              {service.data.description}
+            </p>
+          </div>
+
+          <aside class="h-fit border border-white/10 bg-white/[0.02] p-7">
+            <p class="text-xs uppercase tracking-[0.25em] text-white/35">
+              Dirección responsable
+            </p>
+
+            <p class="mt-3 text-lg font-medium">
+              {service.data.director}
+            </p>
+
+            <p class="mt-7 text-xs uppercase tracking-[0.25em] text-white/35">
+              Dirigido a
+            </p>
+
+            <p class="mt-3 leading-relaxed text-white/55">
+              {service.data.audience}
+            </p>
+
+            <div class="mt-8">
+              <Button href="/contacto">
+                Solicitar diagnóstico
+              </Button>
+            </div>
+          </aside>
+        </div>
+      </Container>
+    </header>
+
+    <section class="py-20">
+      <Container>
+        <div class="mx-auto max-w-3xl">
+          <div class="prose prose-invert prose-lg max-w-none">
+            <Content />
+          </div>
+        </div>
+      </Container>
+    </section>
+  </article>
+</BaseLayout>

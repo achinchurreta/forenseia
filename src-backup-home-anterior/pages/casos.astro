@@ -1,0 +1,53 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import Container from "../components/ui/Container.astro";
+
+const cases = [
+  {
+    title: "Empresas fachada",
+    description: "Análisis de relaciones empresariales, beneficiarios, operaciones y señales de simulación.",
+  },
+  {
+    title: "Nóminas irregulares",
+    description: "Identificación de patrones, duplicidades, inconsistencias y posibles pagos no justificados.",
+  },
+  {
+    title: "Evolución patrimonial incongruente",
+    description: "Comparación entre ingresos, bienes, vehículos, empresas y capacidad económica observable.",
+  },
+  {
+    title: "Fraude documental",
+    description: "Revisión de documentos, fechas, firmas, metadatos, trazabilidad y consistencia.",
+  },
+  {
+    title: "Riesgo reputacional",
+    description: "Análisis OSINT de exposición pública, vínculos, antecedentes digitales y señales de alerta.",
+  },
+  {
+    title: "Incidentes digitales",
+    description: "Revisión inicial de evidencia digital, exposición, accesos, archivos y posibles vectores.",
+  },
+];
+---
+
+<BaseLayout title="Casos de aplicación | ForenseIA">
+  <PageHeader
+    eyebrow="Casos de aplicación"
+    title="Escenarios donde la inteligencia estratégica genera claridad."
+    description="Ejemplos de situaciones donde ForenseIA puede aportar análisis, metodología, evidencia y criterio técnico."
+  />
+
+  <section class="py-24">
+    <Container>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {cases.map((item) => (
+          <div class="border border-white/10 bg-white/[0.02] p-8">
+            <h2 class="text-2xl font-semibold">{item.title}</h2>
+            <p class="text-white/55 leading-relaxed mt-4">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

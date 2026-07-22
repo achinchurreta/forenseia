@@ -1,0 +1,56 @@
+---
+import Container from "../ui/Container.astro";
+import Reveal from "../ui/Reveal.astro";
+
+const items = [
+  {
+    title: "Aprender",
+    description:
+      "Accede a cursos, clases y contenido especializado en auditoría forense, OSINT, inteligencia patrimonial e IA aplicada.",
+  },
+  {
+    title: "Investigar",
+    description:
+      "Consulta análisis, artículos, gacetas y metodologías para entender información compleja con criterio técnico.",
+  },
+  {
+    title: "Solicitar servicios",
+    description:
+      "Agenda diagnósticos, consultorías, capacitaciones o análisis especializados para casos reales e institucionales.",
+  },
+];
+---
+
+<section class="border-t border-white/10 py-28">
+  <Container>
+    <Reveal>
+      <div class="mx-auto max-w-3xl text-center mb-16">
+        <p class="text-[#C8A96B] uppercase tracking-[0.35em] text-xs">
+          Ecosistema ForenseIA
+        </p>
+
+        <h2 class="mt-5 text-4xl md:text-6xl font-semibold leading-tight tracking-[-0.04em]">
+          Aprende, investiga y convierte información en estrategia.
+        </h2>
+      </div>
+    </Reveal>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      {items.map((item, index) => (
+        <Reveal delay={index * 120}>
+          <div class="relative overflow-hidden border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-8 transition duration-500 hover:-translate-y-1 hover:border-[#C8A96B]/70">
+            <p class="text-[#C8A96B] text-sm">0{index + 1}</p>
+
+            <h3 class="mt-8 text-2xl font-semibold">
+              {item.title}
+            </h3>
+
+            <p class="mt-5 text-white/55 leading-relaxed">
+              {item.description}
+            </p>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  </Container>
+</section>

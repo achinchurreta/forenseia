@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Container from "../../components/ui/Container.astro";
+import Button from "../../components/ui/Button.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const courses = await getCollection("courses");
+  return courses.filter((course) => course.data.status === "published").map((course) => ({ params: { slug: String(course.id) }, props: { course } }));
+}
+const { course } = Astro.props;
+const { Content } = await render(course);
+---
+<BaseLayout title={`${course.data.title} | ForenseIA`} description={course.data.description}>
+  <article>
+    <header class="relative overflow-hidden border-b border-white/10 py-16 sm:py-20 lg:py-24">
+      <div class="section-grid absolute inset-0 opacity-45"></div>
+      <div class="absolute -right-32 -top-40 h-[480px] w-[480px] rounded-full bg-[#C8A96B]/10 blur-[130px]"></div>
+      <Container class="relative">
+        <div class="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_360px] xl:gap-16">
+          <div class="max-w-3xl">
+            <p class="eyebrow">{course.data.area}</p>
+            <h1 class="mt-6 text-[clamp(2.65rem,5.4vw,5.2rem)] font-semibold leading-[.98] tracking-[-.055em]">{course.data.title}</h1>
+            <p class="mt-7 max-w-2xl text-base leading-8 text-white/58 sm:text-lg">{course.data.description}</p>
+            <div class="mt-9 flex flex-wrap gap-3"><Button href="/contacto">Solicitar información</Button><Button href="#programa" variant="secondary">Ver programa</Button></div>
+          </div>
+
+          <aside class="glass-panel p-6 sm:p-7 lg:sticky lg:top-28">
+            <p class="eyebrow !text-[10px]">Ficha del curso</p>
+            <dl class="mt-6 divide-y divide-white/10 text-sm">
+              <div class="py-4 first:pt-0"><dt class="text-white/34">Instructor</dt><dd class="mt-2 font-medium text-white">{course.data.instructor}</dd></div>
+              <div class="grid grid-cols-2 gap-5 py-4"><div><dt class="text-white/34">Duración</dt><dd class="mt-2 text-white/80">{course.data.duration}</dd></div><div><dt class="text-white/34">Nivel</dt><dd class="mt-2 text-white/80">{course.data.level}</dd></div></div>
+              <div class="py-4"><dt class="text-white/34">Modalidad</dt><dd class="mt-2 text-white/80">{course.data.modality}</dd></div>
+              <div class="py-4"><dt class="text-white/34">Dirigido a</dt><dd class="mt-2 leading-6 text-white/58">{course.data.audience}</dd></div>
+              {course.data.price && <div class="py-4"><dt class="text-white/34">Inversión</dt><dd class="mt-2 font-medium text-[#E4CB96]">{course.data.price}</dd></div>}
+            </dl>
+            <Button href="/contacto" class="mt-6 w-full">Solicitar información</Button>
+          </aside>
+        </div>
+      </Container>
+    </header>
+
+    <section id="programa" class="py-16 sm:py-20 lg:py-24">
+      <Container>
+        <div class="grid gap-12 lg:grid-cols-[220px_minmax(0,780px)] lg:justify-center">
+          <aside class="hidden lg:block"><div class="sticky top-28 border-l border-[#C8A96B]/35 pl-5"><p class="eyebrow !text-[10px]">Programa</p><p class="mt-4 text-sm leading-6 text-white/40">Objetivos, metodología, módulos, ejercicios y entregables del curso.</p></div></aside>
+          <div class="editorial-content"><Content /></div>
+        </div>
+      </Container>
+    </section>
+
+    <section class="border-t border-white/10 bg-white/[0.018] py-20">
+      <Container><div class="mx-auto max-w-4xl text-center"><p class="eyebrow">Capacitación institucional</p><h2 class="mt-5 text-3xl font-semibold tracking-[-.035em] sm:text-5xl">Adapta este curso a las necesidades de tu equipo.</h2><p class="mx-auto mt-5 max-w-2xl leading-7 text-white/48">La duración, los ejercicios y el nivel técnico pueden ajustarse al perfil de la institución.</p><div class="mt-8"><Button href="/contacto">Solicitar propuesta</Button></div></div></Container>
+    </section>
+  </article>
+</BaseLayout>

@@ -1,0 +1,114 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+import ServiceCard from "../components/ui/ServiceCard.astro";
+import Button from "../components/ui/Button.astro";
+import Reveal from "../components/ui/Reveal.astro";
+import { getCollection } from "astro:content";
+import { services } from "../data/services";
+import { courses } from "../data/courses";
+
+const posts = (await getCollection("blog"))
+  .filter((post) => post.data.status === "published")
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+const latestPosts = posts.slice(0, 3);
+---
+<BaseLayout title="ForenseIA | Inteligencia aplicada para instituciones" description="OSINT, investigación digital, inteligencia artificial y psicología criminal aplicada para instituciones y organizaciones.">
+  <section class="relative isolate overflow-hidden border-b border-white/10">
+    <div class="section-grid absolute inset-0 -z-20 opacity-70"></div>
+    <div class="absolute -right-32 -top-40 -z-10 h-[620px] w-[620px] rounded-full bg-[#C8A96B]/12 blur-[150px]"></div>
+    <div class="absolute -bottom-52 -left-40 -z-10 h-[520px] w-[520px] rounded-full bg-white/[0.035] blur-[140px]"></div>
+
+    <Container>
+      <div class="grid min-h-[720px] items-center gap-14 py-20 lg:grid-cols-[minmax(0,1.1fr)_minmax(340px,.9fr)] lg:py-24">
+        <Reveal>
+          <div class="max-w-[760px]">
+            <p class="eyebrow">Inteligencia aplicada</p>
+            <h1 class="display-title mt-7">Evidencia clara para decisiones complejas.</h1>
+            <p class="mt-7 max-w-2xl text-base leading-8 text-white/58 sm:text-lg">
+              Integramos OSINT, investigación digital, inteligencia artificial y psicología criminal para fortalecer capacidades institucionales.
+            </p>
+            <div class="mt-9 flex flex-wrap gap-3">
+              <Button href="/contacto">Solicitar diagnóstico</Button>
+              <Button href="/cursos" variant="secondary">Explorar cursos</Button>
+            </div>
+            <div class="mt-12 grid max-w-2xl grid-cols-2 gap-6 border-t border-white/10 pt-7 sm:grid-cols-3">
+              <div><p class="text-2xl font-semibold">OSINT</p><p class="mt-2 text-xs text-white/35">Investigación en fuentes abiertas</p></div>
+              <div><p class="text-2xl font-semibold">IA</p><p class="mt-2 text-xs text-white/35">Automatización y análisis</p></div>
+              <div class="col-span-2 sm:col-span-1"><p class="text-2xl font-semibold">Psicología</p><p class="mt-2 text-xs text-white/35">Conducta y prevención</p></div>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={120}>
+          <div class="relative mx-auto w-full max-w-[470px] lg:mr-0">
+            <div class="absolute inset-10 rounded-full bg-[#C8A96B]/15 blur-[90px]"></div>
+            <div class="glass-panel relative overflow-hidden p-8 sm:p-10">
+              <div class="absolute right-5 top-5 h-2 w-2 rounded-full bg-[#C8A96B] shadow-[0_0_22px_#C8A96B]"></div>
+              <div class="mx-auto flex aspect-square max-w-[260px] items-center justify-center">
+                <img src="/logo.png" alt="Logotipo de ForenseIA" width="260" height="260" class="h-full w-full object-contain drop-shadow-[0_18px_45px_rgba(200,169,107,.15)]" />
+              </div>
+              <div class="mt-8 border-t border-white/10 pt-6">
+                <p class="eyebrow !text-[10px]">Enfoque institucional</p>
+                <dl class="mt-5 grid gap-4 text-sm">
+                  <div class="flex justify-between gap-6"><dt class="text-white/35">Especialidades</dt><dd class="text-right text-white/75">OSINT · IA · Psicología</dd></div>
+                  <div class="flex justify-between gap-6"><dt class="text-white/35">Aplicación</dt><dd class="text-right text-white/75">Investigación y decisión</dd></div>
+                  <div class="flex justify-between gap-6"><dt class="text-white/35">Modalidad</dt><dd class="text-right text-white/75">Cursos y servicios</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </Container>
+  </section>
+
+  <section class="py-24 lg:py-28">
+    <Container>
+      <div class="grid gap-12 lg:grid-cols-[.75fr_1.25fr]">
+        <Reveal><div><p class="eyebrow">Áreas de especialización</p><h2 class="section-title mt-5">Tres disciplinas. Una sola estrategia.</h2><p class="mt-6 max-w-md leading-7 text-white/48">Cada dirección trabaja desde su especialidad y se integra cuando el caso exige una visión multidisciplinaria.</p></div></Reveal>
+        <div class="grid gap-4 md:grid-cols-3">
+          {[
+            ["01", "Inteligencia Artificial", "Automatización, análisis y soluciones aplicadas a procesos institucionales."],
+            ["02", "Investigación Digital", "OSINT, búsqueda avanzada, validación y documentación de hallazgos."],
+            ["03", "Psicología Criminal", "Análisis conductual, prevención y capacitación especializada."],
+          ].map(([number, title, description], index) => (
+            <Reveal delay={index * 80}><article class="h-full border border-white/10 bg-white/[0.018] p-6 transition duration-300 hover:-translate-y-1 hover:border-[#C8A96B]/45"><p class="eyebrow !text-[10px]">Área {number}</p><h3 class="mt-5 text-xl font-semibold leading-tight">{title}</h3><p class="mt-4 text-sm leading-6 text-white/45">{description}</p></article></Reveal>
+          ))}
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-y border-white/10 bg-white/[0.018] py-24">
+    <Container>
+      <Reveal><div class="mb-11 max-w-2xl"><p class="eyebrow">Servicios</p><h2 class="section-title mt-5">Soluciones por especialidad.</h2></div></Reveal>
+      <div class="grid gap-5 md:grid-cols-3">
+        {services.slice(0, 3).map((service, index) => (<Reveal delay={index * 80}><ServiceCard title={service.title} description={service.description} href={service.href} label="Ver servicio" /></Reveal>))}
+      </div>
+      <div class="mt-9"><Button href="/servicios" variant="secondary">Ver todos los servicios</Button></div>
+    </Container>
+  </section>
+
+  <section class="py-24">
+    <Container>
+      <div class="grid gap-12 lg:grid-cols-[.8fr_1.2fr]">
+        <Reveal><div><p class="eyebrow">Formación</p><h2 class="section-title mt-5">Cursos para aplicación real.</h2><p class="mt-5 max-w-md leading-7 text-white/48">Programas básicos y especializados para equipos, instituciones y profesionales.</p><div class="mt-8"><Button href="/cursos" variant="secondary">Ver cursos</Button></div></div></Reveal>
+        <div class="grid gap-5 md:grid-cols-2">
+          {courses.slice(0, 2).map((course, index) => (<Reveal delay={index * 80}><ServiceCard title={course.title} description={`${course.duration} · ${course.modality}`} href={course.href} label="Ver curso" /></Reveal>))}
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-y border-white/10 bg-white/[0.018] py-24">
+    <Container>
+      <div class="mb-11 flex items-end justify-between gap-8"><Reveal><div><p class="eyebrow">Biblioteca</p><h2 class="section-title mt-5">Últimos artículos.</h2></div></Reveal><a href="/blog" class="hidden text-sm font-semibold text-[#C8A96B] md:block">Ver todos →</a></div>
+      {latestPosts.length === 0 ? <div class="border border-white/10 p-8 text-white/45">Próximamente publicaremos artículos especializados.</div> : <div class="grid gap-5 md:grid-cols-3">{latestPosts.map((post, index) => (<Reveal delay={index * 80}><ServiceCard title={post.data.title} description={post.data.description} href={`/blog/${post.id}`} label="Leer artículo" /></Reveal>))}</div>}
+    </Container>
+  </section>
+
+  <section class="py-28">
+    <Container><Reveal><div class="glass-panel mx-auto max-w-5xl px-7 py-14 text-center sm:px-12"><p class="eyebrow">Contacto institucional</p><h2 class="section-title mx-auto mt-5 max-w-3xl">Conversemos sobre el contexto, no solo sobre la herramienta.</h2><p class="mx-auto mt-6 max-w-2xl leading-7 text-white/48">Identificamos la necesidad y conectamos tu proyecto con la dirección especializada.</p><div class="mt-9"><Button href="/contacto">Contactar al equipo</Button></div></div></Reveal></Container>
+  </section>
+</BaseLayout>
