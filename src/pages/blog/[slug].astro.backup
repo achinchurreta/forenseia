@@ -1,0 +1,178 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Container from "../../components/ui/Container.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts
+    .filter((entry) => {
+      const data = entry.data as Record<string, any>;
+      return data.status !== "draft" && data.draft !== true;
+    })
+    .map((post) => ({
+      params: { slug: String(post.id) },
+      props: { post },
+    }));
+}
+
+const { post } = Astro.props;
+const data = post.data as Record<string, any>;
+const { Content } = await render(post);
+
+const publishedPosts = (await getCollection("blog"))
+  .filter((entry) => {
+    const entryData = entry.data as Record<string, any>;
+    return entry.id !== post.id && entryData.status !== "draft" && entryData.draft !== true;
+  })
+  .sort((a, b) => {
+    const ad = new Date((a.data as Record<string, any>).date ?? 0).getTime();
+    const bd = new Date((b.data as Record<string, any>).date ?? 0).getTime();
+    return bd - ad;
+  });
+
+const category = data.category ?? data.area ?? "Investigación digital";
+const relatedPosts = publishedPosts
+  .filter((entry) => {
+    const entryData = entry.data as Record<string, any>;
+    return (entryData.category ?? entryData.area) === category;
+  })
+  .slice(0, 3);
+
+if (relatedPosts.length < 3) {
+  for (const entry of publishedPosts) {
+    if (!relatedPosts.some((item) => item.id === entry.id)) relatedPosts.push(entry);
+    if (relatedPosts.length === 3) break;
+  }
+}
+
+const formatDate = (value: unknown) => {
+  if (!value) return "";
+  const date = new Date(String(value));
+  if (Number.isNaN(date.getTime())) return String(value);
+  return new Intl.DateTimeFormat("es-MX", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+};
+
+const coverUrl = (cover: any) => typeof cover === "string" ? cover : cover?.src;
+const cover = coverUrl(data.cover ?? data.image);
+const bodyText = typeof post.body === "string" ? post.body : "";
+const readingMinutes = Math.max(1, Math.ceil(bodyText.replace(/[#_*`>\[\]()!-]/g, " ").split(/\s+/).filter(Boolean).length / 210));
+const author = data.author ?? data.director ?? "Equipo ForenseIA";
+const description = data.description ?? data.excerpt ?? "Artículo especializado de ForenseIA.";
+---
+
+<BaseLayout
+  title={`${data.title} | Blog ForenseIA`}
+  description={description}
+  image={cover ?? "/logo.png"}
+>
+  <article class="article-page">
+    <header class="article-header">
+      <Container>
+        <div class="article-heading-wrap">
+          <a href="/blog" class="article-back-link"><span aria-hidden="true">←</span> Volver al blog</a>
+
+          <div class="article-kicker">
+            <span>{category}</span>
+            {data.edition && <span>Gaceta: {data.edition}</span>}
+          </div>
+
+          <h1>{data.title}</h1>
+          <p class="article-deck">{description}</p>
+
+          <div class="article-byline">
+            <div>
+              <span class="article-byline-label">Autor</span>
+              <strong>{author}</strong>
+            </div>
+            <div>
+              <span class="article-byline-label">Publicado</span>
+              <time datetime={String(data.date ?? "")}>{formatDate(data.date)}</time>
+            </div>
+            <div>
+              <span class="article-byline-label">Lectura</span>
+              <span>{readingMinutes} min</span>
+            </div>
+          </div>
+        </div>
+      </Container>
+    </header>
+
+    {cover && (
+      <Container>
+        <figure class="article-cover">
+          <img src={cover} alt={data.coverAlt ?? data.title} loading="eager" />
+          {data.coverCaption && <figcaption>{data.coverCaption}</figcaption>}
+        </figure>
+      </Container>
+    )}
+
+    <section class="article-content-section">
+      <Container>
+        <div class="article-layout">
+          <aside class="article-side-note" aria-label="Información del artículo">
+            <span>ForenseIA</span>
+            <p>Inteligencia aplicada para investigación y toma de decisiones.</p>
+          </aside>
+
+          <div class="article-prose">
+            <Content />
+          </div>
+
+          <aside class="article-share" aria-label="Compartir artículo">
+            <p>Compartir</p>
+            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.href)}`} target="_blank" rel="noreferrer">LinkedIn</a>
+            <a href={`https://wa.me/?text=${encodeURIComponent(`${data.title} ${Astro.url.href}`)}`} target="_blank" rel="noreferrer">WhatsApp</a>
+          </aside>
+        </div>
+      </Container>
+    </section>
+
+    <section class="article-cta-section">
+      <Container>
+        <div class="article-cta">
+          <div>
+            <p class="eyebrow">Aplicación institucional</p>
+            <h2>¿Necesitas capacitación o una metodología adaptada a tu equipo?</h2>
+            <p>Diseñamos cursos, talleres y soluciones para instituciones, empresas y grupos de investigación.</p>
+          </div>
+          <a href="/contacto">Solicitar información <span aria-hidden="true">→</span></a>
+        </div>
+      </Container>
+    </section>
+
+    {relatedPosts.length > 0 && (
+      <section class="related-posts-section">
+        <Container>
+          <div class="related-heading">
+            <div>
+              <p class="eyebrow">Continuar leyendo</p>
+              <h2>Artículos relacionados</h2>
+            </div>
+            <a href="/blog">Ver todo el blog →</a>
+          </div>
+          <div class="related-posts-grid">
+            {relatedPosts.map((entry) => {
+              const entryData = entry.data as Record<string, any>;
+              return (
+                <article>
+                  <div class="post-meta-row">
+                    <span>{entryData.category ?? entryData.area ?? "Blog"}</span>
+                    <time datetime={String(entryData.date ?? "")}>{formatDate(entryData.date)}</time>
+                  </div>
+                  <h3><a href={`/blog/${entry.id}`}>{entryData.title}</a></h3>
+                  <p>{entryData.description ?? entryData.excerpt}</p>
+                  <a class="post-read-link" href={`/blog/${entry.id}`}>Leer artículo →</a>
+                </article>
+              );
+            })}
+          </div>
+        </Container>
+      </section>
+    )}
+  </article>
+</BaseLayout>

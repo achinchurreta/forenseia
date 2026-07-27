@@ -1,0 +1,123 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+import { getCollection } from "astro:content";
+
+const allPosts = (await getCollection("blog"))
+  .filter((entry) => {
+    const data = entry.data as Record<string, any>;
+    return data.status !== "draft" && data.draft !== true;
+  })
+  .sort((a, b) => {
+    const ad = new Date((a.data as Record<string, any>).date ?? 0).getTime();
+    const bd = new Date((b.data as Record<string, any>).date ?? 0).getTime();
+    return bd - ad;
+  });
+
+const featured = allPosts.find((entry) => (entry.data as Record<string, any>).featured) ?? allPosts[0];
+const posts = featured ? allPosts.filter((entry) => entry.id !== featured.id) : allPosts;
+
+const formatDate = (value: unknown) => {
+  if (!value) return "";
+  const date = new Date(String(value));
+  if (Number.isNaN(date.getTime())) return String(value);
+  return new Intl.DateTimeFormat("es-MX", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+};
+
+const coverUrl = (cover: any) => typeof cover === "string" ? cover : cover?.src;
+const getCategory = (data: Record<string, any>) => data.category ?? data.area ?? "Investigación digital";
+---
+
+<BaseLayout
+  title="Blog | ForenseIA"
+  description="Artículos, análisis, guías y recursos sobre OSINT, investigación digital, inteligencia artificial aplicada e inteligencia patrimonial."
+>
+  <section class="blog-index-hero">
+    <Container>
+      <div class="blog-index-intro">
+        <p class="eyebrow">Blog ForenseIA</p>
+        <h1>Conocimiento aplicado a la investigación.</h1>
+        <p>
+          Análisis, metodologías, herramientas y guías prácticas para investigadores,
+          analistas, instituciones y profesionales.
+        </p>
+      </div>
+
+      {featured && (() => {
+        const data = featured.data as Record<string, any>;
+        const cover = coverUrl(data.cover ?? data.image);
+        return (
+          <a href={`/blog/${featured.id}`} class="featured-post-card">
+            <div class="featured-post-media">
+              {cover ? (
+                <img src={cover} alt={data.title ?? "Artículo destacado"} loading="eager" />
+              ) : (
+                <div class="post-cover-placeholder" aria-hidden="true"><span>FORENSEIA</span></div>
+              )}
+            </div>
+            <div class="featured-post-content">
+              <div class="post-meta-row">
+                <span>{getCategory(data)}</span>
+                <time datetime={String(data.date ?? "")}>{formatDate(data.date)}</time>
+              </div>
+              <h2>{data.title}</h2>
+              <p>{data.description ?? data.excerpt}</p>
+              <span class="post-read-link">Leer artículo <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+        );
+      })()}
+    </Container>
+  </section>
+
+  <section class="blog-grid-section">
+    <Container>
+      <div class="blog-section-heading">
+        <div>
+          <p class="eyebrow">Publicaciones</p>
+          <h2>Últimos artículos</h2>
+        </div>
+        <p>Contenido editorial independiente de la Gaceta institucional.</p>
+      </div>
+
+      {posts.length > 0 ? (
+        <div class="posts-grid">
+          {posts.map((post) => {
+            const data = post.data as Record<string, any>;
+            const cover = coverUrl(data.cover ?? data.image);
+            return (
+              <article class="post-card">
+                <a href={`/blog/${post.id}`} class="post-card-media" aria-label={`Leer ${data.title}`}>
+                  {cover ? (
+                    <img src={cover} alt={data.title ?? "Portada del artículo"} loading="lazy" />
+                  ) : (
+                    <div class="post-cover-placeholder" aria-hidden="true"><span>FORENSEIA</span></div>
+                  )}
+                </a>
+                <div class="post-card-body">
+                  <div class="post-meta-row">
+                    <span>{getCategory(data)}</span>
+                    <time datetime={String(data.date ?? "")}>{formatDate(data.date)}</time>
+                  </div>
+                  <h3><a href={`/blog/${post.id}`}>{data.title}</a></h3>
+                  <p>{data.description ?? data.excerpt}</p>
+                  <a href={`/blog/${post.id}`} class="post-read-link">Leer artículo <span aria-hidden="true">→</span></a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      ) : !featured ? (
+        <div class="blog-empty-state">
+          <p class="eyebrow">Próximamente</p>
+          <h2>Estamos preparando nuevas publicaciones.</h2>
+          <p>Los artículos aparecerán aquí cuando sean publicados desde el panel.</p>
+        </div>
+      ) : null}
+    </Container>
+  </section>
+</BaseLayout>

@@ -1,40 +1,38 @@
-# Corrección del Blog de ForenseIA
+# Corrección final del Blog de ForenseIA
 
-Este paquete corrige exclusivamente la presentación pública del blog.
+Este paquete reemplaza únicamente las plantillas del blog y agrega una hoja de estilos aislada. No modifica la home, el dashboard ni las funciones de Netlify.
 
-## Cambios
+## Archivos incluidos
 
-- El menú muestra **Blog**, no Gaceta.
-- La Gaceta queda como tipo o edición de contenido, no como nombre del apartado.
-- Rediseño de `/blog` con artículo destacado y cuadrícula compacta.
-- Rediseño completo de `/blog/[slug]`.
-- Ancho editorial de 820 px.
-- Texto de lectura entre 17 y 19 px según pantalla.
-- Títulos, listas, imágenes, tablas, citas y código correctamente alineados.
-- CTA y publicaciones relacionadas.
-- Corrección móvil.
+- `src/pages/blog.astro`
+- `src/pages/blog/[slug].astro`
+- `src/styles/blog.css`
 
 ## Instalación
 
-Desde la raíz de tu proyecto:
+Desde la raíz del proyecto:
 
 ```bash
-cp -r src src-backup-antes-blog
+cp -r src/pages/blog.astro src/pages/blog.astro.backup
+cp -r 'src/pages/blog/[slug].astro' 'src/pages/blog/[slug].astro.backup'
 
-tar -xzf forenseia-blog-correction.tar.gz
+tar -xzf forenseia-blog-redesign-final.tar.gz
 rm -rf .astro dist
 npm run build
 npm run dev
 ```
 
-Si el build funciona:
+## Publicar
 
 ```bash
 git add .
-git commit -m "Fix blog editorial layout"
+git commit -m "Redesign blog and article layout"
 git push origin main
 ```
 
-## Nota sobre el contenido
+## Notas
 
-La Gaceta puede seguir existiendo como una categoría, etiqueta o campo `edition` dentro de un post. El apartado público principal seguirá llamándose Blog.
+- El menú y la sección principal se mantienen como **Blog**.
+- La **Gaceta** se muestra únicamente como categoría o edición dentro de un artículo.
+- Si una imagen de portada no existe o la URL es incorrecta, aparecerá un fondo institucional en lugar del icono de imagen rota.
+- Los estilos están aislados en `blog.css` para no descuadrar el resto del sitio.
