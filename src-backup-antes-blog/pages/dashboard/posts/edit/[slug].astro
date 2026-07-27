@@ -1,0 +1,847 @@
+---
+import DashboardLayout from "../../../../components/dashboard/DashboardLayout.astro";
+
+import {
+  getCollection,
+  type CollectionEntry,
+} from "astro:content";
+
+export async function getStaticPaths() {
+  const courses = await getCollection("courses");
+
+  return courses.map((course) => ({
+    params: {
+      slug: String(course.id),
+    },
+    props: {
+      course,
+    },
+  }));
+}
+
+interface Props {
+  course: CollectionEntry<"courses">;
+}
+
+const { course } = Astro.props as Props;
+
+const content =
+  "body" in course && typeof course.body === "string"
+    ? course.body
+    : "";
+
+const instructors = [
+  "Gonzalo García",
+  "Augusto Chinchurreta",
+  "Tania Pérez",
+];
+
+const areas = [
+  "Inteligencia Artificial",
+  "Investigación Digital",
+  "Ciberseguridad",
+  "Psicología Criminal",
+  "Psicología Educativa",
+];
+
+const levels = [
+  "Inicial",
+  "Intermedio",
+  "Avanzado",
+];
+
+const formattedDate = new Date(course.data.date)
+  .toISOString()
+  .split("T")[0];
+---
+
+<DashboardLayout title={`Editar ${course.data.title} | ForenseIA`}>
+  <div
+    id="edit-page"
+    data-current-owner={course.data.instructor}
+    data-current-area={course.data.area}
+    class="max-w-5xl"
+  >
+    <div class="mb-10">
+      <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+        Formación / Editar
+      </p>
+
+      <h1 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-5xl">
+        Editar curso
+      </h1>
+
+      <p class="mt-4 max-w-2xl leading-relaxed text-white/45">
+        Actualiza la información, modalidad, instructor y contenido completo
+        del programa.
+      </p>
+
+      <div
+        id="role-notice"
+        class="mt-6 hidden border border-[#C8A96B]/20 bg-[#C8A96B]/5 p-4 text-sm leading-relaxed text-white/55"
+      ></div>
+
+      <div
+        id="access-denied"
+        class="mt-6 hidden border border-red-400/20 bg-red-500/5 p-5"
+      >
+        <p class="font-medium text-red-300">
+          No tienes permiso para editar este curso.
+        </p>
+
+        <p class="mt-2 text-sm leading-relaxed text-white/45">
+          Este programa pertenece a otra dirección editorial.
+        </p>
+
+        <a
+          href="/dashboard/cursos"
+          class="mt-5 inline-flex border border-red-400/30 px-5 py-3 text-sm text-red-200 transition hover:bg-red-500/10"
+        >
+          Volver a cursos
+        </a>
+      </div>
+    </div>
+
+    <form
+      id="content-form"
+      class="space-y-6"
+    >
+      <input
+        type="hidden"
+        name="currentSlug"
+        value={course.id}
+      />
+
+      <input
+        type="hidden"
+        name="contentType"
+        value="course"
+      />
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label
+            for="title"
+            class="mb-2 block text-sm text-white/50"
+          >
+            Nombre del curso
+          </label>
+
+          <input
+            id="title"
+            name="title"
+            required
+            value={course.data.title}
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label
+            for="slug"
+            class="mb-2 block text-sm text-white/50"
+          >
+            Slug
+          </label>
+
+          <input
+            id="slug"
+            name="slug"
+            required
+            value={course.id}
+            class="input"
+          />
+
+          <p class="mt-2 text-xs text-white/30">
+            Cambiarlo modificará la URL pública del curso.
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <label
+          for="description"
+          class="mb-2 block text-sm text-white/50"
+        >
+          Descripción
+        </label>
+
+        <textarea
+          id="description"
+          name="description"
+          required
+          rows="4"
+          maxlength="220"
+          class="input"
+        >{course.data.description}</textarea>
+
+        <div class="mt-2 flex justify-between gap-4 text-xs text-white/30">
+          <span>
+            Esta descripción aparecerá en el catálogo público.
+          </span>
+
+          <span id="description-counter">
+            {course.data.description.length} / 220
+          </span>
+        </div>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label
+            for="area"
+            class="mb-2 block text-sm text-white/50"
+          >
+            Área
+          </label>
+
+          <select
+            id="area"
+            name="area"
+            required
+            class="input"
+          >
+            {!areas.includes(course.data.area) && (
+              <option
+                value={course.data.area}
+                selected
+              >
+                {course.data.area}
+              </option>
+            )}
+
+            {areas.map((area) => (
+              <option
+                value={area}
+                selected={course.data.area === area}
+              >
+                {area}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label
+            for="instructor"
+            class="mb-2 block text-sm text-white/50"
+          >
+            Director o instructor
+          </label>
+
+          <select
+            id="instructor"
+            name="instructor"
+            required
+            class="input"
+          >
+            {!instructors.includes(course.data.instructor) && (
+              <option
+                value={course.data.instructor}
+                selected
+              >
+                {course.data.instructor}
+              </option>
+            )}
+
+            {instructors.map((instructor) => (
+              <option
+                value={instructor}
+                selected={course.data.instructor === instructor}
+              >
+                {instructor}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label
+            for="level"
+            class="mb-2 block text-sm text-white/50"
+          >
+            Nivel
+          </label>
+
+          <select
+            id="level"
+            name="level"
+            required
+            class="input"
+          >
+            {!levels.includes(course.data.level) && (
+              <option
+                value={course.data.level}
+                selected
+              >
+                {course.data.level}
+              </option>
+            )}
+
+            {levels.map((level) => (
+              <option
+                value={level}
+                selected={course.data.level === level}
+              >
+                {level}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label
+            for="duration"
+            class="mb-2 block text-sm text-white/50"
+          >
+            Duración
+          </label>
+
+          <input
+            id="duration"
+            name="duration"
+            required
+            value={course.data.duration}
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label
+            for="modality"
+            class="mb-2 block text-sm text-white/50"
+          >
+            Modalidad
+          </label>
+
+          <input
+            id="modality"
+            name="modality"
+            required
+            value={course.data.modality}
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label
+            for="price"
+            class="mb-2 block text-sm text-white/50"
+          >
+            Precio
+          </label>
+
+          <input
+            id="price"
+            name="price"
+            value={course.data.price ?? ""}
+            placeholder="Solicitar cotización"
+            class="input"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label
+          for="audience"
+          class="mb-2 block text-sm text-white/50"
+        >
+          Público objetivo
+        </label>
+
+        <input
+          id="audience"
+          name="audience"
+          required
+          value={course.data.audience}
+          class="input"
+        />
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label
+            for="status"
+            class="mb-2 block text-sm text-white/50"
+          >
+            Estado
+          </label>
+
+          <select
+            id="status"
+            name="status"
+            required
+            class="input"
+          >
+            <option
+              value="published"
+              selected={course.data.status === "published"}
+            >
+              Publicado
+            </option>
+
+            <option
+              value="draft"
+              selected={course.data.status === "draft"}
+            >
+              Borrador
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label
+            for="date"
+            class="mb-2 block text-sm text-white/50"
+          >
+            Fecha
+          </label>
+
+          <input
+            id="date"
+            name="date"
+            type="date"
+            required
+            value={formattedDate}
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label
+            for="cover"
+            class="mb-2 block text-sm text-white/50"
+          >
+            URL de portada
+          </label>
+
+          <input
+            id="cover"
+            name="cover"
+            type="url"
+            value={course.data.cover ?? ""}
+            placeholder="https://..."
+            class="input"
+          />
+        </div>
+      </div>
+
+      <label class="flex w-fit items-center gap-3 border border-white/10 bg-white/[0.02] px-4 py-4 text-sm text-white/55">
+        <input
+          id="featured"
+          name="featured"
+          type="checkbox"
+          value="true"
+          checked={course.data.featured}
+          class="h-4 w-4 accent-[#C8A96B]"
+        />
+
+        Mostrar como curso destacado
+      </label>
+
+      <div>
+        <label
+          for="content"
+          class="mb-2 block text-sm text-white/50"
+        >
+          Información completa
+        </label>
+
+        <textarea
+          id="content"
+          name="content"
+          required
+          rows="24"
+          class="input min-h-[600px] font-mono leading-relaxed"
+        >{content}</textarea>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <button
+          id="save-button"
+          type="submit"
+          class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Guardar cambios
+        </button>
+
+        <a
+          href="/dashboard/cursos"
+          class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+        >
+          Cancelar
+        </a>
+
+        {course.data.status === "published" && (
+          <a
+            href={`/cursos/${course.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+          >
+            Ver curso
+          </a>
+        )}
+      </div>
+
+      <p
+        id="message"
+        class="min-h-6 text-sm text-white/50"
+      ></p>
+    </form>
+  </div>
+
+  <style>
+    .input {
+      width: 100%;
+      border: 1px solid rgb(255 255 255 / 0.1);
+      background: #000;
+      padding: 1rem;
+      color: #fff;
+      outline: none;
+      transition:
+        border-color 180ms ease,
+        background-color 180ms ease,
+        opacity 180ms ease;
+    }
+
+    .input:focus {
+      border-color: #c8a96b;
+      background: rgb(255 255 255 / 0.015);
+    }
+
+    .input:disabled {
+      cursor: not-allowed;
+      border-color: rgb(200 169 107 / 0.25);
+      background: rgb(200 169 107 / 0.04);
+      color: rgb(255 255 255 / 0.55);
+      opacity: 1;
+    }
+
+    .input::placeholder {
+      color: rgb(255 255 255 / 0.25);
+    }
+  </style>
+
+  <script is:inline>
+    const editPage = document.getElementById("edit-page");
+    const form = document.getElementById("content-form");
+    const saveButton = document.getElementById("save-button");
+    const message = document.getElementById("message");
+    const roleNotice = document.getElementById("role-notice");
+    const accessDenied = document.getElementById("access-denied");
+
+    const titleInput = document.getElementById("title");
+    const slugInput = document.getElementById("slug");
+    const descriptionInput = document.getElementById("description");
+    const descriptionCounter = document.getElementById(
+      "description-counter"
+    );
+
+    const instructorSelect = document.getElementById("instructor");
+    const areaSelect = document.getElementById("area");
+    const featuredInput = document.getElementById("featured");
+
+    const currentOwner =
+      editPage?.dataset.currentOwner || "";
+
+    let currentUser = null;
+    let accessAllowed = false;
+
+    const ROLE_RULES = {
+      "director-ia": {
+        owner: "Gonzalo García",
+        areas: [
+          "Inteligencia Artificial",
+        ],
+        notice:
+          "Estás editando un curso de la Dirección de Inteligencia Artificial. El instructor permanecerá como Gonzalo García.",
+      },
+
+      "director-psychology": {
+        owner: "Tania Pérez",
+        areas: [
+          "Psicología Criminal",
+          "Psicología Educativa",
+        ],
+        notice:
+          "Estás editando un curso de la Dirección de Psicología. La instructora permanecerá como Tania Pérez.",
+      },
+    };
+
+    function createSlug(value) {
+      return String(value)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function updateDescriptionCounter() {
+      if (
+        !(descriptionInput instanceof HTMLTextAreaElement) ||
+        !descriptionCounter
+      ) {
+        return;
+      }
+
+      descriptionCounter.textContent =
+        `${descriptionInput.value.length} / 220`;
+    }
+
+    function resetAreaOptions() {
+      if (!(areaSelect instanceof HTMLSelectElement)) {
+        return;
+      }
+
+      Array.from(areaSelect.options).forEach((option) => {
+        option.hidden = false;
+        option.disabled = false;
+      });
+    }
+
+    function restrictAreaOptions(allowedAreas) {
+      if (!(areaSelect instanceof HTMLSelectElement)) {
+        return;
+      }
+
+      Array.from(areaSelect.options).forEach((option) => {
+        const allowed = allowedAreas.includes(option.value);
+
+        option.hidden = !allowed;
+        option.disabled = !allowed;
+      });
+
+      if (!allowedAreas.includes(areaSelect.value)) {
+        areaSelect.value = allowedAreas[0];
+      }
+    }
+
+    function disableForm() {
+      form?.querySelectorAll(
+        "input, textarea, select, button"
+      ).forEach((element) => {
+        element.disabled = true;
+      });
+
+      form?.classList.add("hidden");
+      accessDenied?.classList.remove("hidden");
+    }
+
+    function enableForm() {
+      form?.classList.remove("hidden");
+      accessDenied?.classList.add("hidden");
+    }
+
+    function applyUserRestrictions(user) {
+      currentUser = user;
+      accessAllowed = false;
+
+      if (
+        !(instructorSelect instanceof HTMLSelectElement) ||
+        !(areaSelect instanceof HTMLSelectElement)
+      ) {
+        disableForm();
+        return;
+      }
+
+      instructorSelect.disabled = false;
+      areaSelect.disabled = false;
+
+      resetAreaOptions();
+
+      roleNotice?.classList.add("hidden");
+
+      if (roleNotice) {
+        roleNotice.textContent = "";
+      }
+
+      if (user.role === "admin") {
+        accessAllowed = true;
+        enableForm();
+        return;
+      }
+
+      const rules = ROLE_RULES[user.role];
+
+      if (!rules || currentOwner !== rules.owner) {
+        disableForm();
+        return;
+      }
+
+      accessAllowed = true;
+      enableForm();
+
+      instructorSelect.value = rules.owner;
+      instructorSelect.disabled = true;
+
+      restrictAreaOptions(rules.areas);
+
+      if (roleNotice) {
+        roleNotice.textContent = rules.notice;
+        roleNotice.classList.remove("hidden");
+      }
+    }
+
+    function loadStoredUser() {
+      try {
+        const storedUser = JSON.parse(
+          sessionStorage.getItem("forenseia_user") || "null"
+        );
+
+        if (storedUser) {
+          applyUserRestrictions(storedUser);
+        }
+      } catch (error) {
+        console.error(
+          "No se pudo leer el usuario almacenado:",
+          error
+        );
+
+        sessionStorage.removeItem("forenseia_user");
+      }
+    }
+
+    loadStoredUser();
+    updateDescriptionCounter();
+
+    document.addEventListener(
+      "forenseia:user-ready",
+      (event) => {
+        applyUserRestrictions(event.detail);
+      }
+    );
+
+    descriptionInput?.addEventListener(
+      "input",
+      updateDescriptionCounter
+    );
+
+    titleInput?.addEventListener("input", () => {
+      if (
+        !(titleInput instanceof HTMLInputElement) ||
+        !(slugInput instanceof HTMLInputElement) ||
+        slugInput.dataset.edited === "true"
+      ) {
+        return;
+      }
+
+      slugInput.value = createSlug(titleInput.value);
+    });
+
+    slugInput?.addEventListener("input", () => {
+      if (!(slugInput instanceof HTMLInputElement)) {
+        return;
+      }
+
+      slugInput.dataset.edited =
+        slugInput.value.length > 0
+          ? "true"
+          : "false";
+    });
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (
+        !accessAllowed ||
+        !currentUser ||
+        !form ||
+        !saveButton ||
+        !message
+      ) {
+        if (message) {
+          message.textContent =
+            "No tienes permiso para editar este curso.";
+        }
+
+        return;
+      }
+
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(
+        formData.entries()
+      );
+
+      payload.contentType = "course";
+      payload.featured =
+        featuredInput instanceof HTMLInputElement
+          ? featuredInput.checked
+          : false;
+
+      if (instructorSelect instanceof HTMLSelectElement) {
+        payload.instructor = instructorSelect.value;
+      }
+
+      if (areaSelect instanceof HTMLSelectElement) {
+        payload.area = areaSelect.value;
+      }
+
+      if (currentUser.role === "director-ia") {
+        payload.instructor = "Gonzalo García";
+        payload.area = "Inteligencia Artificial";
+      }
+
+      if (currentUser.role === "director-psychology") {
+        payload.instructor = "Tania Pérez";
+      }
+
+      saveButton.disabled = true;
+      saveButton.textContent = "Guardando...";
+      message.textContent = "Actualizando curso...";
+
+      try {
+        const response = await fetch(
+          "/.netlify/functions/update-content",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+
+        const text = await response.text();
+
+        let data = {};
+
+        try {
+          data = text ? JSON.parse(text) : {};
+        } catch {
+          throw new Error(
+            text ||
+              "La función devolvió una respuesta inválida"
+          );
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data.error ||
+              "No se pudo actualizar el curso"
+          );
+        }
+
+        message.textContent =
+          "Curso actualizado. Netlify iniciará un nuevo despliegue.";
+
+        setTimeout(() => {
+          window.location.href = "/dashboard/cursos";
+        }, 1400);
+      } catch (error) {
+        message.textContent =
+          error instanceof Error
+            ? `Error: ${error.message}`
+            : "No se pudo actualizar el curso.";
+
+        saveButton.disabled = false;
+        saveButton.textContent = "Guardar cambios";
+      }
+    });
+  </script>
+</DashboardLayout>

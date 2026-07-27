@@ -1,0 +1,64 @@
+---
+import { CONTACT } from "../../constants/contact";
+---
+
+<footer class="border-t border-white/10 bg-[#030303]">
+  <div class="mx-auto max-w-[1440px] px-5 py-16 sm:px-7 lg:px-10 lg:py-20">
+    <div class="grid gap-14 lg:grid-cols-[1.15fr_0.85fr]">
+      <div class="max-w-xl">
+        <div class="flex items-center gap-3">
+          <span class="flex h-11 w-11 items-center justify-center border border-[#C8A96B]/30">
+            <img src="/logo.png" alt="" class="h-9 w-9 object-contain" />
+          </span>
+          <div>
+            <p class="text-sm font-semibold tracking-[0.16em]">FORENSEIA</p>
+            <p class="mt-1 text-[9px] uppercase tracking-[0.28em] text-[#C8A96B]">Inteligencia aplicada</p>
+          </div>
+        </div>
+
+        <h2 class="mt-8 max-w-lg text-3xl font-semibold leading-tight tracking-[-0.04em] sm:text-4xl">
+          Investigación, tecnología y conocimiento para decisiones críticas.
+        </h2>
+        <p class="mt-5 max-w-lg text-sm leading-7 text-white/45">
+          Servicios y formación especializada en inteligencia artificial, OSINT, investigación digital y psicología criminal.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-10 sm:grid-cols-3">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-white/35">Plataforma</p>
+          <div class="mt-5 grid gap-3 text-sm text-white/55">
+            <a href="/servicios" class="transition hover:text-[#DFC58C]">Servicios</a>
+            <a href="/cursos" class="transition hover:text-[#DFC58C]">Cursos</a>
+            <a href="/recursos" class="transition hover:text-[#DFC58C]">Recursos</a>
+            <a href="/blog" class="transition hover:text-[#DFC58C]">Blog</a>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-white/35">Institución</p>
+          <div class="mt-5 grid gap-3 text-sm text-white/55">
+            <a href="/nosotros" class="transition hover:text-[#DFC58C]">Nosotros</a>
+            <a href="/metodologia" class="transition hover:text-[#DFC58C]">Metodología</a>
+            <a href="/contacto" class="transition hover:text-[#DFC58C]">Contacto</a>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-white/35">Conectar</p>
+          <div class="mt-5 grid gap-3 text-sm text-white/55">
+            <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" class="transition hover:text-[#DFC58C]">WhatsApp</a>
+            <a href={`mailto:${CONTACT.email}`} class="transition hover:text-[#DFC58C]">Correo</a>
+            <a href={CONTACT.instagram} target="_blank" rel="noopener noreferrer" class="transition hover:text-[#DFC58C]">Instagram</a>
+            <a href={CONTACT.facebook} target="_blank" rel="noopener noreferrer" class="transition hover:text-[#DFC58C]">Facebook</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-14 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-white/28 sm:flex-row sm:items-center sm:justify-between">
+      <p>© {new Date().getFullYear()} ForenseIA. Todos los derechos reservados.</p>
+      <p>IA · OSINT · Investigación Digital · Psicología Criminal</p>
+    </div>
+  </div>
+</footer>

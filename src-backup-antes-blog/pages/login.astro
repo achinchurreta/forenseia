@@ -1,0 +1,79 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Login | ForenseIA">
+  <section class="min-h-screen flex items-center justify-center px-6 pt-24">
+    <div class="w-full max-w-md border border-white/10 bg-white/[0.03] p-8">
+      <h1 class="text-3xl font-semibold">Acceso ForenseIA</h1>
+
+      <p class="text-white/50 mt-3">
+        Ingresa al panel administrativo.
+      </p>
+
+      <form id="login-form" class="space-y-5 mt-8">
+        <input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="Correo"
+          required
+          class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
+        />
+
+        <input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="Contraseña"
+          required
+          class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
+        />
+
+        <button
+          type="submit"
+          class="w-full bg-[#C8A96B] text-black px-6 py-4 font-medium"
+        >
+          Entrar
+        </button>
+
+        <p id="message" class="text-white/50"></p>
+      </form>
+    </div>
+  </section>
+
+  <script is:inline>
+    const form = document.getElementById("login-form");
+    const message = document.getElementById("message");
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+
+      message.textContent = "Verificando...";
+
+      try {
+        const response = await fetch("/.netlify/functions/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          message.textContent = data.error || "No se pudo iniciar sesión.";
+          return;
+        }
+
+        window.location.href = "/dashboard";
+      } catch (error) {
+        message.textContent = "Error al conectar con el servidor.";
+      }
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,527 @@
+---
+import DashboardLayout from "../../../components/dashboard/DashboardLayout.astro";
+
+const categories = [
+  "Inteligencia Artificial",
+  "Gobierno Digital",
+  "Automatización",
+  "Agentes Inteligentes",
+  "Análisis Documental",
+  "OSINT",
+  "Investigación Digital",
+  "Ciberseguridad",
+  "Inteligencia Patrimonial",
+  "Auditoría Forense",
+  "Psicología Criminal",
+  "Psicología Educativa",
+  "Análisis Conductual",
+  "Prevención",
+  "Factores de Riesgo",
+];
+
+const authors = [
+  "Gonzalo García",
+  "Augusto Chinchurreta",
+  "Tania Pérez",
+  "ForenseIA",
+];
+---
+
+<DashboardLayout title="Nuevo artículo | ForenseIA">
+  <div class="max-w-5xl">
+    <div class="mb-10">
+      <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+        Biblioteca
+      </p>
+
+      <h1 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-5xl">
+        Nuevo artículo
+      </h1>
+
+      <p class="mt-4 max-w-2xl leading-relaxed text-white/45">
+        Publica contenido especializado dentro de tu dirección.
+      </p>
+
+      <div
+        id="role-notice"
+        class="mt-6 hidden border border-[#C8A96B]/20 bg-[#C8A96B]/5 p-4 text-sm text-white/55"
+      ></div>
+    </div>
+
+    <form id="post-form" class="space-y-6">
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label for="title" class="mb-2 block text-sm text-white/50">
+            Título
+          </label>
+
+          <input
+            id="title"
+            name="title"
+            required
+            placeholder="Título del artículo"
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="slug" class="mb-2 block text-sm text-white/50">
+            Slug
+          </label>
+
+          <input
+            id="slug"
+            name="slug"
+            placeholder="se-genera-automaticamente"
+            class="input"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="description" class="mb-2 block text-sm text-white/50">
+          Descripción SEO
+        </label>
+
+        <textarea
+          id="description"
+          name="description"
+          required
+          rows="4"
+          maxlength="180"
+          placeholder="Resumen breve del artículo."
+          class="input"
+        ></textarea>
+
+        <div class="mt-2 flex justify-between gap-4 text-xs text-white/30">
+          <span>Máximo recomendado: 160–180 caracteres.</span>
+          <span id="description-counter">0 / 180</span>
+        </div>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label for="category" class="mb-2 block text-sm text-white/50">
+            Categoría
+          </label>
+
+          <select
+            id="category"
+            name="category"
+            required
+            class="input"
+          >
+            {categories.map((category) => (
+              <option value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="author" class="mb-2 block text-sm text-white/50">
+            Autor
+          </label>
+
+          <select
+            id="author"
+            name="author"
+            required
+            class="input"
+          >
+            {authors.map((author) => (
+              <option value={author}>
+                {author}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="status" class="mb-2 block text-sm text-white/50">
+            Estado
+          </label>
+
+          <select
+            id="status"
+            name="status"
+            required
+            class="input"
+          >
+            <option value="published">Publicado</option>
+            <option value="draft">Borrador</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label for="cover" class="mb-2 block text-sm text-white/50">
+            URL de portada
+          </label>
+
+          <input
+            id="cover"
+            name="cover"
+            type="url"
+            placeholder="https://..."
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="tags" class="mb-2 block text-sm text-white/50">
+            Etiquetas
+          </label>
+
+          <input
+            id="tags"
+            name="tags"
+            placeholder="osint, fiscalías, investigación"
+            class="input"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="content" class="mb-2 block text-sm text-white/50">
+          Contenido en Markdown
+        </label>
+
+        <textarea
+          id="content"
+          name="content"
+          required
+          rows="24"
+          placeholder="# Introducción
+
+Escribe aquí el contenido del artículo.
+
+## Desarrollo
+
+## Conclusiones"
+          class="input min-h-[600px] font-mono leading-relaxed"
+        ></textarea>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <button
+          id="publish-button"
+          type="submit"
+          class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Guardar artículo
+        </button>
+
+        <a
+          href="/dashboard/posts"
+          class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+        >
+          Cancelar
+        </a>
+      </div>
+
+      <p id="message" class="min-h-6 text-sm text-white/50"></p>
+    </form>
+  </div>
+
+  <style>
+    .input {
+      width: 100%;
+      border: 1px solid rgb(255 255 255 / 0.1);
+      background: #000;
+      padding: 1rem;
+      color: #fff;
+      outline: none;
+      transition:
+        border-color 180ms ease,
+        background-color 180ms ease;
+    }
+
+    .input:focus {
+      border-color: #c8a96b;
+      background: rgb(255 255 255 / 0.015);
+    }
+
+    .input:disabled {
+      cursor: not-allowed;
+      border-color: rgb(200 169 107 / 0.25);
+      background: rgb(200 169 107 / 0.04);
+      color: rgb(255 255 255 / 0.55);
+    }
+
+    .input::placeholder {
+      color: rgb(255 255 255 / 0.25);
+    }
+  </style>
+
+  <script is:inline>
+    const form = document.getElementById("post-form");
+    const button = document.getElementById("publish-button");
+    const message = document.getElementById("message");
+    const titleInput = document.getElementById("title");
+    const slugInput = document.getElementById("slug");
+    const descriptionInput = document.getElementById("description");
+    const descriptionCounter = document.getElementById(
+      "description-counter"
+    );
+    const authorSelect = document.getElementById("author");
+    const categorySelect = document.getElementById("category");
+    const roleNotice = document.getElementById("role-notice");
+
+    let currentUser = null;
+
+    function createSlug(value) {
+      return value
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function setAllowedOptions(select, allowedValues) {
+      if (!(select instanceof HTMLSelectElement)) {
+        return;
+      }
+
+      Array.from(select.options).forEach((option) => {
+        const allowed = allowedValues.includes(option.value);
+
+        option.hidden = !allowed;
+        option.disabled = !allowed;
+      });
+
+      if (!allowedValues.includes(select.value)) {
+        select.value = allowedValues[0];
+      }
+    }
+
+    function applyUserRestrictions(user) {
+      currentUser = user;
+
+      if (
+        !(authorSelect instanceof HTMLSelectElement) ||
+        !(categorySelect instanceof HTMLSelectElement)
+      ) {
+        return;
+      }
+
+      authorSelect.disabled = false;
+
+      Array.from(categorySelect.options).forEach((option) => {
+        option.hidden = false;
+        option.disabled = false;
+      });
+
+      if (roleNotice) {
+        roleNotice.classList.add("hidden");
+        roleNotice.textContent = "";
+      }
+
+      if (user.role === "admin") {
+        return;
+      }
+
+      if (user.role === "director-ia") {
+        authorSelect.value = "Gonzalo García";
+        authorSelect.disabled = true;
+
+        const allowedCategories = [
+          "Inteligencia Artificial",
+          "Gobierno Digital",
+          "Automatización",
+          "Agentes Inteligentes",
+          "Análisis Documental",
+        ];
+
+        setAllowedOptions(categorySelect, allowedCategories);
+
+        if (roleNotice) {
+          roleNotice.textContent =
+            "Publicarás como Gonzalo García dentro de la Dirección de Inteligencia Artificial.";
+          roleNotice.classList.remove("hidden");
+        }
+      }
+
+      if (user.role === "director-psychology") {
+        authorSelect.value = "Tania Pérez";
+        authorSelect.disabled = true;
+
+        const allowedCategories = [
+          "Psicología Criminal",
+          "Psicología Educativa",
+          "Análisis Conductual",
+          "Prevención",
+          "Factores de Riesgo",
+        ];
+
+        setAllowedOptions(categorySelect, allowedCategories);
+
+        if (roleNotice) {
+          roleNotice.textContent =
+            "Publicarás como Tania Pérez dentro de la Dirección de Psicología Criminal.";
+          roleNotice.classList.remove("hidden");
+        }
+      }
+    }
+
+    function fillFieldsFromQuery() {
+      const searchParams = new URLSearchParams(
+        window.location.search
+      );
+
+      for (const [field, value] of searchParams.entries()) {
+        const element = document.querySelector(
+          `[name="${field}"]`
+        );
+
+        if (
+          element instanceof HTMLInputElement ||
+          element instanceof HTMLTextAreaElement ||
+          element instanceof HTMLSelectElement
+        ) {
+          element.value = value;
+        }
+      }
+    }
+
+    function updateDescriptionCounter() {
+      if (!descriptionInput || !descriptionCounter) {
+        return;
+      }
+
+      descriptionCounter.textContent =
+        `${descriptionInput.value.length} / 180`;
+    }
+
+    fillFieldsFromQuery();
+    updateDescriptionCounter();
+
+    try {
+      const storedUser = JSON.parse(
+        sessionStorage.getItem("forenseia_user") || "null"
+      );
+
+      if (storedUser) {
+        applyUserRestrictions(storedUser);
+      }
+    } catch {
+      sessionStorage.removeItem("forenseia_user");
+    }
+
+    document.addEventListener(
+      "forenseia:user-ready",
+      (event) => {
+        applyUserRestrictions(event.detail);
+      }
+    );
+
+    descriptionInput?.addEventListener(
+      "input",
+      updateDescriptionCounter
+    );
+
+    titleInput?.addEventListener("input", () => {
+      if (
+        !slugInput ||
+        slugInput.dataset.edited === "true"
+      ) {
+        return;
+      }
+
+      slugInput.value = createSlug(titleInput.value);
+    });
+
+    slugInput?.addEventListener("input", () => {
+      slugInput.dataset.edited =
+        slugInput.value.length > 0 ? "true" : "false";
+    });
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!form || !button || !message) {
+        return;
+      }
+
+      const payload = Object.fromEntries(
+        new FormData(form).entries()
+      );
+
+      if (
+        authorSelect instanceof HTMLSelectElement
+      ) {
+        payload.author = authorSelect.value;
+      }
+
+      if (
+        categorySelect instanceof HTMLSelectElement
+      ) {
+        payload.category = categorySelect.value;
+      }
+
+      if (currentUser?.role === "director-ia") {
+        payload.author = "Gonzalo García";
+      }
+
+      if (currentUser?.role === "director-psychology") {
+        payload.author = "Tania Pérez";
+      }
+
+      button.disabled = true;
+      button.textContent = "Guardando...";
+      message.textContent = "Creando artículo...";
+
+      try {
+        const response = await fetch(
+          "/.netlify/functions/create-post",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+
+        const text = await response.text();
+
+        let data = {};
+
+        try {
+          data = JSON.parse(text);
+        } catch {
+          throw new Error(
+            text ||
+              "La función devolvió una respuesta inválida"
+          );
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data.error || "No se pudo crear el artículo"
+          );
+        }
+
+        message.textContent =
+          "Artículo guardado. Netlify iniciará un nuevo despliegue.";
+
+        setTimeout(() => {
+          window.location.href = "/dashboard/posts";
+        }, 1400);
+      } catch (error) {
+        message.textContent =
+          error instanceof Error
+            ? `Error: ${error.message}`
+            : "No se pudo crear el artículo.";
+
+        button.disabled = false;
+        button.textContent = "Guardar artículo";
+      }
+    });
+  </script>
+</DashboardLayout>

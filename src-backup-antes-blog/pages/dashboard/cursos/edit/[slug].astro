@@ -1,0 +1,429 @@
+---
+import DashboardLayout from "../../../../components/dashboard/DashboardLayout.astro";
+import {
+  getCollection,
+  type CollectionEntry,
+} from "astro:content";
+
+export async function getStaticPaths() {
+  const courses = await getCollection("courses");
+
+  return courses.map((course) => ({
+    params: {
+      slug: String(course.id),
+    },
+    props: {
+      course,
+    },
+  }));
+}
+
+interface Props {
+  course: CollectionEntry<"courses">;
+}
+
+const { course } = Astro.props as Props;
+
+const content =
+  "body" in course && typeof course.body === "string"
+    ? course.body
+    : "";
+
+const instructors = [
+  "Gonzalo García",
+  "Augusto Chinchurreta",
+  "Tania Pérez",
+];
+
+const areas = [
+  "Inteligencia Artificial",
+  "Investigación Digital",
+  "Ciberseguridad",
+  "Psicología Criminal",
+  "Psicología Educativa",
+];
+
+const formattedDate = new Date(course.data.date)
+  .toISOString()
+  .split("T")[0];
+---
+
+<DashboardLayout title={`Editar ${course.data.title} | ForenseIA`}>
+  <div class="max-w-5xl">
+    <div class="mb-10">
+      <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+        Formación / Editar
+      </p>
+
+      <h1 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-5xl">
+        Editar curso
+      </h1>
+
+      <p class="mt-4 max-w-2xl leading-relaxed text-white/45">
+        Actualiza la información, el estado y el contenido completo del programa.
+      </p>
+    </div>
+
+    <form
+      id="content-form"
+      data-content-type="course"
+      class="space-y-6"
+    >
+      <input
+        type="hidden"
+        name="currentSlug"
+        value={course.id}
+      />
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label for="title" class="mb-2 block text-sm text-white/50">
+            Nombre del curso
+          </label>
+
+          <input
+            id="title"
+            name="title"
+            required
+            value={course.data.title}
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="slug" class="mb-2 block text-sm text-white/50">
+            Slug
+          </label>
+
+          <input
+            id="slug"
+            name="slug"
+            required
+            value={course.id}
+            class="input"
+          />
+
+          <p class="mt-2 text-xs text-white/30">
+            Cambiarlo modificará la URL pública del curso.
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <label for="description" class="mb-2 block text-sm text-white/50">
+          Descripción
+        </label>
+
+        <textarea
+          id="description"
+          name="description"
+          required
+          rows="4"
+          class="input"
+        >{course.data.description}</textarea>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label for="area" class="mb-2 block text-sm text-white/50">
+            Área
+          </label>
+
+          <select id="area" name="area" required class="input">
+            {areas.map((area) => (
+              <option
+                value={area}
+                selected={course.data.area === area}
+              >
+                {area}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="instructor" class="mb-2 block text-sm text-white/50">
+            Director o instructor
+          </label>
+
+          <select
+            id="instructor"
+            name="instructor"
+            required
+            class="input"
+          >
+            {instructors.map((instructor) => (
+              <option
+                value={instructor}
+                selected={course.data.instructor === instructor}
+              >
+                {instructor}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="level" class="mb-2 block text-sm text-white/50">
+            Nivel
+          </label>
+
+          <select id="level" name="level" required class="input">
+            {["Inicial", "Intermedio", "Avanzado"].map((level) => (
+              <option
+                value={level}
+                selected={course.data.level === level}
+              >
+                {level}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label for="duration" class="mb-2 block text-sm text-white/50">
+            Duración
+          </label>
+
+          <input
+            id="duration"
+            name="duration"
+            required
+            value={course.data.duration}
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="modality" class="mb-2 block text-sm text-white/50">
+            Modalidad
+          </label>
+
+          <input
+            id="modality"
+            name="modality"
+            required
+            value={course.data.modality}
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="price" class="mb-2 block text-sm text-white/50">
+            Precio
+          </label>
+
+          <input
+            id="price"
+            name="price"
+            value={course.data.price ?? ""}
+            placeholder="Solicitar cotización"
+            class="input"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="audience" class="mb-2 block text-sm text-white/50">
+          Público objetivo
+        </label>
+
+        <input
+          id="audience"
+          name="audience"
+          required
+          value={course.data.audience}
+          class="input"
+        />
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label for="status" class="mb-2 block text-sm text-white/50">
+            Estado
+          </label>
+
+          <select id="status" name="status" required class="input">
+            <option
+              value="published"
+              selected={course.data.status === "published"}
+            >
+              Publicado
+            </option>
+
+            <option
+              value="draft"
+              selected={course.data.status === "draft"}
+            >
+              Borrador
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label for="date" class="mb-2 block text-sm text-white/50">
+            Fecha
+          </label>
+
+          <input
+            id="date"
+            name="date"
+            type="date"
+            required
+            value={formattedDate}
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="cover" class="mb-2 block text-sm text-white/50">
+            URL de portada
+          </label>
+
+          <input
+            id="cover"
+            name="cover"
+            type="url"
+            value={course.data.cover ?? ""}
+            placeholder="https://..."
+            class="input"
+          />
+        </div>
+      </div>
+
+      <label class="flex w-fit items-center gap-3 border border-white/10 bg-white/[0.02] px-4 py-4 text-sm text-white/55">
+        <input
+          name="featured"
+          type="checkbox"
+          value="true"
+          checked={course.data.featured}
+          class="h-4 w-4 accent-[#C8A96B]"
+        />
+
+        Mostrar como curso destacado
+      </label>
+
+      <div>
+        <label for="content" class="mb-2 block text-sm text-white/50">
+          Información completa
+        </label>
+
+        <textarea
+          id="content"
+          name="content"
+          required
+          rows="24"
+          class="input min-h-[600px] font-mono leading-relaxed"
+        >{content}</textarea>
+      </div>
+
+      <div class="flex flex-wrap gap-4">
+        <button
+          id="save-button"
+          type="submit"
+          class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:opacity-50"
+        >
+          Guardar cambios
+        </button>
+
+        <a
+          href="/dashboard/cursos"
+          class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+        >
+          Cancelar
+        </a>
+
+        {course.data.status === "published" && (
+          <a
+            href={`/cursos/${course.id}`}
+            target="_blank"
+            class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+          >
+            Ver curso
+          </a>
+        )}
+      </div>
+
+      <p id="message" class="min-h-6 text-sm text-white/50"></p>
+    </form>
+  </div>
+
+  <style>
+    .input {
+      width: 100%;
+      border: 1px solid rgb(255 255 255 / 0.1);
+      background: #000;
+      padding: 1rem;
+      color: #fff;
+      outline: none;
+      transition: border-color 180ms ease;
+    }
+
+    .input:focus {
+      border-color: #c8a96b;
+    }
+
+    .input::placeholder {
+      color: rgb(255 255 255 / 0.25);
+    }
+  </style>
+
+  <script is:inline>
+    const form = document.getElementById("content-form");
+    const button = document.getElementById("save-button");
+    const message = document.getElementById("message");
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!form || !button || !message) return;
+
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+
+      payload.contentType = "course";
+      payload.featured = formData.has("featured");
+
+      button.disabled = true;
+      button.textContent = "Guardando...";
+      message.textContent = "Actualizando curso...";
+
+      try {
+        const response = await fetch(
+          "/.netlify/functions/update-content",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "No se pudo actualizar el curso");
+        }
+
+        message.textContent =
+          "Curso actualizado. Netlify iniciará un nuevo despliegue.";
+
+        setTimeout(() => {
+          window.location.href = "/dashboard/cursos";
+        }, 1400);
+      } catch (error) {
+        message.textContent =
+          error instanceof Error
+            ? `Error: ${error.message}`
+            : "No se pudo actualizar el curso.";
+
+        button.disabled = false;
+        button.textContent = "Guardar cambios";
+      }
+    });
+  </script>
+</DashboardLayout>

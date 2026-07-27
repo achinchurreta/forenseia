@@ -1,0 +1,449 @@
+---
+import DashboardLayout from "../../../components/dashboard/DashboardLayout.astro";
+
+const directors = [
+  "Gonzalo García",
+  "Augusto Chinchurreta",
+  "Tania Pérez",
+];
+
+const areas = [
+  "Inteligencia Artificial",
+  "Investigación Digital y Ciberseguridad",
+  "Psicología Criminal",
+];
+---
+
+<DashboardLayout title="Nuevo servicio | ForenseIA">
+  <div class="max-w-5xl">
+    <div class="mb-10">
+      <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+        Servicios
+      </p>
+
+      <h1 class="mt-5 text-4xl font-semibold tracking-[-0.04em] md:text-5xl">
+        Nuevo servicio
+      </h1>
+
+      <p class="mt-4 max-w-2xl leading-relaxed text-white/45">
+        Publica un servicio dentro de tu dirección especializada.
+      </p>
+
+      <div
+        id="role-notice"
+        class="mt-6 hidden border border-[#C8A96B]/20 bg-[#C8A96B]/5 p-4 text-sm text-white/55"
+      ></div>
+    </div>
+
+    <form id="content-form" class="space-y-6">
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label for="title" class="mb-2 block text-sm text-white/50">
+            Título del servicio
+          </label>
+
+          <input
+            id="title"
+            name="title"
+            required
+            placeholder="Ej. Implementación de IA institucional"
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="slug" class="mb-2 block text-sm text-white/50">
+            Slug
+          </label>
+
+          <input
+            id="slug"
+            name="slug"
+            placeholder="se-genera-automaticamente"
+            class="input"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="description" class="mb-2 block text-sm text-white/50">
+          Descripción breve
+        </label>
+
+        <textarea
+          id="description"
+          name="description"
+          required
+          rows="4"
+          maxlength="220"
+          placeholder="Describe el servicio de forma clara y breve."
+          class="input"
+        ></textarea>
+
+        <div class="mt-2 flex justify-between text-xs text-white/30">
+          <span>Esta descripción aparecerá en el catálogo público.</span>
+          <span id="description-counter">0 / 220</span>
+        </div>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label for="area" class="mb-2 block text-sm text-white/50">
+            Área
+          </label>
+
+          <select id="area" name="area" required class="input">
+            {areas.map((area) => (
+              <option value={area}>
+                {area}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="director" class="mb-2 block text-sm text-white/50">
+            Director responsable
+          </label>
+
+          <select
+            id="director"
+            name="director"
+            required
+            class="input"
+          >
+            {directors.map((director) => (
+              <option value={director}>
+                {director}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label for="audience" class="mb-2 block text-sm text-white/50">
+          Público objetivo
+        </label>
+
+        <input
+          id="audience"
+          name="audience"
+          required
+          placeholder="Gobierno, instituciones, organizaciones..."
+          class="input"
+        />
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label for="order" class="mb-2 block text-sm text-white/50">
+            Orden
+          </label>
+
+          <input
+            id="order"
+            name="order"
+            type="number"
+            min="0"
+            value="0"
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="status" class="mb-2 block text-sm text-white/50">
+            Estado
+          </label>
+
+          <select id="status" name="status" class="input">
+            <option value="published">Publicado</option>
+            <option value="draft">Borrador</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="cover" class="mb-2 block text-sm text-white/50">
+            URL de portada
+          </label>
+
+          <input
+            id="cover"
+            name="cover"
+            type="url"
+            placeholder="https://..."
+            class="input"
+          />
+        </div>
+      </div>
+
+      <label class="flex w-fit items-center gap-3 border border-white/10 bg-white/[0.02] px-4 py-4 text-sm text-white/55">
+        <input
+          name="featured"
+          type="checkbox"
+          value="true"
+          class="h-4 w-4 accent-[#C8A96B]"
+        />
+
+        Mostrar como servicio destacado
+      </label>
+
+      <div>
+        <label for="content" class="mb-2 block text-sm text-white/50">
+          Información completa
+        </label>
+
+        <textarea
+          id="content"
+          name="content"
+          required
+          rows="24"
+          placeholder="# Descripción del servicio
+
+## Problemas que resuelve
+
+## Metodología
+
+## Entregables
+
+## Público objetivo"
+          class="input min-h-[600px] font-mono leading-relaxed"
+        ></textarea>
+      </div>
+
+      <div class="flex flex-wrap gap-4">
+        <button
+          id="save-button"
+          type="submit"
+          class="bg-[#C8A96B] px-8 py-4 font-medium text-black transition hover:opacity-90 disabled:opacity-50"
+        >
+          Guardar servicio
+        </button>
+
+        <a
+          href="/dashboard/servicios"
+          class="border border-white/10 px-8 py-4 text-white/55 transition hover:border-[#C8A96B]/60 hover:text-[#C8A96B]"
+        >
+          Cancelar
+        </a>
+      </div>
+
+      <p id="message" class="min-h-6 text-sm text-white/50"></p>
+    </form>
+  </div>
+
+  <style>
+    .input {
+      width: 100%;
+      border: 1px solid rgb(255 255 255 / 0.1);
+      background: #000;
+      padding: 1rem;
+      color: #fff;
+      outline: none;
+    }
+
+    .input:focus {
+      border-color: #c8a96b;
+    }
+
+    .input:disabled {
+      cursor: not-allowed;
+      border-color: rgb(200 169 107 / 0.25);
+      background: rgb(200 169 107 / 0.04);
+      color: rgb(255 255 255 / 0.55);
+    }
+
+    .input::placeholder {
+      color: rgb(255 255 255 / 0.25);
+    }
+  </style>
+
+  <script is:inline>
+    const form = document.getElementById("content-form");
+    const button = document.getElementById("save-button");
+    const message = document.getElementById("message");
+    const titleInput = document.getElementById("title");
+    const slugInput = document.getElementById("slug");
+    const descriptionInput = document.getElementById("description");
+    const descriptionCounter = document.getElementById(
+      "description-counter"
+    );
+    const directorSelect = document.getElementById("director");
+    const areaSelect = document.getElementById("area");
+    const roleNotice = document.getElementById("role-notice");
+
+    let currentUser = null;
+
+    function createSlug(value) {
+      return value
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function applyUserRestrictions(user) {
+      currentUser = user;
+
+      if (
+        !(directorSelect instanceof HTMLSelectElement) ||
+        !(areaSelect instanceof HTMLSelectElement)
+      ) {
+        return;
+      }
+
+      directorSelect.disabled = false;
+      areaSelect.disabled = false;
+      roleNotice?.classList.add("hidden");
+
+      if (user.role === "admin") {
+        return;
+      }
+
+      if (user.role === "director-ia") {
+        directorSelect.value = "Gonzalo García";
+        directorSelect.disabled = true;
+
+        areaSelect.value = "Inteligencia Artificial";
+        areaSelect.disabled = true;
+
+        if (roleNotice) {
+          roleNotice.textContent =
+            "El servicio se publicará como Gonzalo García dentro de Inteligencia Artificial.";
+          roleNotice.classList.remove("hidden");
+        }
+      }
+
+      if (user.role === "director-psychology") {
+        directorSelect.value = "Tania Pérez";
+        directorSelect.disabled = true;
+
+        areaSelect.value = "Psicología Criminal";
+        areaSelect.disabled = true;
+
+        if (roleNotice) {
+          roleNotice.textContent =
+            "El servicio se publicará como Tania Pérez dentro de Psicología Criminal.";
+          roleNotice.classList.remove("hidden");
+        }
+      }
+    }
+
+    try {
+      const storedUser = JSON.parse(
+        sessionStorage.getItem("forenseia_user") || "null"
+      );
+
+      if (storedUser) {
+        applyUserRestrictions(storedUser);
+      }
+    } catch {
+      sessionStorage.removeItem("forenseia_user");
+    }
+
+    document.addEventListener(
+      "forenseia:user-ready",
+      (event) => {
+        applyUserRestrictions(event.detail);
+      }
+    );
+
+    descriptionInput?.addEventListener("input", () => {
+      if (descriptionCounter) {
+        descriptionCounter.textContent =
+          `${descriptionInput.value.length} / 220`;
+      }
+    });
+
+    titleInput?.addEventListener("input", () => {
+      if (
+        !slugInput ||
+        slugInput.dataset.edited === "true"
+      ) {
+        return;
+      }
+
+      slugInput.value = createSlug(titleInput.value);
+    });
+
+    slugInput?.addEventListener("input", () => {
+      slugInput.dataset.edited =
+        slugInput.value ? "true" : "false";
+    });
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!form || !button || !message) {
+        return;
+      }
+
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+
+      payload.contentType = "service";
+      payload.featured = formData.has("featured");
+
+      if (directorSelect instanceof HTMLSelectElement) {
+        payload.director = directorSelect.value;
+      }
+
+      if (areaSelect instanceof HTMLSelectElement) {
+        payload.area = areaSelect.value;
+      }
+
+      if (currentUser?.role === "director-ia") {
+        payload.director = "Gonzalo García";
+        payload.area = "Inteligencia Artificial";
+      }
+
+      if (currentUser?.role === "director-psychology") {
+        payload.director = "Tania Pérez";
+        payload.area = "Psicología Criminal";
+      }
+
+      button.disabled = true;
+      button.textContent = "Guardando...";
+      message.textContent = "Creando servicio...";
+
+      try {
+        const response = await fetch(
+          "/.netlify/functions/create-content",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.error || "No se pudo crear el servicio"
+          );
+        }
+
+        message.textContent =
+          "Servicio guardado. Netlify iniciará un nuevo despliegue.";
+
+        setTimeout(() => {
+          window.location.href = "/dashboard/servicios";
+        }, 1400);
+      } catch (error) {
+        message.textContent =
+          error instanceof Error
+            ? `Error: ${error.message}`
+            : "No se pudo crear el servicio.";
+
+        button.disabled = false;
+        button.textContent = "Guardar servicio";
+      }
+    });
+  </script>
+</DashboardLayout>

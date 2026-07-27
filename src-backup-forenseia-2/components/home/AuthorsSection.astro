@@ -1,0 +1,53 @@
+---
+import Container from "../ui/Container.astro";
+import Reveal from "../ui/Reveal.astro";
+import { authors } from "../../data/authors";
+---
+
+<section class="border-t border-white/10 bg-white/[0.02] py-20">
+  <Container>
+    <Reveal>
+      <div class="max-w-2xl mb-10">
+        <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+          Equipo
+        </p>
+
+        <h2 class="mt-4 text-4xl font-semibold">
+          Dos líneas de especialización.
+        </h2>
+
+        <p class="mt-4 text-white/50 leading-relaxed">
+          ForenseIA une inteligencia artificial aplicada con investigación digital y ciberseguridad.
+        </p>
+      </div>
+    </Reveal>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      {authors.map((author, index) => (
+        <Reveal delay={index * 120}>
+          <article class="border border-white/10 bg-black/40 p-8">
+            <p class="text-[#C8A96B] uppercase tracking-[0.3em] text-xs">
+              {author.role}
+            </p>
+
+            <h3 class="mt-5 text-3xl font-semibold">
+              {author.name}
+            </h3>
+
+            <p class="mt-4 text-white/55 leading-relaxed">
+              {author.description}
+            </p>
+
+            <div class="mt-6 flex flex-wrap gap-2">
+              {author.areas.map((area) => (
+                <span class="border border-white/10 px-3 py-2 text-sm text-white/50">
+                  {area}
+                </span>
+              ))}
+            </div>
+          </article>
+        </Reveal>
+      ))}
+    </div>
+  </Container>
+</section>

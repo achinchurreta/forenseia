@@ -1,0 +1,22 @@
+---
+import Container from "./Container.astro";
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  description: string;
+}
+
+const { eyebrow, title, description } = Astro.props;
+---
+
+<section class="relative overflow-hidden border-b border-white/10 py-20 sm:py-24 lg:py-28">
+  <div class="site-grid pointer-events-none absolute inset-0 opacity-80"></div>
+  <div class="pointer-events-none absolute right-[-12rem] top-[-14rem] h-[30rem] w-[30rem] rounded-full bg-[#C8A96B]/10 blur-[130px]"></div>
+
+  <Container class="relative">
+    <span class="eyebrow">{eyebrow}</span>
+    <h1 class="mt-6 max-w-5xl text-4xl font-semibold leading-[0.98] tracking-[-0.055em] sm:text-6xl lg:text-7xl">{title}</h1>
+    <p class="section-copy mt-7">{description}</p>
+  </Container>
+</section>

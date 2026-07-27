@@ -1,0 +1,60 @@
+export const contentPillars = [
+  {
+    id: "ia",
+    title: "Inteligencia Artificial",
+    responsible: "Gonzalo García",
+    audience: "Gobierno e instituciones",
+    blogCategories: [
+      "IA aplicada",
+      "Automatización",
+      "Gobierno digital",
+      "Agentes inteligentes",
+    ],
+    socialContent: [
+      "Consejos de IA",
+      "Automatizaciones útiles",
+      "Casos institucionales",
+      "Herramientas",
+      "Noticias de IA",
+    ],
+  },
+  {
+    id: "investigacion-digital",
+    title: "Investigación Digital y Ciberseguridad",
+    responsible: "Augusto Chinchurreta",
+    audience: "Fiscalías y organizaciones de investigación",
+    blogCategories: [
+      "OSINT",
+      "Ciberseguridad",
+      "Investigación digital",
+      "Inteligencia patrimonial",
+      "Auditoría forense",
+    ],
+    socialContent: [
+      "Consejos OSINT",
+      "Herramientas de investigación",
+      "Ciberseguridad defensiva",
+      "Casos de estudio",
+      "Alertas digitales",
+    ],
+  },
+  {
+    id: "psicologia",
+    title: "Psicología Criminal y Educativa",
+    responsible: "Tania Pérez",
+    audience: "Instituciones educativas y organizaciones",
+    blogCategories: [
+      "Psicología criminal",
+      "Psicología educativa",
+      "Análisis conductual",
+      "Prevención",
+    ],
+    socialContent: [
+      "Análisis de conducta",
+      "Prevención educativa",
+      "Mitos psicológicos",
+      "Factores de riesgo",
+      "Consejos para instituciones",
+    ],
+  },
+];

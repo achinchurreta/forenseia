@@ -2,177 +2,256 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Container from "../components/ui/Container.astro";
 import Button from "../components/ui/Button.astro";
-import Reveal from "../components/ui/Reveal.astro";
+import { getCollection } from "astro:content";
+
+const institutes = [
+  {
+    number: "01",
+    title: "OSINT",
+    description: "Investigación en fuentes abiertas, personas, empresas, activos digitales, redes sociales y validación de información.",
+    href: "/servicios",
+    icon: "⌕",
+  },
+  {
+    number: "02",
+    title: "Investigación digital",
+    description: "Metodologías para documentar evidencia electrónica, analizar información y construir productos de investigación.",
+    href: "/servicios",
+    icon: "◎",
+  },
+  {
+    number: "03",
+    title: "IA para investigadores",
+    description: "Inteligencia artificial, automatización y análisis documental aplicados a fiscalías, instituciones y organizaciones.",
+    href: "/servicios",
+    icon: "✦",
+  },
+  {
+    number: "04",
+    title: "Inteligencia patrimonial",
+    description: "Análisis de personas, empresas, relaciones, bienes y riesgos para fortalecer procesos de decisión.",
+    href: "/servicios",
+    icon: "◇",
+  },
+];
+
+const routes = [
+  {
+    label: "Formación inicial",
+    title: "OSINT básico aplicado a la investigación digital",
+    description: "Una ruta introductoria para localizar, validar, organizar y documentar información pública de internet.",
+    meta: "8 horas · Nivel inicial",
+    href: "/cursos",
+  },
+  {
+    label: "Capacitación institucional",
+    title: "Programas para fiscalías, seguridad pública y universidades",
+    description: "Temarios, ejercicios y productos finales adaptados a las necesidades de cada grupo o institución.",
+    meta: "Presencial o en línea",
+    href: "/cursos",
+  },
+  {
+    label: "Servicios especializados",
+    title: "Diagnóstico, investigación y diseño metodológico",
+    description: "Acompañamiento para convertir información dispersa en hallazgos sustentados y decisiones accionables.",
+    meta: "Atención personalizada",
+    href: "/contacto",
+  },
+];
+
+let latestPosts = [];
+let latestResources = [];
+
+try {
+  latestPosts = (await getCollection("blog"))
+    .filter((entry) => entry.data.status === "published")
+    .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+    .slice(0, 3);
+} catch {}
+
+try {
+  latestResources = (await getCollection("resources"))
+    .filter((entry) => entry.data.status === "published")
+    .slice(0, 3);
+} catch {}
 ---
 
 <BaseLayout
-  title="ForenseIA | Inteligencia aplicada para instituciones"
-  description="OSINT, investigación digital, inteligencia artificial y psicología criminal aplicada para instituciones y organizaciones."
+  title="ForenseIA | Inteligencia aplicada para investigación y decisiones"
+  description="Academia, biblioteca, investigación y servicios especializados en OSINT, investigación digital, inteligencia artificial e inteligencia patrimonial."
 >
-  <section class="home-hero home-grid">
-    <Container>
-      <div class="hero-layout">
-        <Reveal>
-          <div class="hero-copy">
-            <p class="eyebrow">Inteligencia aplicada</p>
+  <section class="relative overflow-hidden border-b border-white/8 pt-[78px]">
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute right-[3%] top-[12%] h-[520px] w-[520px] rounded-full bg-[#d5ad52]/8 blur-[150px]"></div>
+      <div class="absolute left-[8%] top-[32%] h-px w-[34%] gold-line"></div>
+      <div class="absolute inset-0 opacity-40 [background-image:radial-gradient(circle,rgba(213,173,82,.22)_1px,transparent_1px)] [background-size:72px_72px] [mask-image:linear-gradient(to_right,transparent,black_30%,black_75%,transparent)]"></div>
+    </div>
 
-            <h1 class="hero-title">
-              Evidencia clara<br />
-              para <span class="gold">decisiones complejas.</span>
-            </h1>
-
-            <div class="hero-line"></div>
-
-            <p class="hero-description">
-              Integramos OSINT, investigación digital, inteligencia artificial y
-              psicología criminal para fortalecer capacidades institucionales.
-            </p>
-
-            <div class="hero-actions">
-              <Button href="/contacto">Solicitar diagnóstico</Button>
-              <Button href="/cursos" variant="secondary">Explorar cursos</Button>
-            </div>
-          </div>
-        </Reveal>
-
-        <Reveal delay={120}>
-          <div class="hero-brand-visual" aria-label="Identidad de ForenseIA">
-            <span class="hero-particle one"></span>
-            <span class="hero-particle two"></span>
-            <span class="hero-particle three"></span>
-
-            <img
-              src="/logo.png"
-              alt="ForenseIA, Inteligencia Estratégica"
-              class="hero-logo"
-            />
-          </div>
-        </Reveal>
-      </div>
-
-      <Reveal delay={180}>
-        <div class="value-strip">
-          <div class="value-grid">
-            <article class="value-item">
-              <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                <path d="M24 4 39 10v11c0 10-6.4 18.1-15 23-8.6-4.9-15-13-15-23V10L24 4Z" stroke="currentColor" stroke-width="2.2"/>
-                <path d="m17.5 23.5 4.2 4.2 9-10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <div>
-                <h3>Inteligencia aplicada</h3>
-                <p>Soluciones prácticas para escenarios reales.</p>
-              </div>
-            </article>
-
-            <article class="value-item">
-              <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                <circle cx="24" cy="24" r="17" stroke="currentColor" stroke-width="2.2"/>
-                <circle cx="24" cy="24" r="8" stroke="currentColor" stroke-width="2.2"/>
-                <path d="M24 2v11M24 35v11M2 24h11M35 24h11" stroke="currentColor" stroke-width="2.2"/>
-              </svg>
-              <div>
-                <h3>Investigación digital</h3>
-                <p>Análisis con rigor metodológico y fuentes abiertas.</p>
-              </div>
-            </article>
-
-            <article class="value-item">
-              <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                <path d="M18 9a6 6 0 0 1 11-3 6 6 0 0 1 8 8 6 6 0 0 1 2 10 6 6 0 0 1-4 10 6 6 0 0 1-10 5 6 6 0 0 1-10-5 6 6 0 0 1-4-10 6 6 0 0 1 2-10 6 6 0 0 1 5-5Z" stroke="currentColor" stroke-width="2"/>
-                <path d="M24 7v34M18 15c3 0 6 2 6 5M30 15c-3 0-6 2-6 5M17 30c4 0 7-2 7-6M31 30c-4 0-7-2-7-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              <div>
-                <h3>IA y automatización</h3>
-                <p>Tecnología al servicio del análisis y la verdad.</p>
-              </div>
-            </article>
-
-            <article class="value-item">
-              <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                <rect x="10" y="20" width="28" height="23" rx="2" stroke="currentColor" stroke-width="2.2"/>
-                <path d="M16 20v-6a8 8 0 1 1 16 0v6M24 29v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-              </svg>
-              <div>
-                <h3>Ética y confidencialidad</h3>
-                <p>Compromiso con la legalidad y la privacidad.</p>
-              </div>
-            </article>
+    <Container size="wide" class="relative">
+      <div class="grid min-h-[680px] items-center gap-12 py-20 lg:grid-cols-[1.02fr_.98fr] lg:py-24">
+        <div class="max-w-[740px]">
+          <p class="eyebrow">Inteligencia aplicada</p>
+          <h1 class="mt-7 text-[clamp(3rem,6.4vw,6.5rem)] font-semibold leading-[.92] tracking-[-.065em] text-[#f5f3ed]">
+            Evidencia clara para <span class="text-[#d5ad52]">decisiones complejas.</span>
+          </h1>
+          <p class="mt-8 max-w-2xl text-base leading-8 text-white/56 sm:text-lg">
+            Integramos OSINT, investigación digital, inteligencia artificial y análisis patrimonial para fortalecer capacidades, documentar hallazgos y apoyar decisiones institucionales.
+          </p>
+          <div class="mt-9 flex flex-wrap gap-4">
+            <Button href="/contacto">Solicitar diagnóstico <span aria-hidden="true">→</span></Button>
+            <Button href="/cursos" variant="secondary">Explorar academia <span aria-hidden="true">→</span></Button>
           </div>
         </div>
-      </Reveal>
+
+        <div class="relative flex min-h-[420px] items-center justify-center lg:justify-end">
+          <div class="absolute h-[390px] w-[390px] rounded-full border border-[#d5ad52]/10"></div>
+          <div class="absolute h-[290px] w-[290px] rounded-full border border-[#d5ad52]/12"></div>
+          <div class="absolute left-[5%] right-[2%] top-1/2 h-px -translate-y-1/2 gold-line"></div>
+          <div class="absolute h-[260px] w-[260px] rounded-full bg-[#d5ad52]/10 blur-[85px]"></div>
+          <img
+            src="/logo.png"
+            alt="ForenseIA"
+            class="relative z-10 w-[min(78vw,390px)] object-contain drop-shadow-[0_0_32px_rgba(213,173,82,.35)]"
+          />
+        </div>
+      </div>
+
+      <div class="glass-panel mb-12 grid gap-0 md:grid-cols-2 xl:grid-cols-4">
+        {[
+          ["Inteligencia aplicada", "Soluciones prácticas para escenarios reales."],
+          ["Investigación digital", "Análisis con rigor metodológico."],
+          ["IA y automatización", "Tecnología al servicio del conocimiento."],
+          ["Ética y confidencialidad", "Legalidad, privacidad y responsabilidad."],
+        ].map(([title, description], index) => (
+          <div class={`p-6 lg:p-7 ${index > 0 ? "border-t border-white/8 md:border-l md:border-t-0" : ""} ${index === 2 ? "md:border-t xl:border-t-0" : ""}`}>
+            <p class="text-sm font-semibold text-white/90">{title}</p>
+            <p class="mt-2 text-sm leading-6 text-white/42">{description}</p>
+          </div>
+        ))}
+      </div>
     </Container>
   </section>
 
-  <section class="section-dark">
+  <section class="py-24 sm:py-28">
     <Container>
-      <Reveal>
-        <header class="section-heading">
-          <p class="section-kicker">Nuestras áreas</p>
-          <h2 class="section-title">Soluciones para entornos críticos</h2>
-          <div class="section-accent"></div>
-        </header>
-      </Reveal>
-
-      <div class="area-grid">
-        <Reveal>
-          <article class="area-card">
-            <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-              <circle cx="20" cy="20" r="12" stroke="currentColor" stroke-width="2.2"/>
-              <path d="m29 29 13 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-            </svg>
-            <div>
-              <h3>OSINT</h3>
-              <p>Recolección, validación y análisis de información disponible en fuentes abiertas.</p>
-              <a href="/servicios" class="area-link">Ver servicios <span>→</span></a>
-            </div>
-          </article>
-        </Reveal>
-
-        <Reveal delay={90}>
-          <article class="area-card">
-            <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-              <path d="M24 4c-9 0-16 7-16 16 0 8-2 14-5 20M24 9c-6 0-11 5-11 11 0 10-3 17-7 23M24 14a6 6 0 0 0-6 6c0 11-3 19-8 25M24 4c9 0 16 7 16 16 0 8 2 14 5 20M24 9c6 0 11 5 11 11 0 10 3 17 7 23M24 14a6 6 0 0 1 6 6c0 11 3 19 8 25M24 20v24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-            <div>
-              <h3>Investigación Digital</h3>
-              <p>Análisis técnico de información, dispositivos, redes, datos y comportamientos digitales.</p>
-              <a href="/servicios" class="area-link">Ver servicios <span>→</span></a>
-            </div>
-          </article>
-        </Reveal>
-
-        <Reveal delay={180}>
-          <article class="area-card">
-            <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-              <path d="M18 9a6 6 0 0 1 11-3 6 6 0 0 1 8 8 6 6 0 0 1 2 10 6 6 0 0 1-4 10 6 6 0 0 1-10 5 6 6 0 0 1-10-5 6 6 0 0 1-4-10 6 6 0 0 1 2-10 6 6 0 0 1 5-5Z" stroke="currentColor" stroke-width="2"/>
-              <path d="M24 7v34M18 15c3 0 6 2 6 5M30 15c-3 0-6 2-6 5M17 30c4 0 7-2 7-6M31 30c-4 0-7-2-7-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            <div>
-              <h3>Inteligencia Artificial</h3>
-              <p>Modelos y automatizaciones para análisis, clasificación, predicción y apoyo decisional.</p>
-              <a href="/servicios" class="area-link">Ver servicios <span>→</span></a>
-            </div>
-          </article>
-        </Reveal>
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="eyebrow">Nuestros institutos</p>
+        <h2 class="section-title mx-auto mt-5">Conocimiento organizado alrededor de problemas reales.</h2>
+        <p class="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/46">
+          Cursos, recursos, artículos y servicios conectados dentro de cuatro áreas especializadas.
+        </p>
       </div>
 
-      <div class="proof-row">
-        <Reveal>
-          <div class="stats-panel">
-            <div class="stat"><strong>+50</strong><span>Instituciones<br />asesoradas</span></div>
-            <div class="stat"><strong>+120</strong><span>Proyectos<br />completados</span></div>
-            <div class="stat"><strong>98%</strong><span>Confidencialidad<br />garantizada</span></div>
-            <div class="stat"><strong>Nacional</strong><span>Cobertura y atención<br />especializada</span></div>
-          </div>
-        </Reveal>
+      <div class="mt-14 grid gap-5 md:grid-cols-2">
+        {institutes.map((institute) => (
+          <a href={institute.href} class="group glass-panel relative overflow-hidden p-7 transition duration-300 hover:-translate-y-1 hover:border-[#d5ad52]/40 sm:p-8">
+            <span class="absolute right-6 top-5 text-xs tracking-[0.26em] text-white/20">{institute.number}</span>
+            <div class="flex gap-5">
+              <span class="flex h-13 w-13 shrink-0 items-center justify-center border border-[#d5ad52]/35 text-2xl text-[#d5ad52]">{institute.icon}</span>
+              <div>
+                <h3 class="text-2xl font-semibold tracking-[-.025em]">{institute.title}</h3>
+                <p class="mt-4 max-w-xl text-sm leading-7 text-white/45">{institute.description}</p>
+                <span class="mt-7 inline-flex text-sm font-semibold text-[#d5ad52]">Explorar área <span class="ml-3 transition group-hover:translate-x-1">→</span></span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </Container>
+  </section>
 
-        <Reveal delay={100}>
-          <aside class="cta-panel">
-            <h2>¿Listo para fortalecer tus capacidades?</h2>
-            <p>Hablemos de cómo podemos ayudarte.</p>
-            <Button href="/contacto">Solicitar diagnóstico</Button>
-          </aside>
-        </Reveal>
+  <section class="border-y border-white/8 bg-white/[.015] py-24 sm:py-28">
+    <Container>
+      <div class="grid gap-12 lg:grid-cols-[.75fr_1.25fr]">
+        <div>
+          <p class="eyebrow">Academia ForenseIA</p>
+          <h2 class="section-title mt-5">Formación para avanzar por rutas, no por cursos aislados.</h2>
+          <p class="mt-6 max-w-xl text-base leading-8 text-white/46">
+            Comienza con fundamentos, practica con casos y continúa hacia programas especializados o capacitación institucional.
+          </p>
+          <div class="mt-8">
+            <Button href="/cursos" variant="secondary">Ver todos los programas →</Button>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          {routes.map((route, index) => (
+            <a href={route.href} class="group grid gap-5 border border-white/9 bg-black/35 p-6 transition hover:border-[#d5ad52]/40 sm:grid-cols-[50px_1fr_auto] sm:items-center">
+              <span class="text-sm font-semibold text-[#d5ad52]">0{index + 1}</span>
+              <span>
+                <span class="text-[10px] uppercase tracking-[.22em] text-white/28">{route.label}</span>
+                <strong class="mt-2 block text-lg font-semibold text-white/92">{route.title}</strong>
+                <span class="mt-2 block text-sm leading-6 text-white/42">{route.description}</span>
+              </span>
+              <span class="text-right text-xs text-white/32 sm:min-w-32">{route.meta}<br /><span class="mt-3 inline-block text-[#d5ad52] transition group-hover:translate-x-1">Explorar →</span></span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="py-24 sm:py-28">
+    <Container>
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="eyebrow">Biblioteca y Blog</p>
+          <h2 class="section-title mt-5">Conocimiento para consultar, aplicar y compartir.</h2>
+        </div>
+        <div class="flex gap-3">
+          <Button href="/recursos" variant="secondary">Biblioteca</Button>
+          <Button href="/blog" variant="secondary">Blog</Button>
+        </div>
+      </div>
+
+      <div class="mt-12 grid gap-5 lg:grid-cols-2">
+        <div class="glass-panel p-7 sm:p-8">
+          <p class="text-xs uppercase tracking-[.24em] text-[#d5ad52]">Últimos artículos</p>
+          <div class="mt-6 divide-y divide-white/8">
+            {latestPosts.length > 0 ? latestPosts.map((post) => (
+              <a href={`/blog/${post.id}`} class="group block py-5 first:pt-0 last:pb-0">
+                <h3 class="text-lg font-semibold leading-7 transition group-hover:text-[#d5ad52]">{post.data.title}</h3>
+                <p class="mt-2 line-clamp-2 text-sm leading-6 text-white/40">{post.data.description}</p>
+              </a>
+            )) : (
+              <p class="py-6 text-sm text-white/38">Próximamente publicaremos nuevos artículos especializados.</p>
+            )}
+          </div>
+        </div>
+
+        <div class="glass-panel p-7 sm:p-8">
+          <p class="text-xs uppercase tracking-[.24em] text-[#d5ad52]">Recursos aplicables</p>
+          <div class="mt-6 divide-y divide-white/8">
+            {latestResources.length > 0 ? latestResources.map((resource) => (
+              <a href={`/recursos/${resource.id}`} class="group block py-5 first:pt-0 last:pb-0">
+                <div class="flex items-start justify-between gap-5">
+                  <div>
+                    <h3 class="text-lg font-semibold leading-7 transition group-hover:text-[#d5ad52]">{resource.data.title}</h3>
+                    <p class="mt-2 line-clamp-2 text-sm leading-6 text-white/40">{resource.data.description}</p>
+                  </div>
+                  <span class="shrink-0 border border-white/10 px-2.5 py-1 text-[10px] uppercase tracking-[.18em] text-white/35">{resource.data.type}</span>
+                </div>
+              </a>
+            )) : (
+              <p class="py-6 text-sm text-white/38">La biblioteca comenzará con guías, plantillas y listas de verificación.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-t border-white/8 py-24">
+    <Container>
+      <div class="relative overflow-hidden border border-[#d5ad52]/28 bg-[linear-gradient(120deg,rgba(213,173,82,.09),rgba(255,255,255,.015)_45%,rgba(0,0,0,.65))] px-7 py-12 sm:px-12 lg:px-16">
+        <div class="absolute -right-24 -top-24 h-72 w-72 rounded-full border border-[#d5ad52]/12"></div>
+        <div class="absolute -right-10 -top-10 h-44 w-44 rounded-full border border-[#d5ad52]/14"></div>
+        <div class="relative max-w-3xl">
+          <p class="eyebrow">Capacidades institucionales</p>
+          <h2 class="mt-5 text-[clamp(2rem,4vw,4rem)] font-semibold leading-[1.02] tracking-[-.045em]">¿Necesitas formar a tu equipo o resolver una necesidad de investigación?</h2>
+          <p class="mt-6 max-w-2xl text-base leading-8 text-white/48">Diseñamos programas y servicios de acuerdo con el perfil, objetivos y contexto de cada institución u organización.</p>
+          <div class="mt-8"><Button href="/contacto">Solicitar diagnóstico →</Button></div>
+        </div>
       </div>
     </Container>
   </section>

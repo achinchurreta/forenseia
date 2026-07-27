@@ -1,0 +1,24 @@
+---
+interface Props {
+  href: string;
+  variant?: "primary" | "secondary" | "ghost";
+  class?: string;
+}
+
+const {
+  href,
+  variant = "primary",
+  class: className = "",
+} = Astro.props;
+
+const styles = {
+  primary: "button-primary",
+  secondary: "button-secondary",
+  ghost: "button-ghost",
+};
+---
+
+<a href={href} class={`site-button ${styles[variant]} ${className}`}>
+  <span><slot /></span>
+  <span aria-hidden="true" class="button-arrow">→</span>
+</a>

@@ -1,0 +1,179 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+import Button from "../components/ui/Button.astro";
+import Reveal from "../components/ui/Reveal.astro";
+---
+
+<BaseLayout
+  title="ForenseIA | Inteligencia aplicada para instituciones"
+  description="OSINT, investigación digital, inteligencia artificial y psicología criminal aplicada para instituciones y organizaciones."
+>
+  <section class="home-hero home-grid">
+    <Container>
+      <div class="hero-layout">
+        <Reveal>
+          <div class="hero-copy">
+            <p class="eyebrow">Inteligencia aplicada</p>
+
+            <h1 class="hero-title">
+              Evidencia clara<br />
+              para <span class="gold">decisiones complejas.</span>
+            </h1>
+
+            <div class="hero-line"></div>
+
+            <p class="hero-description">
+              Integramos OSINT, investigación digital, inteligencia artificial y
+              psicología criminal para fortalecer capacidades institucionales.
+            </p>
+
+            <div class="hero-actions">
+              <Button href="/contacto">Solicitar diagnóstico</Button>
+              <Button href="/cursos" variant="secondary">Explorar cursos</Button>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={120}>
+          <div class="hero-brand-visual" aria-label="Identidad de ForenseIA">
+            <span class="hero-particle one"></span>
+            <span class="hero-particle two"></span>
+            <span class="hero-particle three"></span>
+
+            <img
+              src="/logo.png"
+              alt="ForenseIA, Inteligencia Estratégica"
+              class="hero-logo"
+            />
+          </div>
+        </Reveal>
+      </div>
+
+      <Reveal delay={180}>
+        <div class="value-strip">
+          <div class="value-grid">
+            <article class="value-item">
+              <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <path d="M24 4 39 10v11c0 10-6.4 18.1-15 23-8.6-4.9-15-13-15-23V10L24 4Z" stroke="currentColor" stroke-width="2.2"/>
+                <path d="m17.5 23.5 4.2 4.2 9-10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <div>
+                <h3>Inteligencia aplicada</h3>
+                <p>Soluciones prácticas para escenarios reales.</p>
+              </div>
+            </article>
+
+            <article class="value-item">
+              <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <circle cx="24" cy="24" r="17" stroke="currentColor" stroke-width="2.2"/>
+                <circle cx="24" cy="24" r="8" stroke="currentColor" stroke-width="2.2"/>
+                <path d="M24 2v11M24 35v11M2 24h11M35 24h11" stroke="currentColor" stroke-width="2.2"/>
+              </svg>
+              <div>
+                <h3>Investigación digital</h3>
+                <p>Análisis con rigor metodológico y fuentes abiertas.</p>
+              </div>
+            </article>
+
+            <article class="value-item">
+              <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <path d="M18 9a6 6 0 0 1 11-3 6 6 0 0 1 8 8 6 6 0 0 1 2 10 6 6 0 0 1-4 10 6 6 0 0 1-10 5 6 6 0 0 1-10-5 6 6 0 0 1-4-10 6 6 0 0 1 2-10 6 6 0 0 1 5-5Z" stroke="currentColor" stroke-width="2"/>
+                <path d="M24 7v34M18 15c3 0 6 2 6 5M30 15c-3 0-6 2-6 5M17 30c4 0 7-2 7-6M31 30c-4 0-7-2-7-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <div>
+                <h3>IA y automatización</h3>
+                <p>Tecnología al servicio del análisis y la verdad.</p>
+              </div>
+            </article>
+
+            <article class="value-item">
+              <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <rect x="10" y="20" width="28" height="23" rx="2" stroke="currentColor" stroke-width="2.2"/>
+                <path d="M16 20v-6a8 8 0 1 1 16 0v6M24 29v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              </svg>
+              <div>
+                <h3>Ética y confidencialidad</h3>
+                <p>Compromiso con la legalidad y la privacidad.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </Reveal>
+    </Container>
+  </section>
+
+  <section class="section-dark">
+    <Container>
+      <Reveal>
+        <header class="section-heading">
+          <p class="section-kicker">Nuestras áreas</p>
+          <h2 class="section-title">Soluciones para entornos críticos</h2>
+          <div class="section-accent"></div>
+        </header>
+      </Reveal>
+
+      <div class="area-grid">
+        <Reveal>
+          <article class="area-card">
+            <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <circle cx="20" cy="20" r="12" stroke="currentColor" stroke-width="2.2"/>
+              <path d="m29 29 13 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <h3>OSINT</h3>
+              <p>Recolección, validación y análisis de información disponible en fuentes abiertas.</p>
+              <a href="/servicios" class="area-link">Ver servicios <span>→</span></a>
+            </div>
+          </article>
+        </Reveal>
+
+        <Reveal delay={90}>
+          <article class="area-card">
+            <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <path d="M24 4c-9 0-16 7-16 16 0 8-2 14-5 20M24 9c-6 0-11 5-11 11 0 10-3 17-7 23M24 14a6 6 0 0 0-6 6c0 11-3 19-8 25M24 4c9 0 16 7 16 16 0 8 2 14 5 20M24 9c6 0 11 5 11 11 0 10 3 17 7 23M24 14a6 6 0 0 1 6 6c0 11 3 19 8 25M24 20v24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <h3>Investigación Digital</h3>
+              <p>Análisis técnico de información, dispositivos, redes, datos y comportamientos digitales.</p>
+              <a href="/servicios" class="area-link">Ver servicios <span>→</span></a>
+            </div>
+          </article>
+        </Reveal>
+
+        <Reveal delay={180}>
+          <article class="area-card">
+            <svg class="icon-gold" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <path d="M18 9a6 6 0 0 1 11-3 6 6 0 0 1 8 8 6 6 0 0 1 2 10 6 6 0 0 1-4 10 6 6 0 0 1-10 5 6 6 0 0 1-10-5 6 6 0 0 1-4-10 6 6 0 0 1 2-10 6 6 0 0 1 5-5Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M24 7v34M18 15c3 0 6 2 6 5M30 15c-3 0-6 2-6 5M17 30c4 0 7-2 7-6M31 30c-4 0-7-2-7-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <h3>Inteligencia Artificial</h3>
+              <p>Modelos y automatizaciones para análisis, clasificación, predicción y apoyo decisional.</p>
+              <a href="/servicios" class="area-link">Ver servicios <span>→</span></a>
+            </div>
+          </article>
+        </Reveal>
+      </div>
+
+      <div class="proof-row">
+        <Reveal>
+          <div class="stats-panel">
+            <div class="stat"><strong>+50</strong><span>Instituciones<br />asesoradas</span></div>
+            <div class="stat"><strong>+120</strong><span>Proyectos<br />completados</span></div>
+            <div class="stat"><strong>98%</strong><span>Confidencialidad<br />garantizada</span></div>
+            <div class="stat"><strong>Nacional</strong><span>Cobertura y atención<br />especializada</span></div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={100}>
+          <aside class="cta-panel">
+            <h2>¿Listo para fortalecer tus capacidades?</h2>
+            <p>Hablemos de cómo podemos ayudarte.</p>
+            <Button href="/contacto">Solicitar diagnóstico</Button>
+          </aside>
+        </Reveal>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

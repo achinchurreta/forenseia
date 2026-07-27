@@ -1,0 +1,139 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Container from "../../components/ui/Container.astro";
+import Button from "../../components/ui/Button.astro";
+
+import {
+  getCollection,
+  render,
+  type CollectionEntry,
+} from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+
+  return posts
+    .filter((post) => post.data.status === "published")
+    .map((post) => ({
+      params: {
+        slug: String(post.id),
+      },
+      props: {
+        post,
+      },
+    }));
+}
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props as Props;
+const { Content } = await render(post);
+
+const formattedDate = new Intl.DateTimeFormat("es-MX", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+}).format(new Date(post.data.date));
+---
+
+<BaseLayout
+  title={`${post.data.title} | ForenseIA`}
+  description={post.data.description}
+>
+  <article>
+    <header class="border-b border-white/10 pb-20 pt-40">
+      <Container>
+        <div class="mx-auto max-w-5xl">
+          <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+            {post.data.category}
+          </p>
+
+          <h1 class="mt-6 text-4xl font-semibold leading-tight tracking-[-0.04em] md:text-6xl">
+            {post.data.title}
+          </h1>
+
+          <p class="mt-6 max-w-3xl text-lg leading-relaxed text-white/55">
+            {post.data.description}
+          </p>
+
+          <div class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/35">
+            <span>{post.data.author}</span>
+            <span>{formattedDate}</span>
+          </div>
+
+          {post.data.tags.length > 0 && (
+            <div class="mt-7 flex flex-wrap gap-2">
+              {post.data.tags.map((tag) => (
+                <span class="border border-white/10 px-3 py-2 text-xs text-white/40">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </Container>
+    </header>
+
+    {post.data.cover && (
+      <section class="border-b border-white/10">
+        <Container>
+          <div class="mx-auto max-w-5xl py-10">
+            <img
+              src={post.data.cover}
+              alt={post.data.title}
+              class="aspect-[16/8] w-full object-cover"
+            />
+          </div>
+        </Container>
+      </section>
+    )}
+
+    <section class="py-20">
+      <Container>
+        <div class="mx-auto max-w-3xl">
+          <div
+            class="prose prose-invert prose-lg max-w-none
+              prose-headings:font-semibold
+              prose-headings:tracking-[-0.03em]
+              prose-p:leading-relaxed
+              prose-p:text-white/65
+              prose-li:text-white/60
+              prose-a:text-[#C8A96B]
+              prose-strong:text-white
+              prose-blockquote:border-[#C8A96B]
+              prose-blockquote:text-white/55"
+          >
+            <Content />
+          </div>
+
+          <div class="mt-16 border-t border-white/10 pt-10">
+            <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
+              ForenseIA
+            </p>
+
+            <h2 class="mt-5 text-3xl font-semibold">
+              ¿Necesitas aplicar este conocimiento?
+            </h2>
+
+            <p class="mt-4 max-w-xl leading-relaxed text-white/50">
+              Podemos ayudarte con capacitación, análisis especializado o una
+              solución adaptada a tu institución.
+            </p>
+
+            <div class="mt-8 flex flex-wrap gap-4">
+              <Button href="/contacto">
+                Contactar
+              </Button>
+
+              <Button href="/blog" variant="secondary">
+                Volver a la biblioteca
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Container>
+    </section>
+  </article>
+</BaseLayout>

@@ -1,0 +1,85 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import Container from "../components/ui/Container.astro";
+
+const steps = [
+  {
+    title: "Diagnóstico inicial",
+    description: "Identificamos el problema, el contexto, los riesgos y el objetivo del análisis.",
+  },
+  {
+    title: "Recolección de información",
+    description: "Organizamos documentos, datos, evidencia digital, fuentes abiertas y elementos relevantes.",
+  },
+  {
+    title: "Validación documental",
+    description: "Revisamos consistencia, origen, trazabilidad, fechas, relaciones y posibles irregularidades.",
+  },
+  {
+    title: "Análisis técnico y estratégico",
+    description: "Integramos análisis jurídico, financiero, patrimonial, digital y de inteligencia artificial.",
+  },
+  {
+    title: "Matriz de evidencia",
+    description: "Relacionamos hecho, prueba, norma e inferencia para construir hallazgos claros.",
+  },
+  {
+    title: "Informe ejecutivo",
+    description: "Entregamos conclusiones, hallazgos, riesgos, recomendaciones y acciones sugeridas.",
+  },
+];
+---
+
+<BaseLayout title="Metodología | ForenseIA">
+  <PageHeader
+    eyebrow="Método ForenseIA"
+    title="Un proceso claro para analizar, validar y convertir evidencia en inteligencia."
+    description="Trabajamos con diagnóstico, recolección, validación documental, análisis técnico, matriz de evidencia, línea de tiempo, mapa de vínculos e informe ejecutivo."
+  />
+
+  <section class="py-24">
+    <Container>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {steps.map((step, index) => (
+          <div class="border border-white/10 bg-white/[0.02] p-8">
+            <span class="text-[#C8A96B] text-sm">
+              0{index + 1}
+            </span>
+
+            <h2 class="text-2xl font-semibold mt-5">
+              {step.title}
+            </h2>
+
+            <p class="text-white/55 leading-relaxed mt-4">
+              {step.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </Container>
+  </section>
+
+  <section class="border-t border-white/10 bg-white/[0.02] py-24">
+    <Container>
+      <div class="max-w-3xl">
+        <h2 class="text-3xl md:text-5xl font-semibold leading-tight">
+          El resultado no es solo información: es criterio para decidir.
+        </h2>
+
+        <p class="text-white/55 text-lg leading-relaxed mt-6">
+          La metodología ForenseIA busca convertir datos dispersos en hallazgos
+          claros, verificables y accionables para instituciones, empresas,
+          despachos y equipos de investigación.
+        </p>
+
+        <a
+          href="/contacto"
+          class="inline-flex mt-10 bg-[#C8A96B] text-black px-8 py-4 font-medium"
+        >
+          Solicitar diagnóstico
+        </a>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
