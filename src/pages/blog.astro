@@ -1,156 +1,148 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Container from "../components/ui/Container.astro";
 import { getCollection } from "astro:content";
-import "../styles/blog.css";
+import "../styles/blog-v4.css";
 
 const posts = (await getCollection("blog"))
   .filter((entry) => {
     const data = entry.data as Record<string, any>;
     return data.status !== "draft" && data.draft !== true;
   })
-  .sort((a, b) => {
-    const aDate = new Date((a.data as Record<string, any>).date ?? 0).getTime();
-    const bDate = new Date((b.data as Record<string, any>).date ?? 0).getTime();
-    return bDate - aDate;
-  });
+  .sort((a, b) => new Date((b.data as any).date ?? 0).getTime() - new Date((a.data as any).date ?? 0).getTime());
 
-const featured = posts.find((entry) => (entry.data as Record<string, any>).featured === true) ?? posts[0];
-const latestPosts = featured ? posts.filter((entry) => entry.id !== featured.id) : posts;
+const featured = posts.find((entry) => (entry.data as any).featured === true) ?? posts[0];
+const rest = featured ? posts.filter((entry) => entry.id !== featured.id) : posts;
 
-const formatDate = (value: unknown) => {
-  if (!value) return "";
-  const date = new Date(String(value));
-  if (Number.isNaN(date.getTime())) return String(value);
-  return new Intl.DateTimeFormat("es-MX", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
-};
-
-const getCover = (value: any): string => {
+const asData = (entry: any) => entry.data as Record<string, any>;
+const hrefFor = (entry: any) => `/blog/${entry.id}`;
+const coverFor = (data: Record<string, any>) => {
+  const value = data.cover ?? data.image ?? data.featuredImage;
   if (typeof value === "string") return value.trim();
   if (value && typeof value.src === "string") return value.src;
   return "";
 };
-
-const getCategory = (data: Record<string, any>) =>
-  data.category ?? data.area ?? "Investigación digital";
-
-const getDescription = (data: Record<string, any>) =>
-  data.description ?? data.excerpt ?? "Artículo especializado de ForenseIA.";
+const categoryFor = (data: Record<string, any>) => data.category ?? data.area ?? "Blog";
+const descriptionFor = (data: Record<string, any>) => data.description ?? data.excerpt ?? "Contenido especializado de ForenseIA.";
+const formatDate = (value: unknown) => {
+  const date = new Date(String(value ?? ""));
+  return Number.isNaN(date.getTime()) ? "" : new Intl.DateTimeFormat("es-MX", { day: "numeric", month: "long", year: "numeric" }).format(date);
+};
+const readTime = (entry: any) => Math.max(2, Math.ceil(String(entry.body ?? "").split(/\s+/).filter(Boolean).length / 210));
+const categories = [...new Set(posts.map((entry) => categoryFor(asData(entry))))];
+const editorialImages = [
+  "/images/blog/centro-operaciones-forenseia.jpg",
+  "/images/blog/red-inteligencia-patrimonial.jpg",
+  "/images/blog/auditoria-forense-documental.jpg",
+  "/images/blog/flujo-investigacion-digital.jpg",
+];
+const visualFor = (entry: any, index = 0) => coverFor(asData(entry)) || editorialImages[index % editorialImages.length];
 ---
 
-<BaseLayout
-  title="Blog | ForenseIA"
-  description="Artículos, análisis y metodologías sobre OSINT, investigación digital, inteligencia artificial aplicada e inteligencia patrimonial."
->
-  <main class="fi-blog-page">
-    <section class="fi-blog-hero">
-      <Container>
-        <div class="fi-blog-heading">
-          <div>
-            <p class="fi-blog-eyebrow">Blog ForenseIA</p>
-            <h1>Investigación, inteligencia y tecnología aplicada.</h1>
-          </div>
-          <p class="fi-blog-summary">
-            Artículos, guías y análisis para investigadores, instituciones,
-            analistas y profesionales. La Gaceta permanece como una categoría
-            editorial dentro del blog.
-          </p>
+<BaseLayout title="Blog | ForenseIA" description="Artículos, análisis y recursos sobre OSINT, investigación digital e inteligencia aplicada.">
+  <main class="blog-v3">
+    <section class="blog-v3__intro">
+      <div class="blog-v3__shell blog-v3__intro-grid">
+        <div>
+          <span class="blog-v3__eyebrow">Blog ForenseIA</span>
+          <h1>Artículos, análisis y recursos sobre inteligencia aplicada.</h1>
+          <p>Contenido práctico sobre OSINT, investigación digital, inteligencia artificial, auditoría forense e inteligencia patrimonial.</p>
         </div>
-
-        {featured && (() => {
-          const data = featured.data as Record<string, any>;
-          const cover = getCover(data.cover ?? data.image);
-          return (
-            <article class="fi-featured-card">
-              <a class="fi-featured-media" href={`/blog/${featured.id}`} aria-label={`Leer ${data.title}`}>
-                <div class="fi-media-fallback" aria-hidden="true">
-                  <span>FORENSEIA</span>
-                  <small>INTELIGENCIA APLICADA</small>
-                </div>
-                {cover && (
-                  <img
-                    src={cover}
-                    alt={data.coverAlt ?? data.title ?? "Portada del artículo"}
-                    loading="eager"
-                    decoding="async"
-                    onerror="this.style.display='none'"
-                  />
-                )}
-              </a>
-
-              <div class="fi-featured-content">
-                <p class="fi-featured-label">Artículo destacado</p>
-                <div class="fi-post-meta">
-                  <span>{getCategory(data)}</span>
-                  <time datetime={String(data.date ?? "")}>{formatDate(data.date)}</time>
-                </div>
-                <h2><a href={`/blog/${featured.id}`}>{data.title}</a></h2>
-                <p class="fi-featured-description">{getDescription(data)}</p>
-                <a class="fi-primary-link" href={`/blog/${featured.id}`}>
-                  Leer artículo <span aria-hidden="true">→</span>
-                </a>
-              </div>
-            </article>
-          );
-        })()}
-      </Container>
+        <div class="blog-v3__visual" aria-hidden="true">
+          <div class="blog-v3__orb">F</div>
+          <span></span><span></span><span></span>
+        </div>
+      </div>
     </section>
 
-    <section class="fi-latest-section">
-      <Container>
-        <div class="fi-section-header">
-          <div>
-            <p class="fi-blog-eyebrow">Publicaciones</p>
-            <h2>Últimos artículos</h2>
+    <section class="blog-v4__image-band" aria-label="Áreas de investigación ForenseIA">
+      <div class="blog-v3__shell blog-v4__image-band-grid">
+        <figure class="blog-v4__image-tile blog-v4__image-tile--wide"><img src="/images/blog/centro-operaciones-forenseia.jpg" alt="Centro de operaciones y análisis ForenseIA" loading="eager" /><figcaption>Investigación digital</figcaption></figure>
+        <figure class="blog-v4__image-tile"><img src="/images/blog/red-inteligencia-patrimonial.jpg" alt="Mapa de relaciones para inteligencia patrimonial" loading="lazy" /><figcaption>Inteligencia patrimonial</figcaption></figure>
+        <figure class="blog-v4__image-tile"><img src="/images/blog/auditoria-forense-documental.jpg" alt="Análisis documental y auditoría forense" loading="lazy" /><figcaption>Auditoría forense</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="blog-v3__content">
+      <div class="blog-v3__shell blog-v3__layout">
+        <div class="blog-v3__main">
+          {featured && (() => {
+            const data = asData(featured);
+            const cover = visualFor(featured, 0);
+            return (
+              <article class="blog-v3__featured">
+                <a class="blog-v3__featured-image" href={hrefFor(featured)} aria-label={`Leer ${data.title}`}>
+                  <div class="blog-v3__image-fallback"><strong>F</strong><small>FORENSEIA</small></div>
+                  {cover && <img src={cover} alt={data.coverAlt ?? data.title} loading="eager" onerror="this.remove()" />}
+                </a>
+                <div class="blog-v3__featured-copy">
+                  <span class="blog-v3__eyebrow">Artículo destacado</span>
+                  <div class="blog-v3__meta"><span>{categoryFor(data)}</span><time>{formatDate(data.date)}</time></div>
+                  <h2><a href={hrefFor(featured)}>{data.title}</a></h2>
+                  <p>{descriptionFor(data)}</p>
+                  <div class="blog-v3__featured-footer">
+                    <a class="blog-v3__button" href={hrefFor(featured)}>Leer artículo <span>→</span></a>
+                    <span>{readTime(featured)} min de lectura</span>
+                  </div>
+                </div>
+              </article>
+            );
+          })()}
+
+          <div class="blog-v3__section-head">
+            <div><span class="blog-v3__eyebrow">Publicaciones</span><h2>Últimos artículos</h2></div>
           </div>
-          <p>Contenido práctico, editorial y especializado publicado por el equipo de ForenseIA.</p>
+
+          <div class="blog-v3__filters" aria-label="Categorías del blog">
+            <button class="is-active" type="button">Todos</button>
+            {categories.slice(0, 6).map((category) => <button type="button">{category}</button>)}
+          </div>
+
+          {rest.length ? (
+            <div class="blog-v3__grid">
+              {rest.map((entry) => {
+                const data = asData(entry);
+                const cover = visualFor(entry, rest.indexOf(entry) + 1);
+                return (
+                  <article class="blog-v3__card">
+                    <a class="blog-v3__card-image" href={hrefFor(entry)}>
+                      <div class="blog-v3__image-fallback"><strong>F</strong></div>
+                      {cover && <img src={cover} alt={data.coverAlt ?? data.title} loading="lazy" onerror="this.remove()" />}
+                    </a>
+                    <div class="blog-v3__card-body">
+                      <div class="blog-v3__meta"><span>{categoryFor(data)}</span><time>{formatDate(data.date)}</time></div>
+                      <h3><a href={hrefFor(entry)}>{data.title}</a></h3>
+                      <p>{descriptionFor(data)}</p>
+                      <div class="blog-v3__card-footer"><span>{readTime(entry)} min</span><a href={hrefFor(entry)}>Leer más →</a></div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          ) : !featured ? <div class="blog-v3__empty">Aún no hay artículos publicados.</div> : null}
         </div>
 
-        {latestPosts.length > 0 ? (
-          <div class="fi-post-grid">
-            {latestPosts.map((post) => {
-              const data = post.data as Record<string, any>;
-              const cover = getCover(data.cover ?? data.image);
-              return (
-                <article class="fi-post-card">
-                  <a class="fi-post-media" href={`/blog/${post.id}`} aria-label={`Leer ${data.title}`}>
-                    <div class="fi-media-fallback" aria-hidden="true">
-                      <span>FORENSEIA</span>
-                    </div>
-                    {cover && (
-                      <img
-                        src={cover}
-                        alt={data.coverAlt ?? data.title ?? "Portada del artículo"}
-                        loading="lazy"
-                        decoding="async"
-                        onerror="this.style.display='none'"
-                      />
-                    )}
-                  </a>
-                  <div class="fi-post-body">
-                    <div class="fi-post-meta">
-                      <span>{getCategory(data)}</span>
-                      <time datetime={String(data.date ?? "")}>{formatDate(data.date)}</time>
-                    </div>
-                    <h3><a href={`/blog/${post.id}`}>{data.title}</a></h3>
-                    <p>{getDescription(data)}</p>
-                    <a class="fi-text-link" href={`/blog/${post.id}`}>Leer artículo →</a>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        ) : !featured ? (
-          <div class="fi-empty-state">
-            <p class="fi-blog-eyebrow">Próximamente</p>
-            <h2>Estamos preparando nuevas publicaciones.</h2>
-          </div>
-        ) : null}
-      </Container>
+        <aside class="blog-v3__aside">
+          <section class="blog-v3__aside-card">
+            <h3>Buscar en el blog</h3>
+            <label class="blog-v3__search"><input type="search" placeholder="Buscar artículos..." /><span>⌕</span></label>
+          </section>
+          <section class="blog-v3__aside-card">
+            <h3>Sobre el blog</h3>
+            <p>Publicamos contenido especializado para investigadores, analistas, peritos, instituciones de seguridad y profesionales del área legal.</p>
+            <a href="/nosotros">Conoce más sobre nosotros →</a>
+          </section>
+          <section class="blog-v3__aside-card">
+            <h3>Categorías</h3>
+            <ul>
+              {categories.map((category) => <li><span>{category}</span><b>{posts.filter((entry) => categoryFor(asData(entry)) === category).length}</b></li>)}
+            </ul>
+          </section>
+          <section class="blog-v3__aside-card blog-v4__edition-card">
+            <img src="/images/blog/gaceta-forenseia-portada-editorial.jpg" alt="Portada editorial de la Gaceta ForenseIA" loading="lazy" />
+            <div><span class="blog-v3__eyebrow">Edición especial</span><h3>Gaceta ForenseIA</h3><p>Contenido editorial integrado dentro del Blog.</p></div>
+          </section>
+        </aside>
+      </div>
     </section>
   </main>
 </BaseLayout>

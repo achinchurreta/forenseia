@@ -1,212 +1,71 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Container from "../../components/ui/Container.astro";
 import { getCollection, render } from "astro:content";
-import "../../styles/blog.css";
+import "../../styles/blog-v4.css";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
-  return posts
-    .filter((entry) => {
-      const data = entry.data as Record<string, any>;
-      return data.status !== "draft" && data.draft !== true;
-    })
-    .map((post) => ({
-      params: { slug: String(post.id) },
-      props: { post },
-    }));
+  return posts.filter((entry) => {
+    const data = entry.data as Record<string, any>;
+    return data.status !== "draft" && data.draft !== true;
+  }).map((post) => ({ params: { slug: String(post.id) }, props: { post } }));
 }
 
 const { post } = Astro.props;
 const data = post.data as Record<string, any>;
-const { Content } = await render(post);
-
-const formatDate = (value: unknown) => {
-  if (!value) return "";
-  const date = new Date(String(value));
-  if (Number.isNaN(date.getTime())) return String(value);
-  return new Intl.DateTimeFormat("es-MX", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
-};
-
-const getCover = (value: any): string => {
-  if (typeof value === "string") return value.trim();
-  if (value && typeof value.src === "string") return value.src;
-  return "";
-};
-
-const cover = getCover(data.cover ?? data.image);
-const description = data.description ?? data.excerpt ?? "Artículo especializado de ForenseIA.";
-const category = data.category ?? data.area ?? "Investigación digital";
+const { Content, headings } = await render(post);
+const value = data.cover ?? data.image ?? data.featuredImage;
+const cover = (typeof value === "string" ? value.trim() : value?.src ?? "") || "/images/blog/centro-operaciones-forenseia.jpg";
+const description = data.description ?? data.excerpt ?? "Contenido especializado de ForenseIA.";
+const category = data.category ?? data.area ?? "Blog";
 const author = data.author ?? data.director ?? "Equipo ForenseIA";
-const bodyText = typeof post.body === "string" ? post.body : "";
-const readingMinutes = Math.max(
-  1,
-  Math.ceil(bodyText.replace(/[#_*`>\[\]()!-]/g, " ").split(/\s+/).filter(Boolean).length / 210),
-);
-
-const allPosts = (await getCollection("blog"))
-  .filter((entry) => {
-    const entryData = entry.data as Record<string, any>;
-    return entry.id !== post.id && entryData.status !== "draft" && entryData.draft !== true;
-  })
-  .sort((a, b) => {
-    const aDate = new Date((a.data as Record<string, any>).date ?? 0).getTime();
-    const bDate = new Date((b.data as Record<string, any>).date ?? 0).getTime();
-    return bDate - aDate;
-  });
-
-const relatedPosts = [
-  ...allPosts.filter((entry) => {
-    const entryData = entry.data as Record<string, any>;
-    return (entryData.category ?? entryData.area) === category;
-  }),
-  ...allPosts,
-]
-  .filter((entry, index, list) => list.findIndex((item) => item.id === entry.id) === index)
-  .slice(0, 3);
-
-const tags: string[] = Array.isArray(data.tags)
-  ? data.tags.map(String)
-  : [category, ...(data.edition ? [String(data.edition)] : [])];
+const date = new Date(String(data.date ?? ""));
+const formattedDate = Number.isNaN(date.getTime()) ? "" : new Intl.DateTimeFormat("es-MX", { day: "numeric", month: "long", year: "numeric" }).format(date);
+const readingMinutes = Math.max(2, Math.ceil(String(post.body ?? "").split(/\s+/).filter(Boolean).length / 210));
+const tags = Array.isArray(data.tags) ? data.tags.map(String) : [category];
 ---
 
-<BaseLayout
-  title={`${data.title} | Blog ForenseIA`}
-  description={description}
-  image={cover || "/logo.png"}
->
-  <main class="fi-article-page">
-    <section class="fi-article-hero">
-      <Container>
-        <nav class="fi-breadcrumb" aria-label="Migas de pan">
-          <a href="/">Inicio</a><span>›</span>
-          <a href="/blog">Blog</a><span>›</span>
-          <span>{category}</span>
-        </nav>
-
-        <div class="fi-article-grid">
-          <div class="fi-article-main-head">
-            <p class="fi-featured-label">{data.featured ? "Artículo destacado" : "Blog ForenseIA"}</p>
+<BaseLayout title={`${data.title} | Blog ForenseIA`} description={description} image={cover || undefined}>
+  <main class="article-v3">
+    <header class="article-v3__header">
+      <div class="article-v3__shell">
+        <nav class="article-v3__breadcrumb"><a href="/">Inicio</a><span>›</span><a href="/blog">Blog</a><span>›</span><span>{category}</span></nav>
+        <div class="article-v3__head-grid">
+          <div class="article-v3__head-copy">
+            <span class="blog-v3__eyebrow">{data.featured ? "Artículo destacado" : category}</span>
             <h1>{data.title}</h1>
-            <p class="fi-article-deck">{description}</p>
-
-            <div class="fi-article-meta">
-              <span><b>Autor:</b> {author}</span>
-              <span><b>Publicado:</b> <time datetime={String(data.date ?? "")}>{formatDate(data.date)}</time></span>
-              <span><b>Lectura:</b> {readingMinutes} min</span>
-              <span><b>Categoría:</b> {category}</span>
-            </div>
-
-            <figure class="fi-article-cover">
-              <div class="fi-media-fallback" aria-hidden="true">
-                <span>FORENSEIA</span>
-                <small>INTELIGENCIA APLICADA</small>
-              </div>
-              {cover && (
-                <img
-                  src={cover}
-                  alt={data.coverAlt ?? data.title}
-                  loading="eager"
-                  decoding="async"
-                  onerror="this.style.display='none'"
-                />
-              )}
-            </figure>
+            <p>{description}</p>
+            <div class="article-v3__meta"><span>{author}</span><time>{formattedDate}</time><span>{readingMinutes} min de lectura</span></div>
           </div>
-
-          <aside class="fi-article-sidebar">
-            <section class="fi-sidebar-card">
-              <p class="fi-sidebar-title">Sobre el autor</p>
-              <h2>{author}</h2>
-              <p>{data.authorRole ?? data.role ?? "Especialista y colaborador de ForenseIA."}</p>
-            </section>
-
-            <section class="fi-sidebar-card">
-              <p class="fi-sidebar-title">Información</p>
-              <dl class="fi-info-list">
-                <div><dt>Categoría</dt><dd>{category}</dd></div>
-                <div><dt>Fecha</dt><dd>{formatDate(data.date)}</dd></div>
-                <div><dt>Lectura</dt><dd>{readingMinutes} minutos</dd></div>
-                {data.edition && <div><dt>Edición</dt><dd>{data.edition}</dd></div>}
-              </dl>
-            </section>
-
-            {tags.length > 0 && (
-              <section class="fi-sidebar-card">
-                <p class="fi-sidebar-title">Etiquetas</p>
-                <div class="fi-tag-list">
-                  {tags.map((tag) => <span>{tag}</span>)}
-                </div>
-              </section>
-            )}
+          <aside class="article-v3__author-card">
+            <span class="blog-v3__eyebrow">Sobre el autor</span>
+            <div class="article-v3__avatar">{String(author).charAt(0)}</div>
+            <h2>{author}</h2>
+            <p>{data.authorRole ?? data.role ?? "Especialista y colaborador de ForenseIA."}</p>
           </aside>
         </div>
-      </Container>
-    </section>
-
-    <section class="fi-article-body-section">
-      <Container>
-        <div class="fi-article-body-grid">
-          <article class="fi-article-prose">
-            <Content />
-          </article>
-
-          <aside class="fi-reading-aside">
-            <div class="fi-reading-card">
-              <p class="fi-sidebar-title">ForenseIA</p>
-              <p>Inteligencia aplicada para investigación, capacitación y toma de decisiones.</p>
-              <a href="/contacto">Solicitar información →</a>
-            </div>
-          </aside>
+        <figure class="article-v3__cover">
+          <div class="blog-v3__image-fallback"><strong>F</strong><small>FORENSEIA</small></div>
+          {cover && <img src={cover} alt={data.coverAlt ?? data.title} loading="eager" onerror="this.remove()" />}
+        </figure>
+        <div class="article-v4__visual-grid" aria-label="Galería editorial del artículo">
+          <figure><img src="/images/blog/red-inteligencia-patrimonial.jpg" alt="Análisis de relaciones patrimoniales" loading="lazy" /><figcaption>Relaciones y vínculos</figcaption></figure>
+          <figure><img src="/images/blog/auditoria-forense-documental.jpg" alt="Auditoría y revisión documental" loading="lazy" /><figcaption>Evidencia documental</figcaption></figure>
+          <figure><img src="/images/blog/flujo-investigacion-digital.jpg" alt="Flujo de investigación digital" loading="lazy" /><figcaption>Flujo analítico</figcaption></figure>
         </div>
-      </Container>
-    </section>
+      </div>
+    </header>
 
-    <section class="fi-article-cta-section">
-      <Container>
-        <div class="fi-article-cta">
-          <div>
-            <p class="fi-blog-eyebrow">Aplicación institucional</p>
-            <h2>Capacitación y metodologías adaptadas a tu equipo.</h2>
-            <p>Diseñamos cursos, talleres y soluciones para instituciones, empresas y grupos de investigación.</p>
-          </div>
-          <a href="/contacto">Solicitar información →</a>
-        </div>
-      </Container>
+    <section class="article-v3__body-section">
+      <div class="article-v3__shell article-v3__body-grid">
+        <article class="article-v3__prose"><Content /></article>
+        <aside class="article-v3__rail">
+          {headings?.length > 1 && <section class="article-v3__rail-card"><h3>Índice del artículo</h3><ol>{headings.filter((h:any) => h.depth <= 3).map((h:any) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol></section>}
+          <section class="article-v3__rail-card"><h3>Etiquetas</h3><div class="article-v3__tags">{tags.map((tag:string) => <span>{tag}</span>)}</div></section>
+          <section class="article-v3__rail-card article-v4__magazine-card"><img src="/images/blog/gaceta-forenseia-julio-2026.jpg" alt="Portada Gaceta ForenseIA julio 2026" loading="lazy" /><h3>Edición visual</h3><p>La Gaceta es contenido editorial dentro del Blog ForenseIA.</p></section>
+          <section class="article-v3__rail-card"><h3>ForenseIA</h3><p>Capacitación, investigación y soluciones de inteligencia aplicada.</p><a href="/contacto">Solicitar información →</a></section>
+        </aside>
+      </div>
     </section>
-
-    {relatedPosts.length > 0 && (
-      <section class="fi-related-section">
-        <Container>
-          <div class="fi-section-header">
-            <div>
-              <p class="fi-blog-eyebrow">Continuar leyendo</p>
-              <h2>Artículos relacionados</h2>
-            </div>
-            <a href="/blog">Ver todo el blog →</a>
-          </div>
-          <div class="fi-related-grid">
-            {relatedPosts.map((entry) => {
-              const entryData = entry.data as Record<string, any>;
-              return (
-                <article>
-                  <div class="fi-post-meta">
-                    <span>{entryData.category ?? entryData.area ?? "Blog"}</span>
-                    <time datetime={String(entryData.date ?? "")}>{formatDate(entryData.date)}</time>
-                  </div>
-                  <h3><a href={`/blog/${entry.id}`}>{entryData.title}</a></h3>
-                  <p>{entryData.description ?? entryData.excerpt}</p>
-                  <a class="fi-text-link" href={`/blog/${entry.id}`}>Leer artículo →</a>
-                </article>
-              );
-            })}
-          </div>
-        </Container>
-      </section>
-    )}
   </main>
 </BaseLayout>
