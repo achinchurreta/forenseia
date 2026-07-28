@@ -1,102 +1,188 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import PageHeader from "../components/ui/PageHeader.astro";
-import Container from "../components/ui/Container.astro";
-import { CONTACT } from "../constants/contact";
+import "../styles/contacto-v2.css";
+
+const socialLinks = [
+  {
+    name: "Facebook",
+    label: "Noticias, eventos y publicaciones",
+    href: "https://www.facebook.com/forenseia",
+    icon: "facebook",
+  },
+  {
+    name: "Instagram",
+    label: "Contenido visual y actividades",
+    href: "https://www.instagram.com/forenseia",
+    icon: "instagram",
+  },
+  {
+    name: "TikTok",
+    label: "Consejos y contenido breve",
+    href: "https://www.tiktok.com/@forenseia",
+    icon: "tiktok",
+  },
+];
 ---
 
-<BaseLayout title="Contacto | ForenseIA">
-  <PageHeader
-    eyebrow="Contacto"
-    title="Hablemos de tu caso o capacitación."
-    description="Solicita diagnóstico, curso, consultoría o colaboración."
-  />
+<BaseLayout
+  title="Contacto | ForenseIA"
+  description="Solicita información sobre cursos, consultoría, investigación digital, OSINT e inteligencia aplicada."
+>
+  <section class="contact-page">
+    <div class="contact-shell">
+      <header class="contact-hero">
+        <div class="contact-hero__copy">
+          <span class="contact-eyebrow">Contacto</span>
+          <h1>Hablemos de tu caso o capacitación.</h1>
+          <p>
+            Cuéntanos qué necesitas. Podemos ayudarte con formación, consultoría,
+            colaboración institucional o soluciones de inteligencia aplicada.
+          </p>
+        </div>
 
-  <section class="py-20">
-    <Container>
-      <div class="grid lg:grid-cols-[1fr_380px] gap-8">
-        <form
-          name="contacto"
-          method="POST"
-          data-netlify="true"
-          class="border border-white/10 bg-white/[0.03] p-8 space-y-5"
-        >
-          <input type="hidden" name="form-name" value="contacto" />
-
-          <input
-            name="nombre"
-            required
-            placeholder="Nombre"
-            class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
-          />
-
-          <input
-            name="correo"
-            type="email"
-            required
-            placeholder="Correo"
-            class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
-          />
-
-          <input
-            name="telefono"
-            placeholder="WhatsApp"
-            class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
-          />
-
-          <select
-            name="tipo"
-            class="w-full bg-black border border-white/10 px-4 py-4 text-white outline-none focus:border-[#C8A96B]"
-          >
-            <option>Diagnóstico</option>
-            <option>Curso</option>
-            <option>Consultoría</option>
-            <option>Colaboración</option>
-          </select>
-
-          <textarea
-            name="mensaje"
-            required
-            placeholder="Mensaje"
-            class="w-full bg-black border border-white/10 px-4 py-4 text-white min-h-40 outline-none focus:border-[#C8A96B]"
-          ></textarea>
-
-          <button
-            type="submit"
-            class="bg-[#C8A96B] text-black px-8 py-4 font-medium hover:opacity-90 transition"
-          >
-            Enviar
-          </button>
-        </form>
-
-        <aside class="border border-white/10 bg-white/[0.03] p-8 h-fit">
-          <h2 class="text-2xl font-semibold">
-            Contacto directo
-          </h2>
-
-          <div class="mt-6 space-y-4 text-white/55">
-            <a href={CONTACT.whatsapp} target="_blank" class="block hover:text-[#C8A96B]">
-              WhatsApp: +52 993 133 6447
-            </a>
-
-            <a href={`mailto:${CONTACT.email}`} class="block hover:text-[#C8A96B]">
-              {CONTACT.email}
-            </a>
-
-            <a href={CONTACT.facebook} target="_blank" class="block hover:text-[#C8A96B]">
-              Facebook
-            </a>
-
-            <a href={CONTACT.instagram} target="_blank" class="block hover:text-[#C8A96B]">
-              Instagram
-            </a>
-
-            <a href={CONTACT.tiktok} target="_blank" class="block hover:text-[#C8A96B]">
-              TikTok
-            </a>
+        <div class="contact-hero__visual" aria-hidden="true">
+          <div class="contact-hero__orb">
+            <img src="/logo.png" alt="" />
           </div>
+          <span class="contact-hero__line contact-hero__line--one"></span>
+          <span class="contact-hero__line contact-hero__line--two"></span>
+        </div>
+      </header>
+
+      <div class="contact-grid">
+        <section class="contact-form-card" aria-labelledby="contact-form-title">
+          <div class="contact-section-heading">
+            <span>Escríbenos</span>
+            <h2 id="contact-form-title">Solicita información</h2>
+            <p>Responderemos por correo con los siguientes pasos.</p>
+          </div>
+
+          <form
+            name="contacto-forenseia"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            action="/gracias"
+            class="contact-form"
+          >
+            <input type="hidden" name="form-name" value="contacto-forenseia" />
+            <p class="contact-hidden">
+              <label>No llenar: <input name="bot-field" /></label>
+            </p>
+
+            <div class="contact-form__row">
+              <label class="contact-field">
+                <span>Nombre</span>
+                <input type="text" name="nombre" autocomplete="name" required />
+              </label>
+
+              <label class="contact-field">
+                <span>Correo electrónico</span>
+                <input type="email" name="correo" autocomplete="email" required />
+              </label>
+            </div>
+
+            <div class="contact-form__row">
+              <label class="contact-field">
+                <span>Institución o empresa</span>
+                <input type="text" name="institucion" autocomplete="organization" />
+              </label>
+
+              <label class="contact-field">
+                <span>Tipo de solicitud</span>
+                <select name="tipo" required>
+                  <option value="" selected disabled>Selecciona una opción</option>
+                  <option value="curso">Curso o capacitación</option>
+                  <option value="consultoria">Consultoría</option>
+                  <option value="investigacion">Investigación digital u OSINT</option>
+                  <option value="colaboracion">Colaboración institucional</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="contact-field">
+              <span>¿Cómo podemos ayudarte?</span>
+              <textarea
+                name="mensaje"
+                rows="6"
+                placeholder="Describe brevemente el caso, curso o servicio que necesitas."
+                required
+              ></textarea>
+            </label>
+
+            <div class="contact-form__footer">
+              <p>Al enviar aceptas que usemos tus datos únicamente para responder esta solicitud.</p>
+              <button type="submit">
+                Enviar solicitud
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <aside class="contact-sidebar">
+          <section class="contact-info-card">
+            <span class="contact-info-card__eyebrow">Contacto directo</span>
+            <h2>Canales oficiales</h2>
+            <p>
+              Para solicitudes formales, cotizaciones o colaboración institucional,
+              escríbenos por correo.
+            </p>
+
+            <a class="contact-email" href="mailto:ceo@forenseia.org">
+              <span class="contact-email__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M3 6.75A1.75 1.75 0 0 1 4.75 5h14.5A1.75 1.75 0 0 1 21 6.75v10.5A1.75 1.75 0 0 1 19.25 19H4.75A1.75 1.75 0 0 1 3 17.25V6.75Z" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="m4 7 7.02 5.12a1.65 1.65 0 0 0 1.96 0L20 7" stroke="currentColor" stroke-width="1.6"/>
+                </svg>
+              </span>
+              <span>
+                <small>Correo</small>
+                <strong>ceo@forenseia.org</strong>
+              </span>
+            </a>
+          </section>
+
+          <section class="contact-social-card">
+            <div class="contact-social-card__heading">
+              <span>Síguenos</span>
+              <h2>Redes sociales</h2>
+            </div>
+
+            <div class="contact-social-list">
+              {socialLinks.map((social) => (
+                <a href={social.href} target="_blank" rel="noreferrer" class="contact-social-link">
+                  <span class="contact-social-link__icon" aria-hidden="true">
+                    {social.icon === "facebook" && (
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 22v-9h3l.45-3.5H13.6V7.27c0-1.01.28-1.7 1.74-1.7H17.2V2.44c-.32-.04-1.42-.14-2.7-.14-2.67 0-4.5 1.63-4.5 4.62V9.5H7v3.5h3v9h3.6Z"/></svg>
+                    )}
+                    {social.icon === "instagram" && (
+                      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/><circle cx="17.4" cy="6.7" r="1" fill="currentColor"/></svg>
+                    )}
+                    {social.icon === "tiktok" && (
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.25 3h3.03c.18 1.55 1.05 2.87 2.47 3.62v3.05a7.43 7.43 0 0 1-2.45-.72v6.15a6.1 6.1 0 1 1-5.26-6.04v3.08a3.09 3.09 0 1 0 2.21 2.96V3Z"/></svg>
+                    )}
+                  </span>
+                  <span class="contact-social-link__copy">
+                    <strong>{social.name}</strong>
+                    <small>{social.label}</small>
+                  </span>
+                  <span class="contact-social-link__arrow" aria-hidden="true">↗</span>
+                </a>
+              ))}
+            </div>
+          </section>
+
+          <section class="contact-response-card">
+            <span class="contact-response-card__dot"></span>
+            <div>
+              <strong>Tiempo de respuesta</strong>
+              <p>Normalmente respondemos en uno o dos días hábiles.</p>
+            </div>
+          </section>
         </aside>
       </div>
-    </Container>
+    </div>
   </section>
 </BaseLayout>
