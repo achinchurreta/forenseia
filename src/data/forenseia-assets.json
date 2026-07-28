@@ -1,0 +1,161 @@
+{
+  "name": "ForenseIA Asset Pack",
+  "version": "1.0.0",
+  "brand": {
+    "primary": "#D4AF37",
+    "background": "#05070A",
+    "surface": "#0D1117",
+    "text": "#F5F2EA",
+    "muted": "#9BA3AF"
+  },
+  "usage": "Assets optimizados para Astro y web. Usa WebP cuando sea posible y JPG como respaldo.",
+  "assets": [
+    {
+      "title": "Centro de operaciones ForenseIA",
+      "category": "hero",
+      "alt": "Centro profesional de operaciones con múltiples pantallas de análisis e inteligencia.",
+      "recommendedFor": [
+        "home",
+        "servicios",
+        "contacto"
+      ],
+      "focalPoint": "center",
+      "id": "hero-hero-home-centro-operaciones",
+      "width": 975,
+      "height": 542,
+      "aspectRatio": 1.7989,
+      "src": "/assets/forenseia/hero/hero-home-centro-operaciones.jpg",
+      "variants": [
+        "/assets/forenseia/hero/hero-home-centro-operaciones-800.webp",
+        "/assets/forenseia/hero/hero-home-centro-operaciones-975.webp",
+        "/assets/forenseia/hero/hero-home-centro-operaciones.jpg"
+      ]
+    },
+    {
+      "title": "Inteligencia patrimonial",
+      "category": "service",
+      "alt": "Escritorio de investigación con mapa de relaciones entre personas, empresas y activos.",
+      "recommendedFor": [
+        "servicios",
+        "inteligencia patrimonial",
+        "casos"
+      ],
+      "focalPoint": "center",
+      "id": "services-servicio-inteligencia-patrimonial",
+      "width": 975,
+      "height": 542,
+      "aspectRatio": 1.7989,
+      "src": "/assets/forenseia/services/servicio-inteligencia-patrimonial.jpg",
+      "variants": [
+        "/assets/forenseia/services/servicio-inteligencia-patrimonial-800.webp",
+        "/assets/forenseia/services/servicio-inteligencia-patrimonial-975.webp",
+        "/assets/forenseia/services/servicio-inteligencia-patrimonial.jpg"
+      ]
+    },
+    {
+      "title": "Auditoría forense documental",
+      "category": "service",
+      "alt": "Documentación financiera, gráficos, lupa y herramientas de análisis sobre un escritorio.",
+      "recommendedFor": [
+        "auditoría forense",
+        "investigación patrimonial",
+        "blog"
+      ],
+      "focalPoint": "center",
+      "id": "services-servicio-auditoria-forense",
+      "width": 975,
+      "height": 542,
+      "aspectRatio": 1.7989,
+      "src": "/assets/forenseia/services/servicio-auditoria-forense.jpg",
+      "variants": [
+        "/assets/forenseia/services/servicio-auditoria-forense-800.webp",
+        "/assets/forenseia/services/servicio-auditoria-forense-975.webp",
+        "/assets/forenseia/services/servicio-auditoria-forense.jpg"
+      ]
+    },
+    {
+      "title": "Academia de investigación digital",
+      "category": "academy",
+      "alt": "Flujo visual de documentos y evidencia digital conectado en una estación de análisis.",
+      "recommendedFor": [
+        "academia",
+        "cursos",
+        "automatización"
+      ],
+      "focalPoint": "center",
+      "id": "academy-academia-investigacion-digital",
+      "width": 975,
+      "height": 542,
+      "aspectRatio": 1.7989,
+      "src": "/assets/forenseia/academy/academia-investigacion-digital.jpg",
+      "variants": [
+        "/assets/forenseia/academy/academia-investigacion-digital-800.webp",
+        "/assets/forenseia/academy/academia-investigacion-digital-975.webp",
+        "/assets/forenseia/academy/academia-investigacion-digital.jpg"
+      ]
+    },
+    {
+      "title": "Gaceta ForenseIA — portada editorial",
+      "category": "blog",
+      "alt": "Portada editorial oscura de la Gaceta ForenseIA, edición especial de julio de 2026.",
+      "recommendedFor": [
+        "blog",
+        "gaceta",
+        "redes sociales"
+      ],
+      "focalPoint": "center",
+      "id": "blog-gaceta-forenseia-portada-editorial",
+      "width": 1113,
+      "height": 1270,
+      "aspectRatio": 0.8764,
+      "src": "/assets/forenseia/blog/gaceta-forenseia-portada-editorial.jpg",
+      "variants": [
+        "/assets/forenseia/blog/gaceta-forenseia-portada-editorial-1113.webp",
+        "/assets/forenseia/blog/gaceta-forenseia-portada-editorial-800.webp",
+        "/assets/forenseia/blog/gaceta-forenseia-portada-editorial.jpg"
+      ]
+    },
+    {
+      "title": "Gaceta ForenseIA — edición julio 2026",
+      "category": "blog",
+      "alt": "Portada premium negra y dorada de la Gaceta ForenseIA de julio de 2026.",
+      "recommendedFor": [
+        "blog",
+        "gaceta",
+        "artículo destacado"
+      ],
+      "focalPoint": "center",
+      "id": "blog-gaceta-forenseia-julio-2026",
+      "width": 997,
+      "height": 1577,
+      "aspectRatio": 0.6322,
+      "src": "/assets/forenseia/blog/gaceta-forenseia-julio-2026.jpg",
+      "variants": [
+        "/assets/forenseia/blog/gaceta-forenseia-julio-2026-800.webp",
+        "/assets/forenseia/blog/gaceta-forenseia-julio-2026-997.webp",
+        "/assets/forenseia/blog/gaceta-forenseia-julio-2026.jpg"
+      ]
+    },
+    {
+      "title": "Logo ForenseIA",
+      "category": "brand",
+      "alt": "Logotipo institucional de ForenseIA.",
+      "recommendedFor": [
+        "header",
+        "footer",
+        "marca de agua"
+      ],
+      "focalPoint": "center",
+      "id": "brand-logo-forenseia",
+      "width": 1024,
+      "height": 1536,
+      "aspectRatio": 0.6667,
+      "src": "/assets/forenseia/brand/logo-forenseia.jpg",
+      "variants": [
+        "/assets/forenseia/brand/logo-forenseia-1024.webp",
+        "/assets/forenseia/brand/logo-forenseia-800.webp",
+        "/assets/forenseia/brand/logo-forenseia.jpg"
+      ]
+    }
+  ]
+}

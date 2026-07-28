@@ -1,167 +1,214 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import PageHeader from "../components/ui/PageHeader.astro";
 import Container from "../components/ui/Container.astro";
 import Button from "../components/ui/Button.astro";
+import ForenseIAImage from "../components/ui/ForenseIAImage.astro";
 import { getCollection } from "astro:content";
+import "../styles/forenseia-assets.css";
+import "../styles/services-academy-pro.css";
 
 const services = (await getCollection("services"))
   .filter((service) => service.data.status === "published")
-  .sort((a, b) => {
-    if (a.data.featured !== b.data.featured) {
-      return Number(b.data.featured) - Number(a.data.featured);
-    }
+  .sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order);
 
-    return a.data.order - b.data.order;
-  });
+const serviceImages = [
+  "/assets/forenseia/services/servicio-inteligencia-patrimonial-1200.webp",
+  "/assets/forenseia/services/servicio-auditoria-forense-1200.webp",
+  "/assets/forenseia/hero/hero-home-centro-operaciones-1200.webp",
+];
 
-const groups = [
-  {
-    id: "ia",
-    title: "Inteligencia Artificial",
-    description:
-      "Soluciones de inteligencia artificial, automatización y transformación digital para gobierno e instituciones.",
-    director: "Gonzalo García",
-    services: services.filter(
-      (service) => service.data.area === "Inteligencia Artificial"
-    ),
-  },
-  {
-    id: "investigacion",
-    title: "Investigación Digital y Ciberseguridad",
-    description:
-      "Servicios técnicos para fiscalías, agencias de inteligencia, instituciones navales y unidades especializadas.",
-    director: "Augusto Chinchurreta",
-    services: services.filter(
-      (service) =>
-        service.data.area ===
-        "Investigación Digital y Ciberseguridad"
-    ),
-  },
-  {
-    id: "psicologia",
-    title: "Psicología Criminal",
-    description:
-      "Análisis del comportamiento, prevención y capacitación para instituciones y equipos multidisciplinarios.",
-    director: "Tania Pérez",
-    services: services.filter(
-      (service) => service.data.area === "Psicología Criminal"
-    ),
-  },
+const resolveServiceImage = (service, index) => {
+  const value = `${service.data.title} ${service.data.area}`.toLowerCase();
+
+  if (value.includes("patrimonial") || value.includes("empresa")) {
+    return "/assets/forenseia/services/servicio-inteligencia-patrimonial-1200.webp";
+  }
+
+  if (value.includes("auditor") || value.includes("forense") || value.includes("evidencia")) {
+    return "/assets/forenseia/services/servicio-auditoria-forense-1200.webp";
+  }
+
+  return serviceImages[index % serviceImages.length];
+};
+
+const process = [
+  ["01", "Diagnóstico", "Definimos objetivo, alcance, riesgos y resultados esperados."],
+  ["02", "Planeación", "Diseñamos fuentes, metodología, responsables y controles."],
+  ["03", "Investigación", "Obtenemos y organizamos información útil y verificable."],
+  ["04", "Análisis", "Correlacionamos entidades, eventos, activos y relaciones."],
+  ["05", "Informe", "Entregamos hallazgos claros, trazables y accionables."],
+];
+
+const sectors = [
+  "Fiscalías y procuración de justicia",
+  "Seguridad pública",
+  "Unidades de inteligencia",
+  "Instituciones educativas",
+  "Empresas y despachos",
+  "Equipos de investigación",
 ];
 ---
 
 <BaseLayout
-  title="Servicios | ForenseIA"
-  description="Servicios en inteligencia artificial, investigación digital, ciberseguridad y psicología criminal."
+  title="Servicios especializados | ForenseIA"
+  description="Servicios profesionales en OSINT, investigación digital, inteligencia patrimonial, auditoría forense e inteligencia artificial aplicada."
 >
-  <PageHeader
-    eyebrow="Servicios"
-    title="Tres áreas para necesidades complejas."
-    description="Servicios especializados para instituciones públicas, fiscalías, agencias, organizaciones y equipos profesionales."
-  />
+  <main class="sap-page">
+    <section class="sap-hero">
+      <div class="sap-hero__backdrop">
+        <img
+          src="/assets/forenseia/hero/hero-home-centro-operaciones-1600.webp"
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+      </div>
 
-  <section class="py-20">
-    <Container>
-      {services.length === 0 ? (
-        <div class="border border-white/10 bg-white/[0.02] p-10">
-          <p class="text-white/50">
-            Próximamente publicaremos nuestro catálogo de servicios.
+      <Container class="sap-hero__container">
+        <div class="sap-hero__content">
+          <p class="sap-eyebrow">Servicios ForenseIA</p>
+          <h1>Inteligencia aplicada para investigaciones y decisiones complejas.</h1>
+          <p class="sap-lead">
+            Integramos investigación en fuentes abiertas, análisis digital, inteligencia
+            patrimonial, automatización y documentación profesional.
           </p>
+
+          <div class="sap-actions">
+            <Button href="/contacto">Solicitar diagnóstico</Button>
+            <Button href="#servicios" variant="secondary">Explorar servicios</Button>
+          </div>
+
+          <ul class="sap-hero__proof" aria-label="Principios del servicio">
+            <li>Metodología verificable</li>
+            <li>Confidencialidad</li>
+            <li>Enfoque institucional</li>
+          </ul>
         </div>
-      ) : (
-        <div class="space-y-20">
-          {groups.map((group, groupIndex) =>
-            group.services.length > 0 && (
-              <section id={group.id}>
-                <div class="mb-10 grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
-                  <div>
-                    <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
-                      Dirección 0{groupIndex + 1}
-                    </p>
+      </Container>
+    </section>
 
-                    <h2 class="mt-4 text-4xl font-semibold md:text-5xl">
-                      {group.title}
-                    </h2>
+    <section id="servicios" class="sap-section">
+      <Container>
+        <header class="sap-section-heading">
+          <div>
+            <p class="sap-eyebrow">Áreas de especialización</p>
+            <h2>Soluciones diseñadas alrededor del problema.</h2>
+          </div>
+          <p>
+            Cada proyecto comienza con un diagnóstico. El alcance, las fuentes y los
+            entregables se definen según la necesidad real de la institución.
+          </p>
+        </header>
 
-                    <p class="mt-4 text-sm text-[#C8A96B]">
-                      Director: {group.director}
-                    </p>
+        {services.length === 0 ? (
+          <div class="sap-empty">
+            Próximamente publicaremos nuestro catálogo de servicios.
+          </div>
+        ) : (
+          <div class="sap-service-grid">
+            {services.map((service, index) => (
+              <article class:list={["sap-service-card", service.data.featured && "is-featured"]}>
+                <a href={`/servicios/${service.id}`} class="sap-service-card__media">
+                  <ForenseIAImage
+                    src={resolveServiceImage(service, index)}
+                    alt={`Imagen representativa de ${service.data.title}`}
+                    watermark={true}
+                  />
+                </a>
+
+                <div class="sap-service-card__body">
+                  <div class="sap-card-meta">
+                    <span>{service.data.area}</span>
+                    {service.data.featured && <span>Destacado</span>}
                   </div>
 
-                  <p class="max-w-2xl leading-relaxed text-white/45">
-                    {group.description}
-                  </p>
+                  <h3>
+                    <a href={`/servicios/${service.id}`}>{service.data.title}</a>
+                  </h3>
+
+                  <p>{service.data.description}</p>
+
+                  <div class="sap-service-card__footer">
+                    <span>{service.data.audience}</span>
+                    <a href={`/servicios/${service.id}`} aria-label={`Ver ${service.data.title}`}>
+                      Ver servicio <span aria-hidden="true">→</span>
+                    </a>
+                  </div>
                 </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </Container>
+    </section>
 
-                <div class="grid gap-5">
-                  {group.services.map((service) => (
-                    <article class="group flex flex-col justify-between gap-8 border border-white/10 bg-white/[0.02] p-7 transition hover:border-[#C8A96B]/50 lg:flex-row lg:items-center">
-                      <div class="max-w-3xl">
-                        <div class="flex flex-wrap gap-3 text-xs">
-                          <span class="uppercase tracking-[0.22em] text-[#C8A96B]">
-                            {service.data.area}
-                          </span>
+    <section class="sap-section sap-section--visual">
+      <Container>
+        <div class="sap-split">
+          <ForenseIAImage
+            src="/assets/forenseia/services/servicio-auditoria-forense-1600.webp"
+            alt="Documentos y herramientas para auditoría e investigación forense."
+            class="sap-split__media"
+          />
 
-                          {service.data.featured && (
-                            <span class="text-white/30">
-                              Destacado
-                            </span>
-                          )}
-                        </div>
+          <div class="sap-split__content">
+            <p class="sap-eyebrow">Método de trabajo</p>
+            <h2>De la información dispersa a un producto útil.</h2>
+            <p>
+              No entregamos únicamente datos. Construimos un proceso documentado para
+              transformar fuentes, hallazgos y relaciones en resultados comprensibles.
+            </p>
 
-                        <h3 class="mt-4 text-2xl font-semibold md:text-3xl">
-                          {service.data.title}
-                        </h3>
-
-                        <p class="mt-4 leading-relaxed text-white/45">
-                          {service.data.description}
-                        </p>
-
-                        <p class="mt-5 text-sm text-white/30">
-                          Dirigido a: {service.data.audience}
-                        </p>
-                      </div>
-
-                      <Button
-                        href={`/servicios/${service.id}`}
-                        variant="secondary"
-                      >
-                        Ver servicio
-                      </Button>
-                    </article>
-                  ))}
-                </div>
-              </section>
-            )
-          )}
+            <ol class="sap-process">
+              {process.map(([number, title, description]) => (
+                <li>
+                  <span>{number}</span>
+                  <div>
+                    <h3>{title}</h3>
+                    <p>{description}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
-      )}
-    </Container>
-  </section>
+      </Container>
+    </section>
 
-  <section class="border-t border-white/10 py-24">
-    <Container>
-      <div class="mx-auto max-w-3xl text-center">
-        <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
-          Diagnóstico
-        </p>
+    <section class="sap-section">
+      <Container>
+        <div class="sap-sectors">
+          <div>
+            <p class="sap-eyebrow">Sectores atendidos</p>
+            <h2>Capacidad técnica con contexto institucional.</h2>
+          </div>
 
-        <h2 class="mt-5 text-4xl font-semibold md:text-5xl">
-          Define el servicio adecuado para tu institución.
-        </h2>
-
-        <p class="mx-auto mt-6 max-w-xl leading-relaxed text-white/45">
-          Analizamos la necesidad, identificamos el área responsable y
-          proponemos el alcance inicial.
-        </p>
-
-        <div class="mt-9">
-          <Button href="/contacto">
-            Solicitar diagnóstico
-          </Button>
+          <div class="sap-sector-grid">
+            {sectors.map((sector, index) => (
+              <article>
+                <span>0{index + 1}</span>
+                <h3>{sector}</h3>
+              </article>
+            ))}
+          </div>
         </div>
-      </div>
-    </Container>
-  </section>
+      </Container>
+    </section>
+
+    <section class="sap-cta">
+      <Container>
+        <div class="sap-cta__panel">
+          <div>
+            <p class="sap-eyebrow">Diagnóstico inicial</p>
+            <h2>Define el servicio adecuado antes de invertir recursos.</h2>
+            <p>
+              Revisamos el objetivo, identificamos el área responsable y proponemos el
+              alcance inicial del proyecto.
+            </p>
+          </div>
+          <Button href="/contacto">Solicitar diagnóstico</Button>
+        </div>
+      </Container>
+    </section>
+  </main>
 </BaseLayout>

@@ -1,0 +1,28 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  watermark?: boolean;
+  loading?: 'lazy' | 'eager';
+  sizes?: string;
+}
+
+const {
+  src,
+  alt,
+  class: className = '',
+  watermark = true,
+  loading = 'lazy',
+  sizes = '100vw',
+} = Astro.props;
+---
+
+<figure class:list={['forenseia-media', className]}>
+  <img src={src} alt={alt} loading={loading} decoding="async" sizes={sizes} />
+  {watermark && (
+    <span class="forenseia-watermark" aria-hidden="true">
+      <img src="/assets/forenseia/brand/logo-forenseia-800.webp" alt="" />
+    </span>
+  )}
+</figure>

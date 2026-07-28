@@ -1,0 +1,48 @@
+:root {
+  --fia-gold: #d4af37;
+  --fia-bg: #05070a;
+  --fia-surface: #0d1117;
+  --fia-text: #f5f2ea;
+  --fia-muted: #9ba3af;
+}
+
+.forenseia-media {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid color-mix(in srgb, var(--fia-gold) 28%, transparent);
+  background: var(--fia-surface);
+}
+
+.forenseia-media > img:first-child {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.forenseia-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent 55%, rgba(0,0,0,.58)),
+    linear-gradient(120deg, rgba(212,175,55,.08), transparent 42%);
+}
+
+.forenseia-watermark {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+  z-index: 2;
+  width: clamp(42px, 6vw, 70px);
+  opacity: .72;
+  filter: drop-shadow(0 4px 14px rgba(0,0,0,.65));
+}
+
+.forenseia-watermark img {
+  display: block;
+  width: 100%;
+  height: auto;
+}

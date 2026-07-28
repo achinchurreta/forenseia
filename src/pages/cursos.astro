@@ -1,9 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import PageHeader from "../components/ui/PageHeader.astro";
 import Container from "../components/ui/Container.astro";
 import Button from "../components/ui/Button.astro";
+import ForenseIAImage from "../components/ui/ForenseIAImage.astro";
 import { getCollection } from "astro:content";
+import "../styles/forenseia-assets.css";
+import "../styles/services-academy-pro.css";
 
 const courses = (await getCollection("courses"))
   .filter((course) => course.data.status === "published")
@@ -12,157 +14,230 @@ const courses = (await getCollection("courses"))
       return Number(b.data.featured) - Number(a.data.featured);
     }
 
-    return (
-      new Date(b.data.date).getTime() -
-      new Date(a.data.date).getTime()
-    );
+    return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
   });
 
-const groups = [
+const courseImages = [
+  "/assets/forenseia/academy/academia-investigacion-digital-1200.webp",
+  "/assets/forenseia/hero/hero-home-centro-operaciones-1200.webp",
+  "/assets/forenseia/services/servicio-inteligencia-patrimonial-1200.webp",
+];
+
+const resolveCourseImage = (course, index) => {
+  const value = `${course.data.title} ${course.data.area}`.toLowerCase();
+
+  if (value.includes("patrimonial")) {
+    return "/assets/forenseia/services/servicio-inteligencia-patrimonial-1200.webp";
+  }
+
+  if (value.includes("forense") || value.includes("auditor")) {
+    return "/assets/forenseia/services/servicio-auditoria-forense-1200.webp";
+  }
+
+  return courseImages[index % courseImages.length];
+};
+
+const routes = [
   {
-    id: "inteligencia-artificial",
-    title: "Inteligencia Artificial",
-    description:
-      "Programas de inteligencia artificial, automatización y transformación digital para gobierno e instituciones.",
-    courses: courses.filter(
-      (course) => course.data.area === "Inteligencia Artificial"
-    ),
+    number: "01",
+    title: "OSINT e investigación digital",
+    description: "Búsqueda avanzada, validación, análisis de vínculos y documentación.",
   },
   {
-    id: "investigacion-digital",
-    title: "Investigación Digital y Ciberseguridad",
-    description:
-      "Formación dirigida a fiscalías, agencias, unidades de investigación y equipos técnicos.",
-    courses: courses.filter((course) =>
-      ["Investigación Digital", "Ciberseguridad"].includes(
-        course.data.area
-      )
-    ),
+    number: "02",
+    title: "Inteligencia artificial aplicada",
+    description: "Análisis documental, automatización y generación de productos.",
   },
   {
-    id: "psicologia",
-    title: "Psicología Criminal y Educativa",
-    description:
-      "Cursos sobre comportamiento, prevención, análisis conductual y contextos educativos.",
-    courses: courses.filter((course) =>
-      ["Psicología Criminal", "Psicología Educativa"].includes(
-        course.data.area
-      )
-    ),
+    number: "03",
+    title: "Inteligencia patrimonial",
+    description: "Personas, empresas, activos, relaciones y evaluación de riesgo.",
   },
+  {
+    number: "04",
+    title: "Formación institucional",
+    description: "Programas adaptados a perfiles, objetivos y operaciones reales.",
+  },
+];
+
+const methodology = [
+  ["Fundamento", "Conceptos esenciales y marco metodológico."],
+  ["Demostración", "Aplicación guiada con herramientas y casos."],
+  ["Práctica", "Ejercicios individuales y colaborativos."],
+  ["Producto", "Informe, matriz, mapa o entregable verificable."],
 ];
 ---
 
 <BaseLayout
-  title="Cursos | ForenseIA"
-  description="Cursos especializados en inteligencia artificial, investigación digital, ciberseguridad y psicología criminal."
+  title="Academia | ForenseIA"
+  description="Formación especializada en OSINT, investigación digital, inteligencia artificial e inteligencia patrimonial."
 >
-  <PageHeader
-    eyebrow="Formación"
-    title="Cursos especializados y aplicables."
-    description="Programas para instituciones, organizaciones, fiscalías, agencias y equipos profesionales."
-  />
+  <main class="sap-page">
+    <section class="sap-hero sap-hero--academy">
+      <div class="sap-hero__backdrop">
+        <img
+          src="/assets/forenseia/academy/academia-investigacion-digital-1600.webp"
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+      </div>
 
-  <section class="py-20">
-    <Container>
-      {courses.length === 0 ? (
-        <div class="border border-white/10 bg-white/[0.02] p-10">
-          <p class="text-white/50">
-            Próximamente publicaremos nuevos programas de formación.
+      <Container class="sap-hero__container">
+        <div class="sap-hero__content">
+          <p class="sap-eyebrow">Academia ForenseIA</p>
+          <h1>Formación aplicada para investigadores, analistas e instituciones.</h1>
+          <p class="sap-lead">
+            Cursos y programas construidos alrededor de metodologías, ejercicios y
+            productos que pueden trasladarse al trabajo profesional.
           </p>
-        </div>
-      ) : (
-        <div class="space-y-20">
-          {groups.map((group, groupIndex) =>
-            group.courses.length > 0 && (
-              <section id={group.id}>
-                <div class="mb-10 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
-                  <div>
-                    <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
-                      Área 0{groupIndex + 1}
-                    </p>
 
-                    <h2 class="mt-4 text-4xl font-semibold md:text-5xl">
-                      {group.title}
-                    </h2>
+          <div class="sap-actions">
+            <Button href="#programas">Explorar programas</Button>
+            <Button href="/contacto" variant="secondary">Capacitación institucional</Button>
+          </div>
+        </div>
+      </Container>
+    </section>
+
+    <section class="sap-section">
+      <Container>
+        <header class="sap-section-heading">
+          <div>
+            <p class="sap-eyebrow">Rutas de especialización</p>
+            <h2>Desarrolla capacidades en una progresión clara.</h2>
+          </div>
+          <p>
+            La academia organiza el aprendizaje por áreas y niveles para evitar cursos
+            aislados sin continuidad profesional.
+          </p>
+        </header>
+
+        <div class="sap-route-grid">
+          {routes.map((route) => (
+            <article>
+              <span>{route.number}</span>
+              <h3>{route.title}</h3>
+              <p>{route.description}</p>
+            </article>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    <section id="programas" class="sap-section sap-section--soft">
+      <Container>
+        <header class="sap-section-heading">
+          <div>
+            <p class="sap-eyebrow">Programas disponibles</p>
+            <h2>Cursos con contexto, práctica y entregables.</h2>
+          </div>
+          <p>
+            Consulta duración, modalidad, nivel e instructor antes de solicitar
+            información o una propuesta institucional.
+          </p>
+        </header>
+
+        {courses.length === 0 ? (
+          <div class="sap-empty">
+            Próximamente publicaremos nuevos programas de formación.
+          </div>
+        ) : (
+          <div class="sap-course-grid">
+            {courses.map((course, index) => (
+              <article class="sap-course-card">
+                <a href={`/cursos/${course.id}`} class="sap-course-card__media">
+                  <ForenseIAImage
+                    src={resolveCourseImage(course, index)}
+                    alt={`Portada del curso ${course.data.title}`}
+                    watermark={true}
+                  />
+                  <span class="sap-level">{course.data.level}</span>
+                </a>
+
+                <div class="sap-course-card__body">
+                  <div class="sap-card-meta">
+                    <span>{course.data.area}</span>
+                    {course.data.featured && <span>Destacado</span>}
                   </div>
 
-                  <p class="max-w-2xl leading-relaxed text-white/45">
-                    {group.description}
-                  </p>
+                  <h3>
+                    <a href={`/cursos/${course.id}`}>{course.data.title}</a>
+                  </h3>
+
+                  <p>{course.data.description}</p>
+
+                  <dl class="sap-course-facts">
+                    <div>
+                      <dt>Duración</dt>
+                      <dd>{course.data.duration}</dd>
+                    </div>
+                    <div>
+                      <dt>Modalidad</dt>
+                      <dd>{course.data.modality}</dd>
+                    </div>
+                    <div>
+                      <dt>Instructor</dt>
+                      <dd>{course.data.instructor}</dd>
+                    </div>
+                  </dl>
+
+                  <a class="sap-card-link" href={`/cursos/${course.id}`}>
+                    Ver programa <span aria-hidden="true">→</span>
+                  </a>
                 </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </Container>
+    </section>
 
-                <div class="grid gap-5">
-                  {group.courses.map((course) => (
-                    <article class="group flex flex-col justify-between gap-8 border border-white/10 bg-white/[0.02] p-7 transition hover:border-[#C8A96B]/50 lg:flex-row lg:items-center">
-                      <div class="max-w-3xl">
-                        <div class="flex flex-wrap gap-3 text-xs">
-                          <span class="uppercase tracking-[0.22em] text-[#C8A96B]">
-                            {course.data.area}
-                          </span>
+    <section class="sap-section">
+      <Container>
+        <div class="sap-split sap-split--reverse">
+          <ForenseIAImage
+            src="/assets/forenseia/hero/hero-home-centro-operaciones-1600.webp"
+            alt="Centro de análisis empleado como entorno de aprendizaje profesional."
+            class="sap-split__media"
+          />
 
-                          {course.data.featured && (
-                            <span class="text-white/30">
-                              Destacado
-                            </span>
-                          )}
-                        </div>
+          <div class="sap-split__content">
+            <p class="sap-eyebrow">Metodología</p>
+            <h2>Aprender haciendo, documentando y explicando.</h2>
+            <p>
+              Cada programa combina teoría esencial, demostraciones, ejercicios y un
+              producto final que permite evaluar el aprendizaje.
+            </p>
 
-                        <h3 class="mt-4 text-2xl font-semibold md:text-3xl">
-                          {course.data.title}
-                        </h3>
-
-                        <p class="mt-4 leading-relaxed text-white/45">
-                          {course.data.description}
-                        </p>
-
-                        <div class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/30">
-                          <span>{course.data.duration}</span>
-                          <span>{course.data.modality}</span>
-                          <span>{course.data.level}</span>
-                          <span>{course.data.instructor}</span>
-                        </div>
-                      </div>
-
-                      <Button
-                        href={`/cursos/${course.id}`}
-                        variant="secondary"
-                      >
-                        Ver curso
-                      </Button>
-                    </article>
-                  ))}
-                </div>
-              </section>
-            )
-          )}
+            <div class="sap-method-grid">
+              {methodology.map(([title, description], index) => (
+                <article>
+                  <span>0{index + 1}</span>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
+                </article>
+              ))}
+            </div>
+          </div>
         </div>
-      )}
-    </Container>
-  </section>
+      </Container>
+    </section>
 
-  <section class="border-t border-white/10 py-24">
-    <Container>
-      <div class="mx-auto max-w-3xl text-center">
-        <p class="text-xs uppercase tracking-[0.3em] text-[#C8A96B]">
-          Formación institucional
-        </p>
-
-        <h2 class="mt-5 text-4xl font-semibold md:text-5xl">
-          También desarrollamos programas personalizados.
-        </h2>
-
-        <p class="mx-auto mt-6 max-w-xl leading-relaxed text-white/45">
-          Podemos adaptar duración, temario, modalidad y enfoque a las
-          necesidades de tu institución.
-        </p>
-
-        <div class="mt-9">
-          <Button href="/contacto">
-            Solicitar propuesta
-          </Button>
+    <section class="sap-cta">
+      <Container>
+        <div class="sap-cta__panel">
+          <div>
+            <p class="sap-eyebrow">Capacitación institucional</p>
+            <h2>Adapta temario, duración y ejercicios a tu equipo.</h2>
+            <p>
+              Podemos diseñar una ruta presencial, en línea o híbrida de acuerdo con
+              funciones, nivel técnico y objetivos operativos.
+            </p>
+          </div>
+          <Button href="/contacto">Solicitar propuesta</Button>
         </div>
-      </div>
-    </Container>
-  </section>
+      </Container>
+    </section>
+  </main>
 </BaseLayout>
