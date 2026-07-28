@@ -4,22 +4,35 @@ interface Props {
   alt: string;
   class?: string;
   watermark?: boolean;
-  loading?: 'lazy' | 'eager';
+  loading?: "lazy" | "eager";
   sizes?: string;
 }
 
 const {
   src,
   alt,
-  class: className = '',
+  class: className = "",
   watermark = true,
-  loading = 'lazy',
-  sizes = '100vw',
+  loading = "lazy",
+  sizes = "100vw",
 } = Astro.props;
+
+const fallback = src.replace(/-\d+\.webp$/i, ".jpg");
 ---
 
-<figure class:list={['forenseia-media', className]}>
-  <img src={src} alt={alt} loading={loading} decoding="async" sizes={sizes} />
+<figure class:list={["forenseia-media", className]}>
+  <picture>
+    <source srcset={src} type="image/webp" />
+    <img
+      src={fallback}
+      alt={alt}
+      loading={loading}
+      decoding="async"
+      sizes={sizes}
+      onerror={`this.onerror=null;this.src='${fallback}'`}
+    />
+  </picture>
+
   {watermark && (
     <span class="forenseia-watermark" aria-hidden="true">
       <img src="/assets/forenseia/brand/logo-forenseia-800.webp" alt="" />

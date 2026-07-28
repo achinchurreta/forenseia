@@ -3,22 +3,25 @@ const navigation = [
   { label: "Inicio", href: "/" },
   { label: "Servicios", href: "/servicios" },
   { label: "Academia", href: "/cursos" },
-  { label: "Biblioteca", href: "/recursos" },
   { label: "Blog", href: "/blog" },
   { label: "Nosotros", href: "/nosotros" },
   { label: "Contacto", href: "/contacto" },
 ];
+
+const currentPath = Astro.url.pathname;
+const isActive = (href) =>
+  href === "/" ? currentPath === "/" : currentPath.startsWith(href);
 ---
 
-<header class="site-header fixed inset-x-0 top-0 z-50 border-b border-white/8 bg-[#030303]/90 backdrop-blur-xl">
-  <div class="mx-auto flex h-[78px] max-w-[1480px] items-center justify-between gap-8 px-5 sm:px-7 lg:px-10">
+<header class="site-header fixed inset-x-0 top-0 z-50 border-b border-white/8 bg-[#030303]/92 backdrop-blur-xl">
+  <div class="mx-auto flex h-[76px] max-w-[1480px] items-center justify-between gap-6 px-5 sm:px-7 lg:px-10">
     <a href="/" class="group flex min-w-0 items-center gap-3" aria-label="ForenseIA, inicio">
-      <span class="relative flex h-12 w-12 shrink-0 items-center justify-center">
-        <span class="absolute inset-1 rounded-full bg-[#d5ad52]/18 blur-lg transition group-hover:bg-[#d5ad52]/28"></span>
+      <span class="relative flex h-11 w-11 shrink-0 items-center justify-center">
+        <span class="absolute inset-1 rounded-full bg-[#d5ad52]/16 blur-lg transition group-hover:bg-[#d5ad52]/28"></span>
         <img
           src="/logo.png"
           alt="Logotipo de ForenseIA"
-          class="relative h-11 w-11 object-contain drop-shadow-[0_0_12px_rgba(213,173,82,.3)]"
+          class="relative h-10 w-10 object-contain drop-shadow-[0_0_12px_rgba(213,173,82,.3)]"
         />
       </span>
 
@@ -36,7 +39,13 @@ const navigation = [
       {navigation.map((item) => (
         <a
           href={item.href}
-          class="relative py-2 text-sm font-medium text-white/66 transition hover:text-white after:absolute after:inset-x-0 after:-bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-[#d5ad52] after:transition-transform hover:after:scale-x-100"
+          aria-current={isActive(item.href) ? "page" : undefined}
+          class:list={[
+            "relative py-2 text-sm font-medium transition after:absolute after:inset-x-0 after:-bottom-1 after:h-px after:origin-left after:bg-[#d5ad52] after:transition-transform",
+            isActive(item.href)
+              ? "text-white after:scale-x-100"
+              : "text-white/66 after:scale-x-0 hover:text-white hover:after:scale-x-100",
+          ]}
         >
           {item.label}
         </a>
@@ -59,7 +68,6 @@ const navigation = [
         aria-expanded="false"
         aria-label="Abrir menú"
       >
-        <span class="sr-only">Abrir menú</span>
         <span aria-hidden="true" class="text-xl">☰</span>
       </button>
     </div>
@@ -68,7 +76,14 @@ const navigation = [
   <div id="mobile-menu" class="hidden border-t border-white/8 bg-[#050505] px-5 py-6 xl:hidden">
     <nav class="mx-auto flex max-w-[1480px] flex-col" aria-label="Navegación móvil">
       {navigation.map((item) => (
-        <a href={item.href} class="border-b border-white/8 py-4 text-sm text-white/72 hover:text-[#d5ad52]">
+        <a
+          href={item.href}
+          aria-current={isActive(item.href) ? "page" : undefined}
+          class:list={[
+            "border-b border-white/8 py-4 text-sm",
+            isActive(item.href) ? "text-[#d5ad52]" : "text-white/72 hover:text-[#d5ad52]",
+          ]}
+        >
           {item.label}
         </a>
       ))}
@@ -84,8 +99,8 @@ const navigation = [
   const mobileMenu = document.getElementById("mobile-menu");
 
   menuButton?.addEventListener("click", () => {
-    const isOpen = !mobileMenu?.classList.contains("hidden");
+    const willOpen = mobileMenu?.classList.contains("hidden");
     mobileMenu?.classList.toggle("hidden");
-    menuButton.setAttribute("aria-expanded", String(!isOpen));
+    menuButton.setAttribute("aria-expanded", String(Boolean(willOpen)));
   });
 </script>
